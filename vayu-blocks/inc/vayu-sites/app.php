@@ -23,47 +23,25 @@ class VAYU_BLOCKS_SITES_APP{
 
   }
 
-    public function register_routes() {
+  public function register_routes() {
+    if(current_user_can('manage_options')){
+      register_rest_route( 'ai/v1', 'vayu-site-builder', array(
+        'methods' => 'POST',
+        'callback' => array( $this, 'tp_install' ),
+        'permission_callback' => '__return_true',
+    ) );
 
-        register_rest_route( 'ai/v1', 'vayu-site-builder', array(
-          'methods' => 'POST',
-          'callback' => array( $this, 'tp_install' ),
-          'permission_callback' => '__return_true',
-      ) );
+      }
 
-
-        register_rest_route( 'ai/v1', 'ai-site-import', array(
-          'methods' => 'POST',
-          'callback' =>  array( $this, 'data_import' ),
-          'login_user_id' => get_current_user_id(),
-          'permission_callback' => '__return_true',
-      ) );
-
-
-    }
-
+  }
 
   public function tp_install(WP_REST_Request $request){
       $request = $request->get_params();
       $params  = $request['params'];
     //  wp_send_json_success($params);
       new VAYU_BLOCKS_SITES_BUILDER_SETUP($params);
-    
-      return json_encode( site_url());
+      return json_encode( array('status'=>true));
   }
-
-  public function data_import(WP_REST_Request $request){
-      
-        $atrs = $request->get_attributes();
-        $request = $request->get_params();
-        $params  = $request['params'];
-         
-        new VAYU_BLOCKS_SITES_IMPORT($params,$atrs['login_user_id']);
-      
-        return json_encode(site_url());
-  }
-
-
 
   public function import_data() {
         if ( ! isset( $_POST['vsecurity'] ) || ! wp_verify_nonce( $_POST['vsecurity'], 'vayu_nonce' ) ) {

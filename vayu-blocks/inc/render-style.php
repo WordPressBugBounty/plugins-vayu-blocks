@@ -14,6 +14,7 @@ add_action( 'init', 'vayu_render_init', 99);
 
 function vayu_render_server_side_css() {
 
+
 	global $_wp_current_template_content;
 
 	$content         = '';
@@ -90,12 +91,34 @@ function vayu_enqueue_google_fonts($font_family_string)
 function vayu_cycle_through_blocks( $blocks, $post_id ) {
 	$css = '';
 	foreach ( $blocks as $block ) {
-		if ( $block['blockName'] === 'vayu-blocks/post-grid' ) {
-			 $css .= generate_inline_styles($block['attrs']);
-	 	}
+		if ( $block['blockName'] === 'vayu-blocks/advance-timeline' ) {
+			$css .= generate_inline_advance_timeline_styles($block['attrs']);
+		}
+
+		if ( $block['blockName'] === 'vayu-blocks/timeline-child' ) {
+			$css .= generate_inline_timeline_child_styles($block['attrs']);
+		}
+
+		if ( $block['blockName'] === 'vayu-blocks/flip-wrapper' ) {
+			$css .= generate_inline_flip_wrapper_styles($block['attrs']);
+		}
+
 	 	if ( $block['blockName'] === 'vayu-blocks/advance-slider' ) {
-			$css .= generate_inline_styles($block['attrs']);
-		} 		
+			$css .= generate_inline_slider_styles($block['attrs']);
+		} 
+
+		if ( $block['blockName'] === 'vayu-blocks/flip-box' ) {
+			$css .= generate_inline_flip_box_styles($block['attrs']);
+		} 
+		
+		if ( $block['blockName'] === 'vayu-blocks/image' ) {
+			$css .= generate_inline_image_styles($block['attrs']);
+		} 
+
+		if ( $block['blockName'] === 'vayu-blocks/icon' ) {
+			$css .= generate_inline_icon_styles($block['attrs']);
+		} 
+
 		if ( $block['blockName'] === 'vayu-blocks/advance-heading' ) {
 			   if ( isset($block['attrs']['fontFamily'] ) ){
 				vayu_enqueue_google_fonts($block['attrs']['fontFamily']);
@@ -107,6 +130,23 @@ function vayu_cycle_through_blocks( $blocks, $post_id ) {
 			
 			 $css .= vayu_advance_container_style($block['attrs']);
 	    } 
+
+		if ( $block['blockName'] === 'vayu-blocks/advance-query-loop' ) {
+			
+			$css .= vayu_advance_loop_style($block['attrs']);
+	   } 
+
+	   if ( $block['blockName'] === 'vayu-blocks/blurb' ) {
+			
+		$css .= vayu_blurb_style($block['attrs']);
+
+        } 
+
+		if ( $block['blockName'] === 'vayu-blocks/unfold' ) {
+			
+			$css .= vayu_unfold_style($block['attrs']);
+	
+		} 
 
 		if ( $block['blockName'] === 'vayu-blocks/advance-product' ){
 

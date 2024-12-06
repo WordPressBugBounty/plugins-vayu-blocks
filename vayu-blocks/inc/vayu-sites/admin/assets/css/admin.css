@@ -727,7 +727,7 @@ fill: #ffff;
 
 /*** model template click **/
 
-iframe{      
+.aisb-model iframe{      
   max-width: 100%;
   display: block;  /* iframes are inline by default */   
   height: 100vh;  /* Set height to 100% of the viewport height */   

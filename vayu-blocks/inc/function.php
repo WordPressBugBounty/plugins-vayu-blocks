@@ -3,13 +3,14 @@ if (!defined('ABSPATH')) exit;
 
 function vayu_blocks_categories( $categories ) {
     return array_merge(
-        $categories,
+
         [
             [
                 'slug'  => 'vayu-blocks',
                 'title' => __( 'Vayu Blocks', 'vayu-blocks' ),
             ],
-        ]
+        ],
+        $categories
     );
 }
 add_filter( 'block_categories_all', 'vayu_blocks_categories', 11, 2);
@@ -35,6 +36,7 @@ function vayu_blocks_editor_assets(){
         array(
             'homeUrl' => plugins_url( '/', __FILE__ ),
             'showOnboarding' => '',
+            'options'=> (new VAYU_BLOCKS_OPTION_PANEL())->get_option()
         )
     );
 
@@ -61,6 +63,8 @@ function vayu_admin_react_script() {
         'homeUrl' => plugins_url( '/', __FILE__ ),
         'ajaxurl' => admin_url( 'admin-ajax.php' ),
         'homeUrl2' => get_home_url(),
+        'nonce' => wp_create_nonce('vayu_blocks_nonce'),
+        'options'=> (new VAYU_BLOCKS_OPTION_PANEL())->get_option()
     );
     
     if( class_exists('Vayu_Block_Plugin_Pro') ){
@@ -179,62 +183,178 @@ function vayu_blocks_save_toggle_switch_callback($request) {
 
 // ************* Rest API of Block Settings ************* //
 
-add_action('rest_api_init', function () {
-    
-    // Endpoint to save input values
-    register_rest_route('vayu-blocks-sett/v1', '/save-input-values', array(
-        'methods' => 'POST',
-        'callback' => 'vayu_blocks_save_input_values_callback',
-        'permission_callback' => '__return_true', // Set your permission callback here
-    ));
 
-    // Endpoint to retrieve input values
-    register_rest_route('vayu-blocks-sett/v1', '/get-input-values', array(
-        'methods' => 'GET',
-        'callback' => 'vayu_blocks_get_input_values_callback',
-        'permission_callback' => '__return_true', // Set your permission callback here
-    ));
-});
+add_action('wp_ajax_vayu_blocks_save_input_values', 'vayu_blocks_save_input_values_callback');
 
-// Callback function to save input values
-function vayu_blocks_save_input_values_callback($request) {
-    $data = $request->get_json_params(); // Get JSON data sent in the request
+function vayu_blocks_save_input_values_callback() {
+    check_ajax_referer('vayu_blocks_nonce', 'security');
 
-    // Process and save data to the database
-    // Example:
-    $container_width = isset($data['containerWidth']) ? absint($data['containerWidth']) : 1250;
-    $container_gap = isset($data['containerGap']) ? absint($data['containerGap']) : 18;
-    $padding = isset($data['padding']) ? absint($data['padding']) : 20;
-    $button_color = isset($data['buttonColor']) ? sanitize_text_field($data['buttonColor']) : '';
+    // Decode the JSON string into an associative array
+    $inputData = isset($_POST['inputData']) ? json_decode(stripslashes($_POST['inputData']), true) : array();
 
-    update_option('container_width', $container_width);
-    update_option('container_gap', $container_gap);
-    update_option('padding', $padding);
-    update_option('button_color', $button_color);
+    // Get the current settings from the database
+    $settings = get_option('vayu_blocks_settings', array());
 
-    return rest_ensure_response(array(
+    // Loop through each provided setting
+    foreach ($inputData as $key => $value) {
+        // Check if only the 'value' key is present, indicating a toggle switch change
+        if (isset($value['value']) && !isset($value['settings'])) {
+            // Update only the 'value' key
+            if (isset($settings[$key])) {
+                $settings[$key]['value'] = sanitize_text_field($value['value']);
+            } else {
+                // If the setting doesn't exist, create a new entry with just 'value'
+                $settings[$key] = array(
+                    'value' => sanitize_text_field($value['value']),
+                    'settings' => array(), // Default empty settings array
+                );
+            }
+        } elseif (isset($value['settings'])) { // If 'settings' key is present, handle block settings
+            // Update the 'settings' key and optionally the 'value' key
+            if (isset($settings[$key])) {
+                $settings[$key]['settings'] = vayu_blocks_array_merge_recursive_distinct($settings[$key]['settings'], array_map('sanitize_text_field', $value['settings']));
+                if (isset($value['value'])) {
+                    $settings[$key]['value'] = sanitize_text_field($value['value']);
+                }
+            } else {
+                // If the setting doesn't exist, create a new entry with both 'value' and 'settings'
+                $settings[$key] = array(
+                    'value' => isset($value['value']) ? sanitize_text_field($value['value']) : '',
+                    'settings' => array_map('sanitize_text_field', $value['settings']),
+                );
+            }
+        }
+    }
+
+    // Update the settings in the database
+    update_option('vayu_blocks_settings', $settings);
+
+    // Return success response
+    wp_send_json_success(array(
         'success' => true,
         'message' => 'Input values saved successfully',
     ));
+
+    wp_die();
 }
 
-// Callback function to retrieve input values
-function vayu_blocks_get_input_values_callback($request) {
-    // Retrieve data from the database
-    // Example:
-    $container_width = absint(get_option('container_width',1250));
-    $container_gap = absint(get_option('container_gap',20));
-    $padding = absint(get_option('padding',18));
-    $button_color = sanitize_text_field(get_option('button_color'));
+// Helper function to merge arrays recursively with distinct values
+function vayu_blocks_array_merge_recursive_distinct(array &$array1, array &$array2) {
+    $merged = $array1;
 
-    // Prepare and return data
-    return rest_ensure_response(array(
-        'containerWidth' => $container_width,
-        'containerGap' => $container_gap,
-        'padding' => $padding,
-        'buttonColor' => $button_color,
+    foreach ($array2 as $key => &$value) {
+        if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+            $merged[$key] = vayu_blocks_array_merge_recursive_distinct($merged[$key], $value);
+        } else {
+            $merged[$key] = $value;
+        }
+    }
+
+    return $merged;
+}
+
+
+
+
+
+add_action('wp_ajax_vayu_blocks_get_input_values', 'vayu_blocks_get_input_values_callback');
+
+function vayu_blocks_get_input_values_callback() {
+    // Retrieve the settings from the database
+    $settings = get_option('vayu_blocks_settings', array(
+        'container' => array(
+            'value' => 1,
+            'settings' => array(
+                'containerWidth' => 1250,
+                'containerGap' => 18,
+                'padding' => 20,
+            ),
+        ),
+        'button' => array(
+            'value' => 0,
+            'settings' => array(
+                'buttonColor' => '',
+            ),
+        ),
+        'heading' => array(
+            'value' => 0,
+            'settings' => array(
+               
+            ),
+        ),
+        'spacer' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'product' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'postgrid' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'flipBox' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'image' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'icon' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'advanceSlider' => array(
+            'value' => 0,
+            'settings' => array(
+            
+            ),
+        ),
+        'queryloop' => array(
+            'value' => 0,
+            'settings' => array(
+            
+            ),
+        ),
+        'imageHotspot' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'imagePin' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
+        'advanceTimeline' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
     ));
+
+    // Ensure the response is in JSON format
+    wp_send_json_success($settings);
 }
+
+
 
 add_action('rest_api_init', function() {
     add_filter('rest_post_query', 'vayu_blocks_filter_posts_with_featured_image', 10, 2);

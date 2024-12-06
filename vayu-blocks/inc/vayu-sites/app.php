@@ -12,8 +12,7 @@ class VAYU_BLOCKS_SITES_APP{
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
-
+    add_action( 'wp_ajax_vayu_blocks_sites_ajax_process_start', array( $this, 'process_start') );
     add_action( 'wp_ajax_vayu_blocks_sites_ajax_handler_data', array( $this, 'import_data') );
     add_action( 'wp_ajax_vayu_blocks_sites_ajax_import_xml', array( $this, 'import_xml') );	
     add_action( 'wp_ajax_vayu_blocks_sites_ajax_cutomizer', array( $this, 'init_cutomizer') );
@@ -23,25 +22,20 @@ class VAYU_BLOCKS_SITES_APP{
 
   }
 
-  public function register_routes() {
-    if(current_user_can('manage_options')){
-      register_rest_route( 'ai/v1', 'vayu-site-builder', array(
-        'methods' => 'POST',
-        'callback' => array( $this, 'tp_install' ),
-        'permission_callback' => '__return_true',
-    ) );
-
-      }
-
+  public function process_start(){
+    if ( ! isset( $_POST['vsecurity'] ) || ! wp_verify_nonce( $_POST['vsecurity'], 'vayu_nonce' ) ) {
+      wp_send_json_error( array( 'message' => 'Invalid nonce.' ) );
+      wp_die();
   }
 
-  public function tp_install(WP_REST_Request $request){
-      $request = $request->get_params();
-      $params  = $request['params'];
-    //  wp_send_json_success($params);
-      new VAYU_BLOCKS_SITES_BUILDER_SETUP($params);
-      return json_encode( array('status'=>true));
+  if(isset( $_POST['data'] ) && current_user_can('manage_options')){
+    $params = json_decode( wp_unslash( $_POST['data'] ),true);
+    new VAYU_BLOCKS_SITES_BUILDER_SETUP($params['data']);
+
+     wp_send_json_success( array('status'=> true));
+
   }
+}
 
   public function import_data() {
         if ( ! isset( $_POST['vsecurity'] ) || ! wp_verify_nonce( $_POST['vsecurity'], 'vayu_nonce' ) ) {

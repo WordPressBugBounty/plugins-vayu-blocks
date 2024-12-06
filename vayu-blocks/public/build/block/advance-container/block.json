@@ -259,7 +259,8 @@
       "default": "linked"
     },
     "padding": {
-      "type": "number"
+      "type": "number",
+      "default": 0
     },
     "paddingUnit": {
       "type": "string",
@@ -950,6 +951,10 @@
     "elementGapUnit": {
       "type": "string",
       "default": "px"
+    },
+    "variationSelected": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

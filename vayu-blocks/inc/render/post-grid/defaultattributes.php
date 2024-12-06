@@ -2,6 +2,7 @@
 return array(
     //Settings
         //layout
+            'pg_layoutalignment' => 'left',
             'pg_postLayoutColumns' => 3,
             'pg_postLayoutColumnsTablet' => 2,
             'pg_postLayoutColumnsMobile' => 2,
@@ -31,6 +32,7 @@ return array(
             'sortByField' => "date",
             
         //layoutcontrols
+            'pg_featuredimage_animate' => true,
             'pg_showFullContentTablet' => false,
             'pg_showFullContentMobile' => false,
             'pg_FullContent' => 'default',
@@ -189,7 +191,7 @@ return array(
             'pg_layoutPaddingRight' => 2,
             'pg_layoutPaddingBottom' => 10,
             'pg_layoutPaddingLeft' => 2,
-            'pg_lineHeight' => 1.3,
+            'pg_lineHeight' => 1.8,
             'pg_postBorderRadius' => "5",
             'pg_spacing' => 4,
             'buttonpaddingUnit' => 'px',
@@ -209,21 +211,21 @@ return array(
             'pg_layoutpaddingType' => 'linked',
             'pg_layoutpaddingTypeTablet' => 'linked',
             'pg_layoutpaddingTypeMobile' => 'linked',
-            'pg_layoutpadding' => 0,
-            'pg_layoutpaddingTop' => 2,
-            'pg_layoutpaddingRight' => 2,
-            'pg_layoutpaddingBottom' => 10,
-            'pg_layoutpaddingLeft' => 2,
-            'pg_layoutpaddingTablet' => 2,
-            'pg_layoutpaddingTopTablet' => 2,
-            'pg_layoutpaddingRightTablet' => 2,
-            'pg_layoutpaddingBottomTablet' => 10,
-            'pg_layoutpaddingLeftTablet' => 2,
-            'pg_layoutpaddingMobile' => 2,
-            'pg_layoutpaddingTopMobile' => 2,
-            'pg_layoutpaddingRightMobile' => 2,
-            'pg_layoutpaddingBottomMobile' => 10,
-            'pg_layoutpaddingLeftMobile' => 2,
+            'pg_layoutpadding' => 15,
+            'pg_layoutpaddingTop' => 15,
+            'pg_layoutpaddingRight' => 15,
+            'pg_layoutpaddingBottom' => 15,
+            'pg_layoutpaddingLeft' => 15,
+            'pg_layoutpaddingTablet' => 15,
+            'pg_layoutpaddingTopTablet' => 15,
+            'pg_layoutpaddingRightTablet' => 15,
+            'pg_layoutpaddingBottomTablet' => 15,
+            'pg_layoutpaddingLeftTablet' => 15,
+            'pg_layoutpaddingMobile' => 15,
+            'pg_layoutpaddingTopMobile' => 15,
+            'pg_layoutpaddingRightMobile' => 15,
+            'pg_layoutpaddingBottomMobile' => 15,
+            'pg_layoutpaddingLeftMobile' => 15,
             'pg_layoutpaddingUnit' => 'px',
             'pg_postTopBorderRadius' => "1px",
             'pg_postBottomBorderRadius' => "1px",
@@ -275,7 +277,7 @@ return array(
         //title
             'pg_textColor' => 'black',
             'pg_textSize' => 14,
-            'pg_TitlelineHeight' => 1.2,
+            'pg_TitlelineHeight' => 1.6,
             'pg_TitleSize' => 18,
             'pg_TitleColor' => 'black',
             'titlechoice' => 'color',
@@ -473,6 +475,7 @@ return array(
             'pg_dateImageScale' => 0.6,
 
     //Advanced
+        'classNamemain' => '',
         'globalwidth'=> '',
         'width' => '',
         'customWidthlayout' => '',
@@ -631,7 +634,51 @@ return array(
         'borderradiusHvrRightMobile'=> 20,
         'borderradiusHvrBottomMobile'=> 20,
         'borderradiusHvrLeftMobile'=> 20,
+                // advance Border
+                'advanceborder' => array(
+                    'topcolor' => '',
+                    'topwidth' => '0px',
+                    'topstyle' => 'solid',
+                    'bottomcolor' => '',
+                    'bottomwidth' => '0px',
+                    'bottomstyle' => 'solid',
+                    'leftcolor' => '',
+                    'leftwidth' => '0px',
+                    'leftstyle' => 'solid',
+                    'rightcolor' => '',
+                    'rightwidth' => '0px',
+                    'rightstyle' => 'solid',
+                ),
+        
+            // advance Border Radius
+                'advanceRadius' => array(
+                    'top' => '4px',
+                    'bottom' => '4px',
+                    'left' => '4px',
+                    'right' => '4px',
+                ),
+                // advance Border
+                'advanceborderhvr' => array(
+                    'topcolor' => '',
+                    'topwidth' => '0px',
+                    'topstyle' => 'solid',
+                    'bottomcolor' => '',
+                    'bottomwidth' => '0px',
+                    'bottomstyle' => 'solid',
+                    'leftcolor' => '',
+                    'leftwidth' => '0px',
+                    'leftstyle' => 'solid',
+                    'rightcolor' => '',
+                    'rightwidth' => '0px',
+                    'rightstyle' => 'solid',
+                ),
+        
+        // advance Border Radius
+            'advanceRadiushvr' => array(
+                'top' => '4px',
+                'bottom' => '4px',
+                'left' => '4px',
+                'right' => '4px',
+            ),
 );
-
-
 ?>

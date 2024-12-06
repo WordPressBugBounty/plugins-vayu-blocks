@@ -8,7 +8,6 @@ class VayuBlocksPostGrid {
     private $attr;
     private $device_type;
 
-
     public function __construct($attr) {
         $this->attr = $attr;
         $this->device_type = $this->get_device_type();
@@ -16,6 +15,17 @@ class VayuBlocksPostGrid {
 
     //render all post
     public function render_posts() {
+
+        // Get the current post's permalink
+        $current_post_link = get_permalink();
+        
+        // Extract the post ID from the permalink
+        $post_id = get_the_ID(); // Alternatively, you can parse the URL to get the ID
+
+        // Construct the pagination URL
+        $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+        $pagination_link = home_url('/' . get_post_type() . '/' . $post_id . '/page/' . ($paged + 1) . '/');
+
         $columns = $this->attr['pg_postLayoutColumns']; // Default value
         $rows = $this->attr['pg_numberOfRow']; // Default value
 
@@ -55,6 +65,7 @@ class VayuBlocksPostGrid {
             'posts_per_page' => $columns * $rows,
             'paged' => $paged
         );
+
         // If filtering by featured image is enabled
         if (!empty($this->attr['pg_featuredImageOnly']) && $this->attr['pg_featuredImageOnly']) {
             $args['meta_query'] = array(
@@ -68,13 +79,15 @@ class VayuBlocksPostGrid {
         $query = new WP_Query($args);
 
         $animated = isset($attr['className']) ? $attr['className'] : '';
+        $className = $this->attr['classNamemain'];
+
 
         // Rendering posts
         $output = '';
         if ($query->have_posts()) {
-            $output .= '<div class="alignfull">';
+            $output .= '<div class="' . esc_attr($className) . ' ' . $animated . ' th-post-grid-main-wp-editor-wrapper">';
             $output .= '<div>';
-            $output .= '<div class="th-post-grid-wrapper th-post-grid-wrapper-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . ' ' . $animated . '">';
+            $output .= '<div class="th-post-grid-wrapper th-post-grid-wrapper-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">';
             
             while ($query->have_posts()) {
                 $query->the_post();
@@ -113,9 +126,14 @@ class VayuBlocksPostGrid {
             }
 
             $output .= '</div>';
-            $output .= '<div class="pagination">' . $this->render_pagination($query, $paged) . '</div>'; // Render pagination controls
+
+            if ($this->attr['showpagination']) {
+                $output .= '<div class="pagination">' . $this->render_pagination($query, $paged) . '</div>'; // Render pagination controls
+            }
+            
             $output .= '</div>';
             $output .= '</div>';
+         
         } else {
             $output .= '<p>' . esc_html__('No posts found.', 'plugin-textdomain') . '</p>';
         }
@@ -124,10 +142,9 @@ class VayuBlocksPostGrid {
     }
 
     //pagination
-    public function render_pagination($query) {
+    public function render_pagination($query,$paged) {
         // Retrieve the current page number from the query var
         $paged = get_query_var('paged') ? get_query_var('paged') : 1;
-    
         // Return early if pagination should not be shown
         if (!isset($this->attr['showpagination']) || !$this->attr['showpagination']) {
             return ''; // Return an empty string if pagination should not be shown
@@ -147,7 +164,6 @@ class VayuBlocksPostGrid {
             'after_page_number'  => '</span>',
             'add_args'      => false, // Don't add extra args to the pagination URLs
         );
-    
         // Generate and return pagination
         return paginate_links($pagination_args);
     } 
@@ -166,15 +182,25 @@ class VayuBlocksPostGrid {
 
         if ($FeaturedImage) {
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
+            $featured_image_id = get_post_thumbnail_id($post_id); // Get the ID of the featured image
+
+            // Get the alt text for the featured image
+            $alt_text = get_post_meta($featured_image_id, '_wp_attachment_image_alt', true);
+
+            // Assuming the attributes are passed as an array to the function or class
+            $pg_featuredimage_animate = isset($this->attr['pg_featuredimage_animate']) ? $this->attr['pg_featuredimage_animate'] : false;
+            // Check if the animation should be applied
+            $animate_class = $pg_featuredimage_animate ? 'animatefeaturedimage-front' : '';
+
             $output .= '<div class="post-grid-featured-image">
-                    <img src="' . esc_url($featured_image_url) . '" class="post-grid-image">
+                    <img src="' . esc_url($featured_image_url) . '" class="post-grid-image ' . esc_attr($animate_class) . ' alt="' . esc_attr($alt_text) . '">
                   </div>';
 
         }
         return $output;
     }
 
-    //title
+    //category
     private function render_category($categories) {
         $output='';
         if ($this->device_type  === 'Desktop') {
@@ -206,7 +232,7 @@ class VayuBlocksPostGrid {
         $post_title = get_the_title();
         $post_permalink = get_permalink();
 
-        $output .= '<div >';
+        $output .= '<div class="vayu_blocks_title_post_grid">';
         
         
         if (isset($this->attr['pg_blockTitleTag'])) {
@@ -222,8 +248,7 @@ class VayuBlocksPostGrid {
         } else {
             $output .= '</h4>';
         }
-        
-       
+    
         $output .= '</div>';
 
         return $output;
@@ -410,13 +435,11 @@ class VayuBlocksPostGrid {
 }
 
 function post_grid_render($attr) {
-    //attributes Merged
-    $default_attributes = include('defaultattributes.php');
+    $default_attributes = include('defaultattributes.php'); //attributes Merged
     $attr = array_merge($default_attributes, $attr); 
-
     $renderer = new VayuBlocksPostGrid($attr);
-
-    // Call the combined method
-    return $renderer->render_posts();
+    $style = "<style id='post-grid-style'>";
+        $style .= generate_inline_styles($attr);
+    $style .= "</style>";
+    return $renderer->render_posts().$style;
 }
-

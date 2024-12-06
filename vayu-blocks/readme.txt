@@ -2,9 +2,9 @@
 Contributors: ThemeHunk, satyendra61
 Tags: block, blocks editor, gutenberg, page builder, gutenberg templates
 Requires at least: 6.2
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -47,7 +47,7 @@ Discover how to make the most of Vayu Blocks with our detailed and user-friendly
 The plugin is relying on the service behind www.themehunk.com and wpthemes.themehunk.com for accessing the page Template content like template images. No account is required to access the service template collection and the privacy policy can be found [here](https://themehunk.com/privacy-policy/).
 
 ### Supported Themes
-These themes have been tested and are compatible with search plugin without significant issues. Also you can use this plugin to your Block Pages:
+These themes have been tested and are compatible with search plugin without significant issues. Also you can use this plugin to your Block, Elementor, WooCommerce Pages:
 
 * [TH Shop Mania](https://wordpress.org/themes/th-shop-mania/) - by ThemeHunk
 * [Top Store](https://wordpress.org/themes/top-store/) - by ThemeHunk
@@ -110,8 +110,11 @@ create a new thread on the [Support](https://themehunk.com/contact-us/) And also
 
 == Changelog ==
 
-=1.1.1 =
-* Fixed : Security issue fixed.
+=1.2.0 =
+* New : FlipBox Block, Image, Icon, Advance Slider, Advance Query loop, ImageAdvance Time Line  Blocks added.
+* New : Blocks issue fixed.
+* Update : Style issue fixed.
+
 
 =1.1.0 =
 * New : Post Grid Block Added

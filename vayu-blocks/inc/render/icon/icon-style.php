@@ -18,13 +18,13 @@ function generate_inline_icon_styles($attr) {
 
     $inline = '.vayu_blocks_icon__wrapper';
 
-    $css .= ".wp_block_vayu-blocks-icon-main {";
-        // Check if 'widthType' attribute is set to 'customwidth' and apply the width accordingly
-        $css .= "width: " . esc_attr($attr['customWidth']) . esc_attr($attr['customWidthUnit']) . ";";
-        $css .= "margin-left: auto !important;";
-        $css .= "margin-right: auto !important;";
+    // $css .= ".wp_block_vayu-blocks-icon-main {";
+    //     // Check if 'widthType' attribute is set to 'customwidth' and apply the width accordingly
+    //     $css .= "width: " . esc_attr($attr['customWidth']) . esc_attr($attr['customWidthUnit']) . ";";
+    //     $css .= "margin-left: auto !important;";
+    //     $css .= "margin-right: auto !important;";
         
-    $css .= "}";
+    // $css .= "}";
     
     // Add media query for tablet screens
     $css .= "@media (max-width: 768px) {";
@@ -76,6 +76,19 @@ function generate_inline_icon_styles($attr) {
     //Main div
     $css .= "$wrapper {";
 
+        $css .= '--icon-size-font-tablet: ' . (isset($attr['fontSizeTablet']) ? esc_attr($attr['fontSizeTablet']) . 'px' : '') . ';';
+        $css .= '--icon-size-font-mobile: ' . (isset($attr['fontSizeMobile']) ? esc_attr($attr['fontSizeMobile']) . 'px' : '') . ';';
+    
+        $css  .= '--text-icon-settings-tablet-font: ' . esc_attr($attr['textfontTablet']) . ';';
+        $css  .= '--text-icon-settings-tablet-size: ' . (isset($attr['textsizeTablet']) ? esc_attr($attr['textsizeTablet']) . 'px' : '') . ';';
+        $css  .= '--text-icon-settings-tablet-appearance: ' . esc_attr($attr['textappearanceTablet']) . ';';
+        $css  .= '--text-icon-settings-tablet-letterSpacing: ' . esc_attr($attr['letterSpacingTablet']) . ';';
+        
+        $css  .= '--text-icon-settings-mobile-font: ' . esc_attr($attr['textfontMobile']) . ';';
+        $css  .= '--text-icon-settings-mobile-size: ' . (isset($attr['textsizeMobile']) ? esc_attr($attr['textsizeMobile']) . 'px' : '') . ';';
+        $css  .= '--text-icon-settings-mobile-appearance: ' . esc_attr($attr['textappearanceMobile']) . ';';
+        $css  .= '--text-icon-settings-mobile-letterSpacing: ' . esc_attr($attr['letterSpacingMobile']) . ';';
+        
         $css  .= '--stroke-text-settings: ' . $attr['strokeWidthtext'] . 'px ' . $attr['stroketext'] . ';';
         $css  .= '--text-icon-settings-font: ' . $attr['textfont'] . ';';
         $css .= '--text-icon-settings-size: ' . $attr['textsize'] . 'px;';
@@ -86,27 +99,71 @@ function generate_inline_icon_styles($attr) {
         $css .= '--text-icon-settings-textx: ' . $attr['textx'] . ';';
         $css .= '--text-icon-settings-texty: ' . $attr['texty'] . ';';
 
+        $css .= '--icon-padding-box-icon: ' . $attr['iconpadding']['top'] . ' ' . $attr['iconpadding']['left'] . ' ' . $attr['iconpadding']['bottom'] . ' ' . $attr['iconpadding']['right'] . ';';
+        $css .= '--icon-margin-box-icon: ' . $attr['iconmargin']['top'] . ' ' . $attr['iconmargin']['left'] . ' ' . $attr['iconmargin']['bottom'] . ' ' . $attr['iconmargin']['right'] . ';';
+
+        $css .= '--icon-padding-box-icon-tablet: ' . $attr['iconpaddingTablet']['top'] . ' ' . $attr['iconpaddingTablet']['left'] . ' ' . $attr['iconpaddingTablet']['bottom'] . ' ' . $attr['iconpaddingTablet']['right'] . ';';
+        $css .= '--icon-margin-box-icon-tablet: ' . $attr['iconmarginTablet']['top'] . ' ' . $attr['iconmarginTablet']['left'] . ' ' . $attr['iconmarginTablet']['bottom'] . ' ' . $attr['iconmarginTablet']['right'] . ';';
+
+        $css .= '--icon-padding-box-icon-mobile: ' . $attr['iconpaddingMobile']['top'] . ' ' . $attr['iconpaddingMobile']['left'] . ' ' . $attr['iconpaddingMobile']['bottom'] . ' ' . $attr['iconpaddingMobile']['right'] . ';';
+        $css .= '--icon-margin-box-icon-mobile: ' . $attr['iconmarginMobile']['top'] . ' ' . $attr['iconmarginMobile']['left'] . ' ' . $attr['iconmarginMobile']['bottom'] . ' ' . $attr['iconmarginMobile']['right'] . ';';
+
         $css .= '--icon-size-font: ' . $attr['fontSize'] . 'px;';
         $css .= '--icon-rotate-degree: ' . $attr['rotate'] . 'deg;';
         $css .= '--icon-color-svg: ' . $attr['color'] . ';';
         $css .= '--icon-hover-color-svg: ' . $attr['hoverColor'] . ';';
         $css .= '--backgorund-box-icon: ' . $attr['backgroundcolor'] . ';';
-        $css .= '--backgorund-hover-box-icon: ' . $attr['backgroundhoverColor'] . ';';
+        if($attr['backgroundhoverColor']){
+            $css .= '--backgorund-hover-box-icon: ' . $attr['backgroundhoverColor'] . ';';
+        }else{
+            $css .= '--backgorund-hover-box-icon: ' . $attr['backgroundcolor'] . ';';
+        }
+
         $css .= '--color-hover-box-icon: ' . $attr['hoverColor'] . ';';
-        $css .= '--icon-padding-box-icon: ' . $attr['iconpadding']['top'] . ' ' . $attr['iconpadding']['left'] . ' ' . $attr['iconpadding']['bottom'] . ' ' . $attr['iconpadding']['right'] . ';';
-        $css .= '--icon-margin-box-icon: ' . $attr['iconmargin']['top'] . ' ' . $attr['iconmargin']['left'] . ' ' . $attr['iconmargin']['bottom'] . ' ' . $attr['iconmargin']['right'] . ';';
-        $css .= '--icon-box-icon-border-top: ' . $attr['iconborder']['topwidth'] . ' ' . $attr['iconborder']['topstyle'] . ' ' . $attr['iconborder']['topcolor'] . ';';
-        $css .= '--icon-box-icon-border-bottom: ' . $attr['iconborder']['bottomwidth'] . ' ' . $attr['iconborder']['bottomstyle'] . ' ' . $attr['iconborder']['bottomcolor'] . ';';
-        $css .= '--icon-box-icon-border-left: ' . $attr['iconborder']['leftwidth'] . ' ' . $attr['iconborder']['leftstyle'] . ' ' . $attr['iconborder']['leftcolor'] . ';';
-        $css .= '--icon-box-icon-border-right: ' . $attr['iconborder']['rightwidth'] . ' ' . $attr['iconborder']['rightstyle'] . ' ' . $attr['iconborder']['rightcolor'] . ';';
+
+        $css .= '--icon-box-icon-border-top: ' . $attr['iconTopBorder'] . ' ' . $attr['iconTopborderType'] . ' ' . $attr['iconTopBorderColor'] . ';';
+        $css .= '--icon-box-icon-border-bottom: ' . $attr['iconBottomBorder'] . ' ' . $attr['iconBottomborderType'] . ' ' . $attr['iconBottomBorderColor'] . ';';
+        $css .= '--icon-box-icon-border-left: ' . $attr['iconLeftBorder'] . ' ' . $attr['iconLeftborderType'] . ' ' . $attr['iconLeftBorderColor'] . ';';
+        $css .= '--icon-box-icon-border-right: ' . $attr['iconRightBorder'] . ' ' . $attr['iconRightborderType'] . ' ' . $attr['iconRightBorderColor'] . ';';
+        
+        $css .= '--icon-box-icon-border-top-tablet: ' . $attr['iconTopBorderTablet'] . ' ' . $attr['iconTopborderTypeTablet'] . ' ' . $attr['iconTopBorderColorTablet'] . ';';
+        $css .= '--icon-box-icon-border-bottom-tablet: ' . $attr['iconBottomBorderTablet'] . ' ' . $attr['iconBottomborderTypeTablet'] . ' ' . $attr['iconBottomBorderColorTablet'] . ';';
+        $css .= '--icon-box-icon-border-left-tablet: ' . $attr['iconLeftBorderTablet'] . ' ' . $attr['iconLeftborderTypeTablet'] . ' ' . $attr['iconLeftBorderColorTablet'] . ';';
+        $css .= '--icon-box-icon-border-right-tablet: ' . $attr['iconRightBorderTablet'] . ' ' . $attr['iconRightborderTypeTablet'] . ' ' . $attr['iconRightBorderColorTablet'] . ';';
+        
+        $css .= '--icon-box-icon-border-top-mobile: ' . $attr['iconTopBorderMobile'] . ' ' . $attr['iconTopborderTypeMobile'] . ' ' . $attr['iconTopBorderColorMobile'] . ';';
+        $css .= '--icon-box-icon-border-bottom-mobile: ' . $attr['iconBottomBorderMobile'] . ' ' . $attr['iconBottomborderTypeMobile'] . ' ' . $attr['iconBottomBorderColorMobile'] . ';';
+        $css .= '--icon-box-icon-border-left-mobile: ' . $attr['iconLeftBorderMobile'] . ' ' . $attr['iconLeftborderTypeMobile'] . ' ' . $attr['iconLeftBorderColorMobile'] . ';';
+        $css .= '--icon-box-icon-border-right-mobile: ' . $attr['iconRightBorderMobile'] . ' ' . $attr['iconRightborderTypeMobile'] . ' ' . $attr['iconRightBorderColorMobile'] . ';';
+        
+        // Only the border radius will be responsive
         $css .= '--icon-box-icon-borderRadius: ' . $attr['iconRadius']['top'] . ' ' . $attr['iconRadius']['right'] . ' ' . $attr['iconRadius']['left'] . ' ' . $attr['iconRadius']['bottom'] . ';';
+        $css .= '--icon-box-icon-borderRadiusTablet: ' . $attr['iconRadiusTablet']['top'] . ' ' . $attr['iconRadiusTablet']['right'] . ' ' . $attr['iconRadiusTablet']['left'] . ' ' . $attr['iconRadiusTablet']['bottom'] . ';';
+        $css .= '--icon-box-icon-borderRadiusMobile: ' . $attr['iconRadiusMobile']['top'] . ' ' . $attr['iconRadiusMobile']['right'] . ' ' . $attr['iconRadiusMobile']['left'] . ' ' . $attr['iconRadiusMobile']['bottom'] . ';';
+        
+        $css .= '--icon-box-icon-hover-border-top: ' . $attr['iconhvrTopBorder'] . ' ' . $attr['iconhvrTopborderType'] . ' ' . $attr['iconhvrTopBorderColor'] . ';';
+        $css .= '--icon-box-icon-hover-border-bottom: ' . $attr['iconhvrBottomBorder'] . ' ' . $attr['iconhvrBottomborderType'] . ' ' . $attr['iconhvrBottomBorderColor'] . ';';
+        $css .= '--icon-box-icon-hover-border-left: ' . $attr['iconhvrLeftBorder'] . ' ' . $attr['iconhvrLeftborderType'] . ' ' . $attr['iconhvrLeftBorderColor'] . ';';
+        $css .= '--icon-box-icon-hover-border-right: ' . $attr['iconhvrRightBorder'] . ' ' . $attr['iconhvrRightborderType'] . ' ' . $attr['iconhvrRightBorderColor'] . ';';
+        
+        $css .= '--icon-box-icon-hover-border-top-tablet: ' . $attr['iconhvrTopBorderTablet'] . ' ' . $attr['iconhvrTopborderTypeTablet'] . ' ' . $attr['iconhvrTopBorderColorTablet'] . ';';
+        $css .= '--icon-box-icon-hover-border-bottom-tablet: ' . $attr['iconhvrBottomBorderTablet'] . ' ' . $attr['iconhvrBottomborderTypeTablet'] . ' ' . $attr['iconhvrBottomBorderColorTablet'] . ';';
+        $css .= '--icon-box-icon-hover-border-left-tablet: ' . $attr['iconhvrLeftBorderTablet'] . ' ' . $attr['iconhvrLeftborderTypeTablet'] . ' ' . $attr['iconhvrLeftBorderColorTablet'] . ';';
+        $css .= '--icon-box-icon-hover-border-right-tablet: ' . $attr['iconhvrRightBorderTablet'] . ' ' . $attr['iconhvrRightborderTypeTablet'] . ' ' . $attr['iconhvrRightBorderColorTablet'] . ';';
+        
+        $css .= '--icon-box-icon-hover-border-top-mobile: ' . $attr['iconhvrTopBorderMobile'] . ' ' . $attr['iconhvrTopborderTypeMobile'] . ' ' . $attr['iconhvrTopBorderColorMobile'] . ';';
+        $css .= '--icon-box-icon-hover-border-bottom-mobile: ' . $attr['iconhvrBottomBorderMobile'] . ' ' . $attr['iconhvrBottomborderTypeMobile'] . ' ' . $attr['iconhvrBottomBorderColorMobile'] . ';';
+        $css .= '--icon-box-icon-hover-border-left-mobile: ' . $attr['iconhvrLeftBorderMobile'] . ' ' . $attr['iconhvrLeftborderTypeMobile'] . ' ' . $attr['iconhvrLeftBorderColorMobile'] . ';';
+        $css .= '--icon-box-icon-hover-border-right-mobile: ' . $attr['iconhvrRightBorderMobile'] . ' ' . $attr['iconhvrRightborderTypeMobile'] . ' ' . $attr['iconhvrRightBorderColorMobile'] . ';';
+        
+        // Only the border radius will be responsive
+        $css .= '--icon-box-icon-hover-borderRadius: ' . $attr['iconhvrRadius']['top'] . ' ' . $attr['iconhvrRadius']['right'] . ' ' . $attr['iconhvrRadius']['left'] . ' ' . $attr['iconhvrRadius']['bottom'] . ';';
+        $css .= '--icon-box-icon-hover-borderRadiusTablet: ' . $attr['iconhvrRadiusTablet']['top'] . ' ' . $attr['iconhvrRadiusTablet']['right'] . ' ' . $attr['iconhvrRadiusTablet']['left'] . ' ' . $attr['iconhvrRadiusTablet']['bottom'] . ';';
+        $css .= '--icon-box-icon-hover-borderRadiusMobile: ' . $attr['iconhvrRadiusMobile']['top'] . ' ' . $attr['iconhvrRadiusMobile']['right'] . ' ' . $attr['iconhvrRadiusMobile']['left'] . ' ' . $attr['iconhvrRadiusMobile']['bottom'] . ';';
+
+
         $css .= '--icon-box-icon-boxShadow: ' . $newboxShadow . ';'; // Assuming $newboxShadow is already set
         $css .= '--icon-box-icon-hover-boxShadow: ' . $hoverboxShadow . ';'; // Assuming $hoverboxShadow is already set
-        $css .= '--icon-box-icon-border-hover-top: ' . $attr['iconborderhvr']['topwidth'] . ' ' . $attr['iconborderhvr']['topstyle'] . ' ' . $attr['iconborderhvr']['topcolor'] . ';';
-        $css .= '--icon-box-icon-border-hover-bottom: ' . $attr['iconborderhvr']['bottomwidth'] . ' ' . $attr['iconborderhvr']['bottomstyle'] . ' ' . $attr['iconborderhvr']['bottomcolor'] . ';';
-        $css .= '--icon-box-icon-border-hover-left: ' . $attr['iconborderhvr']['leftwidth'] . ' ' . $attr['iconborderhvr']['leftstyle'] . ' ' . $attr['iconborderhvr']['leftcolor'] . ';';
-        $css .= '--icon-box-icon-border-hover-right: ' . $attr['iconborderhvr']['rightwidth'] . ' ' . $attr['iconborderhvr']['rightstyle'] . ' ' . $attr['iconborderhvr']['rightcolor'] . ';';
-        $css .= '--icon-box-icon-hover-borderRadius: ' . $attr['iconRadiushvr']['top'] . ' ' . $attr['iconRadiushvr']['right'] . ' ' . $attr['iconRadiushvr']['left'] . ' ' . $attr['iconRadiushvr']['bottom'] . ';';
 
         // Desktop Padding
         $paddingUnit = isset($attr['paddingUnit']) ? esc_attr($attr['paddingUnit']) : 'px';
@@ -198,8 +255,8 @@ function generate_inline_icon_styles($attr) {
         
         // Flex properties
         $css .= "display: flex;";
-        $css .= "justify-content: center;";
-        $css .= "align-items: {$attr['alignment']};";
+        $css .= "align-items: center;";
+        $css .= "justify-content: {$attr['alignment']};";
         
     $css .= "}";
      
@@ -317,6 +374,20 @@ function generate_inline_icon_styles($attr) {
             ($attr['flipVertical'] ? "scaleY(-1)" : "") . " !important;";
     $css .= "}";
 
+
+    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
+        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-icon  {display:none;}}";
+    }
+    //hide on Tablet
+    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
+        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-icon  {display:none;}}";
+    }
+    //hide on Mobile
+    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
+        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-icon  {display:none;}}";
+    }
+
+
     // for tablet
     $css .= "@media (max-width: 1024px) {
 
@@ -342,6 +413,7 @@ function generate_inline_icon_styles($attr) {
             border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusTablet']) ? esc_attr($attr['pg_postBottomBorderRadiusTablet']) . "px" : '0') . ";
             border-bottom-right-radius: " . (isset($attr['pg_postLeftBorderRadiusTablet']) ? esc_attr($attr['pg_postLeftBorderRadiusTablet']) . "px" : '0') . ";
             border-top-right-radius: " . (isset($attr['pg_postRightBorderRadiusTablet']) ? esc_attr($attr['pg_postRightBorderRadiusTablet']) . "px" : '0') . ";
+            align-items: " . (isset($attr['alignmentTablet']) ? esc_attr($attr['alignmentTablet']) : '') . ";
         }
 
         $wrapper $inline {
@@ -372,6 +444,8 @@ function generate_inline_icon_styles($attr) {
             border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusMobile']) ? esc_attr($attr['pg_postBottomBorderRadiusMobile']) . "px" : '0') . ";
             border-bottom-right-radius: " . (isset($attr['pg_postLeftBorderRadiusMobile']) ? esc_attr($attr['pg_postLeftBorderRadiusMobile']) . "px" : '0') . ";
             border-top-right-radius: " . (isset($attr['pg_postRightBorderRadiusMobile']) ? esc_attr($attr['pg_postRightBorderRadiusMobile']) . "px" : '0') . ";
+
+            align-items: " . (isset($attr['alignmentMobile']) ? esc_attr($attr['alignmentMobile']) : '') . ";
         }
 
         $wrapper $inline {

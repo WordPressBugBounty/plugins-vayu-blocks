@@ -18,14 +18,15 @@ class VAYU_BLOCKS_OPTION_PANEL {
             'postgrid' =>  array( 'isActive' => true,'type'=>'free'),
             'flipBox' =>  array( 'isActive' => true,'type'=>'free'),
             'image' =>  array( 'isActive' => true,'type'=>'free'),
+            'video' =>  array( 'isActive' => true,'type'=>'free'),
             'icon' =>  array( 'isActive' => true,'type'=>'free'),
             'advanceSlider' =>  array( 'isActive' => true,'type'=>'free'),
             'advanceQueryLoop' =>  array( 'isActive' => true,'type'=>'free'),
-            // 'imageHotspot' =>  array( 'isActive' => true,'type'=>'free'),
-            // 'imagePin' =>  array( 'isActive' => true,'type'=>'free'),
+            'imageHotspot' =>  array( 'isActive' => true,'type'=>'free'),
             'advanceTimeline' =>  array( 'isActive' => true,'type'=>'free'),
-            // 'blurb' =>  array( 'isActive' => true,'type'=>'free'),
-            // 'unfold' =>  array( 'isActive' => true,'type'=>'free'),
+            'blurb' =>  array( 'isActive' => true,'type'=>'free'),
+            'unfold' =>  array( 'isActive' => true,'type'=>'free'),
+            'post-pagination' =>  array( 'isActive' => true,'type'=>'free'),
         );
 
         }

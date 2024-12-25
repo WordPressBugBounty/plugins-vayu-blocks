@@ -154,6 +154,9 @@ return array(
 
     //Advanced
         'classNamemain' => '',
+        'responsiveTogHideDesktop'=> false,
+        'responsiveTogHideTablet'=> false,
+        'responsiveTogHideMobile'=> false,
         'globalwidth'=> '',
         'width' => '',
         'customWidthlayout' => '',

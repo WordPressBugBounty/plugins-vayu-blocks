@@ -50,8 +50,7 @@ class Vayu_Blocks_Sites_Options_Import {
 			'nav_menu_locations',
 			'show_on_front',
 			'page_on_front',
-			'page_for_posts',
-			
+			'page_for_posts',			
 			// Plugin: WooCommerce.
 			// Pages.
 			'woocommerce_shop_page_title',
@@ -81,8 +80,7 @@ class Vayu_Blocks_Sites_Options_Import {
 
 		if ( ! isset( $options ) ) {
 			return;
-		}
-
+		}	
 		foreach ( $options as $option_name => $option_value ) {
 
 			// Is option exist in defined array site_options()?
@@ -252,5 +250,4 @@ class Vayu_Blocks_Sites_Options_Import {
 			}
 		}
 	}
-
 }

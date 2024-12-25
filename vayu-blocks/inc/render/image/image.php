@@ -38,6 +38,7 @@ class Vayu_blocks_image {
         $wrapperanimation = isset($attributes['wrapperanimation']) ? esc_attr($attributes['wrapperanimation']) : '';
         $animation_classname = '';
 
+      
 
         if ($attributes['animationsettings'] === 'without-hvr') {
             $animation_classname = $attributes['imagehvranimation'];
@@ -47,23 +48,31 @@ class Vayu_blocks_image {
             $animation_classname = $attributes['imagehvranimation'] . 'onetime';
         }
 
-        $image_html .= '<div class="vayu_blocks_image__wrapper ' . $wrapperanimation . ' " id='. $uniqueId .'>';
-            $image_html .= '<div class="vayu_blocks_rotating_div">';
-            $image_html .= '<div class="vayu_blocks_image_image_wrapping_container ' . $imageHvrFilter . ' ' . $imageHvrEffect . ' ' . $animation_classname . '" >';            
-                $image_html .= '<img 
-                                    src="' . $imageSrc . '" 
-                                    alt="' . $imageAlt . '" 
-                                    class="vayu_blocks__image_image ' . $imageHvrEffect . ' ' . $imageHvrFilter . ' '. $imagemaskshape .'" 
-                                />';             
+        $image_html .= '<div class="vayu_blocks_main_image_container_image_image">';
+            $image_html .= '<div class="vayu_blocks_image__wrapper ' . $wrapperanimation . ' " id='. $uniqueId .'>';
+                $image_html .= '<div class="vayu_blocks_rotating_div">';
+                $image_html .= '<div class="vayu_blocks_image_image_wrapping_container ' . $imageHvrFilter . ' ' . $imageHvrEffect . ' ' . $animation_classname . '" >';   
+                
+                
+                if ($attributes['typeimage'] === 'image') {
+
+                    $image_html .= '<img 
+                        src="' . $imageSrc . '" 
+                        alt="' . $imageAlt . '" 
+                        class="vayu_blocks__image_image ' . $imageHvrEffect . ' ' . $imageHvrFilter . ' '. $imagemaskshape .'" 
+                    />';
+                }
+
+            
+                // Append the overlay HTML
+
+                // Conditionally append overlay HTML
+                if (!empty($attributes['overlayshow']) || !empty($attributes['frameshow'])) {
+                    $image_html .= $this->overlay(); // Ensure this method returns valid HTML
+                }
+
+                $image_html .= '</div>';
             $image_html .= '</div>';
-            // Append the overlay HTML
-
-            // Conditionally append overlay HTML
-            if (!empty($attributes['overlayshow']) || !empty($attributes['frameshow'])) {
-                $image_html .= $this->overlay(); // Ensure this method returns valid HTML
-            }
-
-        
         $image_html .= '</div>';
         $image_html .= '</div>';
 
@@ -311,6 +320,8 @@ function vayu_block_image_render($attr,$content) {
 
     $animated = isset($attr['className']) ? esc_attr($attr['className']) : ''; // animation
 
+    $uniqueId = isset($attr['uniqueId']) ? esc_attr($attr['uniqueId']) : '';
+
     // Render and return the image output inside a div with the dynamic class name
-    return '<div class="wp_block_vayu-blocks-image-main ' . $className . ' ' . $animated . '">' . $image->render() . '</div>';
+    return '<div id=' . $uniqueId . ' class="wp_block_vayu-blocks-image-main ' . $className . ' ' . $animated . '">' . $image->render() . '</div>';
 } 

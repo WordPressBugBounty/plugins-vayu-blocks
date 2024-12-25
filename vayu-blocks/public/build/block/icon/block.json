@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "title": "Icon",
   "category": "vayu-blocks",
-  "description": "Enhance your designs with 300+ advanced icons featuring dynamic styling for unforgettable visuals.",
+  "description": "A block to insert icons for visual enhancement and branding.",
   "supports": {
     "html": false,
     "align": [

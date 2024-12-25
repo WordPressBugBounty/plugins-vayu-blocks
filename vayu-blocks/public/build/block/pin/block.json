@@ -5,24 +5,26 @@
   "version": "0.2.0",
   "title": "Pin",
   "parent": [
-    "vayu-blocks/image-hotspot"
+    "vayu-blocks/image-hotspot",
+    "vayu-blocks/image"
   ],
   "category": "vayu-blocks",
   "description": "This is a image pin",
   "supports": {
-    "reusable": false,
+    "reusable": true,
     "html": false,
     "align": [
       "wide",
       "full"
     ],
     "layout": false,
-    "lock": true
+    "multiple": true
   },
   "textdomain": "vayu-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
+  "viewScriptModule": "file:./view.js",
   "attributes": {
     "id": {
       "type": "string"
@@ -37,6 +39,17 @@
     "y": {
       "type": "number",
       "default": 50
+    },
+    "tooltipDisplay": {
+      "type": "string",
+      "default": "onHover"
+    },
+    "animation": {
+      "type": "string",
+      "default": "none"
+    },
+    "triangleArrowColor": {
+      "type": "string"
     }
   }
 }

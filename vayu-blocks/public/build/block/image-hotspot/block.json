@@ -4,11 +4,9 @@
   "name": "vayu-blocks/image-hotspot",
   "title": "Image Hotspot",
   "category": "vayu-blocks",
-  "description": "Create stunning visual experiences with a customizable image block featuring animated overlays, advanced borders, and mask support.",
+  "description": "A block to highlight specific parts of an image using pins.",
   "supports": {
     "html": false,
-    "layout": false,
-    "interactivity": true,
     "align": [
       "wide",
       "full"

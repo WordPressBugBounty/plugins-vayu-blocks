@@ -5,11 +5,12 @@
   "version": "0.1.0",
   "title": "Advance Heading",
   "category": "vayu-blocks",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "A block to add styled headings for better content hierarchy with dynamic content.",
   "keywords": [
     "heading",
     "title",
-    "advanced heading"
+    "advanced heading",
+    "dynamic heading"
   ],
   "textdomain": "vayu-blocks",
   "usesContext": [

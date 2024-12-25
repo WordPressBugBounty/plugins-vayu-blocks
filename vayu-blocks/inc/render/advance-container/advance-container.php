@@ -10,7 +10,6 @@ function vayu_advance_container_style($attr){
 
     if(isset( $attr['uniqueID'] )){
 	
-
 		$options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option();
 		// Access the container settings
 		$container_width = $options['global']['containerWidth'];

@@ -236,6 +236,10 @@ function vayu_unfold_style($attr){
         if (isset($attr['contentGradient'])) {
             $css .= ".wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded)::after { background: {$attr['contentGradient']}; }";
         } 
+
+        if (isset($attr['align']) && $attr['align']=='space-around') {
+            $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width: 100%; }";
+        } 
         $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
         //Btnpadding
         if (isset($attr['paddingBtnType']) && 'unlinked' === $attr['paddingBtnType']) {
@@ -252,7 +256,7 @@ function vayu_unfold_style($attr){
         } else {
             $paddingBtn = isset($attr['paddingBtn']) ? $attr['paddingBtn'] : '';
             $paddingBtnUnit = isset($attr['paddingBtnUnit']) ? $attr['paddingBtnUnit'] : 'px';
-            $css .= "padding: {$paddingBtn}{$paddingBtnUnit};";
+            $css .= "padding: {$paddingBtn}{$paddingBtnUnit};"; 
         }
 
         $css .= isset( $attr['btnClr'] ) ? "color:{$attr['btnClr']};" : 'color:#fff;';
@@ -533,7 +537,9 @@ function vayu_unfold_style($attr){
             $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: 150px; }";
         }
         
-
+        if (isset($attr['alignTablet']) && $attr['alignTablet']=='space-around') {
+            $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width:100%; }";
+        } 
         $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
         //Btnpadding
         if (isset($attr['paddingBtnTypeTablet']) && 'unlinked' === $attr['paddingBtnTypeTablet']) {
@@ -781,7 +787,9 @@ function vayu_unfold_style($attr){
     }
    
     
-
+    if (isset($attr['alignMobile']) && $attr['alignMobile']=='space-around') {
+        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width: 100%; }";
+    } 
     $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
     // Btn padding
     if (isset($attr['paddingBtnTypeMobile']) && 'unlinked' === $attr['paddingBtnTypeMobile']) {

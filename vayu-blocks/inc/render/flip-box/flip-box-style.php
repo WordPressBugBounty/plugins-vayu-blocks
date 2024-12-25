@@ -29,13 +29,6 @@ function generate_inline_flip_box_styles($attr) {
 
     // Generate the class selector by concatenating '.' with the unique ID
     $wrapper = '.vayu-blocks-image-flip-main-container-for-front' . esc_attr($uniqueId);
-
-    $css .= ".wp_block_vayu-blocks-image-flip-main {";
-        // // Check if 'widthType' attribute is set to 'customwidth' and apply the width accordingly
-        // $css .= "width: " . esc_attr($attr['customWidth']) . esc_attr($attr['customWidthUnit']) . ";";
-        $css .= "margin-left: auto !important;";
-        $css .= "margin-right: auto !important;";
-    $css .= "}";
     
     //Main div
     $css .= "$wrapper {";
@@ -316,6 +309,18 @@ function generate_inline_flip_box_styles($attr) {
         } elseif ($attr['flipside'] === 'bottom') {
             $transformstyle = 'translateY(-90%)';
         } 
+    }
+
+    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
+        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-flip-box  {display:none;}}";
+    }
+    //hide on Tablet
+    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
+        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-flip-box  {display:none;}}";
+    }
+    //hide on Mobile
+    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
+        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-flip-box  {display:none;}}";
     }
     
     $css .= "$wrapper .vayu_blocks_flip-box-back {";

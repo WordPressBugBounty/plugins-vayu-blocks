@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Advance Button",
   "category": "vayu-blocks",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "A block to create interactive and visually appealing call-to-action buttons.",
   "textdomain": "vayu-blocks",
   "attributes": {
     "id": {

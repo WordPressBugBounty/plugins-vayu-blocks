@@ -4,7 +4,7 @@ Tags: block, blocks editor, gutenberg, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.7
 Requires PHP: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -41,7 +41,7 @@ Vayu block addons & Website Templates [View More](https://themehunk.com/vayu-blo
 We're here to help. Feel free to open a new thread on the [Support](https://themehunk.com/contact-us/).
 
 ### Documentation
-Discover how to make the most of Vayu Blocks with our detailed and user-friendly[Documentation](https://themehunk.com/docs/vayu-blocks/)
+Discover how to make the most of Vayu Blocks with our detailed and user-friendly [Documentation](https://themehunk.com/docs/vayu-blocks/).
 
 ### Useful Resources
 The plugin is relying on the service behind www.themehunk.com and wpthemes.themehunk.com for accessing the page Template content like template images. No account is required to access the service template collection and the privacy policy can be found [here](https://themehunk.com/privacy-policy/).
@@ -109,6 +109,13 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+
+=1.2.1 =
+* New : Video block added.
+* New : Video block added.
+* Update : Header and Footer import issue fixed.
+* Update : Minor bug fixes.
+* Update : Readme text issue fixed.
 
 =1.2.0 =
 * New : FlipBox Block, Image, Icon, Advance Slider, Advance Query loop, ImageAdvance Time Line  Blocks added.

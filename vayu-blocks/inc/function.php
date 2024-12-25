@@ -16,6 +16,22 @@ function vayu_blocks_categories( $categories ) {
 add_filter( 'block_categories_all', 'vayu_blocks_categories', 11, 2);
 
 
+/**
+ * Register and enqueue stylesheet for the editor only.
+ */
+add_action( 'enqueue_block_assets', 'vayu_blocks_enqueue_panel_styles' );
+//add_action( 'enqueue_block_editor_assets', 'vayu_blocks_enqueue_editor_styles' );
+
+
+function vayu_blocks_enqueue_panel_styles() {
+   if ( is_admin() ) {
+        wp_enqueue_style( 'vayu-blocks-panel-style',  VAYU_BLOCKS_URL . 'inc/assets/css/editor-panel.css' );
+    }
+}
+
+
+
+
 function vayu_blocks_editor_assets(){
 
     $asset_file = require_once VAYU_BLOCKS_DIR_PATH .'public/build/registerPlugin.asset.php';
@@ -312,6 +328,12 @@ function vayu_blocks_get_input_values_callback() {
                 
             ),
         ),
+        'video' => array(
+            'value' => 0,
+            'settings' => array(
+                
+            ),
+        ),
         'icon' => array(
             'value' => 0,
             'settings' => array(
@@ -331,12 +353,6 @@ function vayu_blocks_get_input_values_callback() {
             ),
         ),
         'imageHotspot' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'imagePin' => array(
             'value' => 0,
             'settings' => array(
                 

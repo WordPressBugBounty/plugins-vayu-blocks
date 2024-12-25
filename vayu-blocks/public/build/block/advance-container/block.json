@@ -259,8 +259,7 @@
       "default": "linked"
     },
     "padding": {
-      "type": "number",
-      "default": 0
+      "type": "number"
     },
     "paddingUnit": {
       "type": "string",
@@ -941,12 +940,10 @@
       "type": "number"
     },
     "elementGapTablet": {
-      "type": "number",
-      "default": "20"
+      "type": "number"
     },
     "elementGapMobile": {
-      "type": "number",
-      "default": "20"
+      "type": "number"
     },
     "elementGapUnit": {
       "type": "string",

@@ -4,6 +4,7 @@
 	exit;
 } 
 
+
 function vayu_advance_heading_style($attr){ 
 
 	$css = '';
@@ -635,6 +636,19 @@ function vayu_advance_heading_style($attr){
 }
 
 // Renderloop function
+add_action('rest_api_init', function () {
+    register_rest_field('post', 'comment_count', [
+        'get_callback'    => function ($post) {
+            return get_comments_number($post['id']);
+        },
+        'update_callback' => null,
+        'schema'          => [
+            'description' => __('The number of comments for the post.'),
+            'type'        => 'integer',
+            'context'     => ['view', 'edit'],
+        ],
+    ]);
+});
 function vayu_blocks_advance_heading_render( $attributes, $content, $block ) {
     // Check if the postId is set in the block context (as in a Query Loop)
     if ( ! isset( $block->context['postId'] ) ) {
@@ -658,6 +672,9 @@ function vayu_blocks_advance_heading_render( $attributes, $content, $block ) {
         case 'excerpt':
             $display_content = get_the_excerpt( $post_id );
             break;
+		case 'content':
+			$display_content = apply_filters('the_content', get_post_field('post_content', $post_id));
+				break;
         case 'post_date':
             $display_content = get_the_date( '', $post_id );
             break;
@@ -668,17 +685,29 @@ function vayu_blocks_advance_heading_render( $attributes, $content, $block ) {
             $display_content = $post_id;
             break;
         case 'post_image':
-            $display_content = get_the_post_thumbnail( $post_id );
+            $display_content = '<figure class="wp-block-post-featured-image">' . get_the_post_thumbnail( $post_id ) . '</figure>';
             break;
         case 'author_name':
             $display_content = get_the_author_meta( 'display_name', get_post_field( 'post_author', $post_id ) );
             break;
+		case 'author_nic_name':
+			$display_content = get_the_author_meta( 'nickname', get_post_field( 'post_author', $post_id ) );
+            break;
+		case 'author_first_name':
+				$display_content = get_the_author_meta('first_name', get_post_field('post_author', $post_id));
+				break;
+		case 'author_last_name':
+				$display_content = get_the_author_meta('last_name', get_post_field('post_author', $post_id));
+				break;
         case 'author_bio':
             $display_content = get_the_author_meta( 'description', get_post_field( 'post_author', $post_id ) );
             break;
         case 'author_email':
             $display_content = get_the_author_meta( 'user_email', get_post_field( 'post_author', $post_id ) );
             break;
+		case 'comment_count':
+				$display_content = get_comments_number($post_id);
+				break;
         default:
             $display_content = get_the_title( $post_id );
             break;

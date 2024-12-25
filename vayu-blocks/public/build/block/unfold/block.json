@@ -5,7 +5,7 @@
   "version": "0.9.0",
   "title": "Unfold",
   "category": "vayu-blocks",
-  "description": "Create Unfold",
+  "description": "A block to display hidden content that expands on click.",
   "supports": {
     "html": false,
     "align": [

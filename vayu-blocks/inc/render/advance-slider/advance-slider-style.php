@@ -43,11 +43,6 @@ function generate_inline_slider_styles($attr) {
         $css .= "--swiper-pagination-bullet-width: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-pagination-bullet-height: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-navigation-size: " . esc_attr($attr['navigationsize']) . "px !important;";
-
-        $css .= "width: " . esc_attr($attr['customWidth']) . esc_attr($attr['customWidthUnit']) . ";";
-        
-        $css .= "margin-left:auto !important;";
-        $css .= "margin-right:auto !important;";
         
        // Desktop Padding
        $paddingUnit = isset($attr['paddingUnit']) ? esc_attr($attr['paddingUnit']) : 'px';
@@ -60,8 +55,8 @@ function generate_inline_slider_styles($attr) {
        $marginUnit = isset($attr['marginUnit']) ? esc_attr($attr['marginUnit']) : 'px';
        $css .= isset($attr['marginTop']) ? "margin-top: " . esc_attr($attr['marginTop']) . $marginUnit . ";" : '';
        $css .= isset($attr['marginBottom']) ? "margin-bottom: " . esc_attr($attr['marginBottom']) . $marginUnit . ";" : '';
-       $css .= isset($attr['marginLeft']) ? "margin-left: " . esc_attr($attr['marginLeft']) . $marginUnit . ";" : '';
-       $css .= isset($attr['marginRight']) ? "margin-right: " . esc_attr($attr['marginRight']) . $marginUnit . ";" : '';
+    //    $css .= isset($attr['marginLeft']) ? "margin-left: " . esc_attr($attr['marginLeft']) . $marginUnit . ";" : '';
+    //    $css .= isset($attr['marginRight']) ? "margin-right: " . esc_attr($attr['marginRight']) . $marginUnit . ";" : '';
        
 
        // Top border
@@ -133,7 +128,7 @@ function generate_inline_slider_styles($attr) {
     $css .= "}";
    
     // Add media query for tablet screens
-    $css .= "@media (max-width: 768px) {";
+    $css .= "@media (max-width: 1024px) {";
         $css .= "$wrapper {";
             $css .= "width: " . esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) . ";";
         $css .= "}";
@@ -285,21 +280,77 @@ function generate_inline_slider_styles($attr) {
     $css .= ".swiper-button-next, .swiper-button-prev {";
         $css .= "width:0 !important;";
         $css .= "height:0 !important;";
-
         $css .= "background: " . esc_attr($attr['navigationbackground']) . " !important;";
         $css .= "color: " . esc_attr($attr['navigationcolor']) . ";";
         $css .= "top: " . esc_attr($attr['navigationtop']) . "% !important;"; // Added space for proper CSS syntax
-        $css .= "border-top: " . esc_attr($attr['navigationborder']['topwidth']) . " " . esc_attr($attr['navigationborder']['topstyle']) . " " . esc_attr($attr['navigationborder']['topcolor']) . ";";
-        $css .= "border-bottom: " . esc_attr($attr['navigationborder']['bottomwidth']) . " " . esc_attr($attr['navigationborder']['bottomstyle']) . " " . esc_attr($attr['navigationborder']['bottomcolor']) . ";";
-        $css .= "border-left: " . esc_attr($attr['navigationborder']['leftwidth']) . " " . esc_attr($attr['navigationborder']['leftstyle']) . " " . esc_attr($attr['navigationborder']['leftcolor']) . ";";
-        $css .= "border-right: " . esc_attr($attr['navigationborder']['rightwidth']) . " " . esc_attr($attr['navigationborder']['rightstyle']) . " " . esc_attr($attr['navigationborder']['rightcolor']) . ";";
-        $css .= "border-radius: " . esc_attr($attr['navigationborderRadius']['top']) . " " . esc_attr($attr['navigationborderRadius']['right']) . " " . esc_attr($attr['navigationborderRadius']['bottom']) . " " . esc_attr($attr['navigationborderRadius']['left']) . ";";
         $css .= "padding: " . esc_attr($attr['navigationpadding']['top']) . " " . esc_attr($attr['navigationpadding']['right']) . " " . esc_attr($attr['navigationpadding']['bottom']) . " " . esc_attr($attr['navigationpadding']['left']) . ";";
         $css .= "opacity: $displayopacity;"; // Ensuring displayopacity is escaped correctly
+
+        // Border radius for arrow
+        if (isset($attr['arrowradius'])) {
+            $css .= "border-top-left-radius: " . esc_attr($attr['arrowradius']['top']) . ";";
+            $css .= "border-top-right-radius: " . esc_attr($attr['arrowradius']['right']) . ";";
+            $css .= "border-bottom-right-radius: " . esc_attr($attr['arrowradius']['bottom']) . ";";
+            $css .= "border-bottom-left-radius: " . esc_attr($attr['arrowradius']['left']) . ";";
+        }
+
+        if (isset($attr['arrowradiusTablet'])) {
+            $css .= "@media (max-width: 1024px) {";
+            $css .= "border-top-left-radius: " . esc_attr($attr['arrowradiusTablet']['top']) . ";";
+            $css .= "border-top-right-radius: " . esc_attr($attr['arrowradiusTablet']['right']) . ";";
+            $css .= "border-bottom-right-radius: " . esc_attr($attr['arrowradiusTablet']['bottom']) . ";";
+            $css .= "border-bottom-left-radius: " . esc_attr($attr['arrowradiusTablet']['left']) . ";";
+            $css .= "padding: " . esc_attr($attr['navigationpaddingTablet']['top']) . " " . esc_attr($attr['navigationpaddingTablet']['right']) . " " . esc_attr($attr['navigationpaddingTablet']['bottom']) . " " . esc_attr($attr['navigationpaddingTablet']['left']) . ";";
+            $css .= "}";
+        }
+
+        if (isset($attr['arrowradiusMobile'])) {
+            $css .= "@media (max-width: 768px) {";
+            $css .= "border-top-left-radius: " . esc_attr($attr['arrowradiusMobile']['top']) . ";";
+            $css .= "border-top-right-radius: " . esc_attr($attr['arrowradiusMobile']['right']) . ";";
+            $css .= "border-bottom-right-radius: " . esc_attr($attr['arrowradiusMobile']['bottom']) . ";";
+            $css .= "border-bottom-left-radius: " . esc_attr($attr['arrowradiusMobile']['left']) . ";";
+            $css .= "padding: " . esc_attr($attr['navigationpaddingMobile']['top']) . " " . esc_attr($attr['navigationpaddingMobile']['right']) . " " . esc_attr($attr['navigationpaddingMobile']['bottom']) . " " . esc_attr($attr['navigationpaddingMobile']['left']) . ";";
+            $css .= "}";
+        }
+
+        // Border for Desktop
+        $css .= isset($attr['arrowTopborderType']) && isset($attr['arrowTopBorder']) && isset($attr['arrowTopBorderColor']) ? 
+            "border-top: " . esc_attr($attr['arrowTopborderType']) . ' ' . esc_attr($attr['arrowTopBorder']) . " " . esc_attr($attr['arrowTopBorderColor']) . ";" : '';
+        $css .= isset($attr['arrowBottomborderType']) && isset($attr['arrowBottomBorder']) && isset($attr['arrowBottomBorderColor']) ? 
+            "border-bottom: " . esc_attr($attr['arrowBottomborderType']) . ' ' . esc_attr($attr['arrowBottomBorder']) . " " . esc_attr($attr['arrowBottomBorderColor']) . ";" : '';
+        $css .= isset($attr['arrowLeftborderType']) && isset($attr['arrowLeftBorder']) && isset($attr['arrowLeftBorderColor']) ? 
+            "border-left: " . esc_attr($attr['arrowLeftborderType']) . ' ' . esc_attr($attr['arrowLeftBorder']) . " " . esc_attr($attr['arrowLeftBorderColor']) . ";" : '';
+        $css .= isset($attr['arrowRightborderType']) && isset($attr['arrowRightBorder']) && isset($attr['arrowRightBorderColor']) ? 
+            "border-right: " . esc_attr($attr['arrowRightborderType']) . ' ' . esc_attr($attr['arrowRightBorder']) . " " . esc_attr($attr['arrowRightBorderColor']) . ";" : '';
+
+        // Media Query for Tablet
+        $css .= "@media (max-width: 1024px) {";
+            $css .= isset($attr['arrowTopborderTypeTablet']) && isset($attr['arrowTopBorderTablet']) && isset($attr['arrowTopBorderColorTablet']) ? 
+                "border-top: " . esc_attr($attr['arrowTopborderTypeTablet']) . ' ' . esc_attr($attr['arrowTopBorderTablet']) . " " . esc_attr($attr['arrowTopBorderColorTablet']) . ";" : '';
+            $css .= isset($attr['arrowBottomborderTypeTablet']) && isset($attr['arrowBottomBorderTablet']) && isset($attr['arrowBottomBorderColorTablet']) ? 
+                "border-bottom: " . esc_attr($attr['arrowBottomborderTypeTablet']) . ' ' . esc_attr($attr['arrowBottomBorderTablet']) . " " . esc_attr($attr['arrowBottomBorderColorTablet']) . ";" : '';
+            $css .= isset($attr['arrowLeftborderTypeTablet']) && isset($attr['arrowLeftBorderTablet']) && isset($attr['arrowLeftBorderColorTablet']) ? 
+                "border-left: " . esc_attr($attr['arrowLeftborderTypeTablet']) . ' ' . esc_attr($attr['arrowLeftBorderTablet']) . " " . esc_attr($attr['arrowLeftBorderColorTablet']) . ";" : '';
+            $css .= isset($attr['arrowRightborderTypeTablet']) && isset($attr['arrowRightBorderTablet']) && isset($attr['arrowRightBorderColorTablet']) ? 
+                "border-right: " . esc_attr($attr['arrowRightborderTypeTablet']) . ' ' . esc_attr($attr['arrowRightBorderTablet']) . " " . esc_attr($attr['arrowRightBorderColorTablet']) . ";" : '';
+        $css .= "}";
+
+        // Media Query for Mobile
+        $css .= "@media (max-width: 768px) {";
+            $css .= isset($attr['arrowTopborderTypeMobile']) && isset($attr['arrowTopBorderMobile']) && isset($attr['arrowTopBorderColorMobile']) ? 
+                "border-top: " . esc_attr($attr['arrowTopborderTypeMobile']) . ' ' . esc_attr($attr['arrowTopBorderMobile']) . " " . esc_attr($attr['arrowTopBorderColorMobile']) . ";" : '';
+            $css .= isset($attr['arrowBottomborderTypeMobile']) && isset($attr['arrowBottomBorderMobile']) && isset($attr['arrowBottomBorderColorMobile']) ? 
+                "border-bottom: " . esc_attr($attr['arrowBottomborderTypeMobile']) . ' ' . esc_attr($attr['arrowBottomBorderMobile']) . " " . esc_attr($attr['arrowBottomBorderColorMobile']) . ";" : '';
+            $css .= isset($attr['arrowLeftborderTypeMobile']) && isset($attr['arrowLeftBorderMobile']) && isset($attr['arrowLeftBorderColorMobile']) ? 
+                "border-left: " . esc_attr($attr['arrowLeftborderTypeMobile']) . ' ' . esc_attr($attr['arrowLeftBorderMobile']) . " " . esc_attr($attr['arrowLeftBorderColorMobile']) . ";" : '';
+            $css .= isset($attr['arrowRightborderTypeMobile']) && isset($attr['arrowRightBorderMobile']) && isset($attr['arrowRightBorderColorMobile']) ? 
+                "border-right: " . esc_attr($attr['arrowRightborderTypeMobile']) . ' ' . esc_attr($attr['arrowRightBorderMobile']) . " " . esc_attr($attr['arrowRightBorderColorMobile']) . ";" : '';
+        $css .= "}";
     $css .= "}";
     
     // Tablet Navigation
-    $css .= "@media (max-width: 768px) {";
+    $css .= "@media (max-width: 1024px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
             $css .= "background: " . esc_attr($attr['navigationbackgroundTablet']) . " !important;";
             $css .= "top: " . esc_attr($attr['navigationtopTablet']) . "% !important;";
@@ -327,13 +378,13 @@ function generate_inline_slider_styles($attr) {
         $css .= "}";
 
         $css .= ".swiper-pagination {";
-            $css .= "left: " . esc_attr($attr['dotsplaceTablet']) . "% !important;"; // Fixed interpolation and added percentage
+            $css .= "left: " . esc_attr($attr['dotsplaceTablet']) . "% !important;"; // Fixed interpolation and added percenarrowe
         $css .= "}";
 
     $css .= "}";
 
     // Mobile Navigation
-    $css .= "@media (max-width: 480px) {";
+    $css .= "@media (max-width: 768px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
             $css .= "background: " . esc_attr($attr['navigationbackgroundMobile']) . " !important;";
             $css .= "top: " . esc_attr($attr['navigationtopMobile']) . "% !important;";
@@ -361,7 +412,7 @@ function generate_inline_slider_styles($attr) {
         $css .= "}";
 
         $css .= ".swiper-pagination {";
-            $css .= "left: " . esc_attr($attr['dotsplaceMobile']) . "% !important;"; // Fixed interpolation and added percentage
+            $css .= "left: " . esc_attr($attr['dotsplaceMobile']) . "% !important;"; // Fixed interpolation and added percenarrowe
         $css .= "}";
 
     $css .= "}";
@@ -397,7 +448,7 @@ function generate_inline_slider_styles($attr) {
         $css .= "font-size: " . esc_attr($attr['bulletsize']) . "px !important;"; // Fixed interpolation
     $css .= "}";
 
-    $css .= ".swiper-pagination {"; // Fixed interpolation and added percentage
+    $css .= ".swiper-pagination {"; // Fixed interpolation and added percenarrowe
         $css .= "width: 100% !important;";
         $css .= "height: 70px !important;";
         $css .= "left: 50% !important;";
@@ -428,6 +479,19 @@ function generate_inline_slider_styles($attr) {
     $css .= ".swiper-pagination-fraction {";
         $css .= "font-size: " . esc_attr($attr['bulletsize']) . "px !important;"; // Fixed interpolation
     $css .= "}";
+
+    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
+        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-advance-slider  {display:none;}}";
+    }
+    //hide on Tablet
+    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
+        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-advance-slider  {display:none;}}";
+    }
+    //hide on Mobile
+    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
+        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-advance-slider  {display:none;}}";
+    }
+
 
     return $css;
 }

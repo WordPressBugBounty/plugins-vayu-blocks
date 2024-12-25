@@ -5,7 +5,7 @@
  * Description:       The Vayu Blocks is an add-on plugin For Gutenberg Block Editor. Quickstart the Gutenberg editor with Powerful and elegant blocks to design stunning websites. Free Vayu Blocks plugin that amplifies the default WordPress Gutenberg Editor with powerful blocks.
  * Requires at least: 6.6
  * Requires PHP:      7.0
- * Version:           1.2.0
+ * Version:           1.2.1
  * Author:            ThemeHunk
  * Author URI:        https://themehunk.com
  * License:           GPLv3
@@ -173,7 +173,6 @@ class Vayu_Block_Plugin {
     public function vayu_register_blocks_new() {
         $options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option(); // Fetch the options array
         $blocks_dir = __DIR__ . '/public/build/block';
-
         // Define the block-specific render callbacks in an associative array
         $blocks_with_render_callbacks = array(
             'flip-box'      => array(
@@ -191,6 +190,10 @@ class Vayu_Block_Plugin {
             'image'         => array(
                 'isActive'        => isset($options['image']['isActive']) ? $options['image']['isActive'] : 0,
                 'render_callback' => 'vayu_block_image_render',
+            ),
+            'video'         => array(
+                'isActive'        => isset($options['video']['isActive']) ? $options['video']['isActive'] : 0,
+                'render_callback' => 'vayu_block_video_render',
             ),
             'icon'         => array(
                 'isActive'        => isset($options['icon']['isActive']) ? $options['icon']['isActive'] : 0,
@@ -219,18 +222,14 @@ class Vayu_Block_Plugin {
                 'render_callback' => 'vayu_block_unfold_render',
                 
             ),
-            // 'image-hotspot'       => array(
-            //     'isActive'        => 1,
-            //     'render_callback' => 'vayu_blocks_render_hotspot_block',
-            // ),
-            // 'image-pin'         => array(
-            //     'isActive'        => 1,
-            //     'render_callback' => 'vayu_blocks_render_pin_block',
-            // ),
-            // 'pin'       => array(
-            //     'isActive'        => 1, // Assuming always active for this block
-            //     'render_callback' => 'vayu_block_pin_child_render',
-            // ),
+            'image-hotspot'       => array(
+                'isActive'        => 1,
+                'render_callback' => 'vayu_blocks_render_image_hotspot_block',
+            ),
+            'pin'       => array(
+                'isActive'        => 1, // Assuming always active for this block
+                'render_callback' => 'vayu_block_pin_child_render',
+            ),
             'timeline-child'  => array(
                 'isActive'        => 1, // Assuming always active for this block
                 'render_callback' => 'vayu_block_timeline_child_render',
@@ -239,6 +238,14 @@ class Vayu_Block_Plugin {
                 'isActive'        => isset($options['advanceTimeline']['isActive']) ? $options['advanceTimeline']['isActive'] : 0,
                 'render_callback' => 'vayu_block_advance_timeline_render',
             ),
+            'post-pagination'  => array(
+                'isActive'        => 1,
+                'render_callback' => 'vayu_block_post_pagination_render',
+            ),
+            // 'mega-menu'  => array(
+            //     'isActive'        => 1,
+            //     'render_callback' => 'vayu_blocks_mega_menu_render',
+            // ),
         );
     
         foreach ( $blocks_with_render_callbacks as $block_name => $block_options ) {
@@ -317,3 +324,25 @@ function vayu_block_plugin_init( ) {
     new Vayu_Block_Plugin();
 }
 add_action( 'init', 'vayu_block_plugin_init', 1 );
+
+
+
+
+/**
+ * Adds a custom template part area for mega menus to the list of template part areas.
+ *
+ * @param array $areas Existing array of template part areas.
+ * @return array Modified array of template part areas including the new "Menu" area.
+ */
+function outermost_mega_menu_template_part_areas( array $areas ) {
+	$areas[] = array(
+		'area'        => 'menu',
+		'area_tag'    => 'div',
+		'description' => __( 'Menu templates are used to create sections of a mega menu.', 'mega-menu-block' ),
+		'icon'        => '',
+		'label'       => __( 'Menu', 'mega-menu-block' ),
+	);
+
+	return $areas;
+}
+add_filter( 'default_wp_template_part_areas', 'outermost_mega_menu_template_part_areas' );

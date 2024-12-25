@@ -94,6 +94,86 @@ class Vayu_blocks_icon {
             ]
         ];
 
+    
+        if (!function_exists('getAnimationClass')) {
+            function getAnimationClass($effectType, $imageselectedAnimation, $isClicked = false) {
+                switch ($effectType) {
+                    case 'always':
+                        switch ($imageselectedAnimation) {
+                            case 'shadow-pulse':
+                                return 'vayu_blocks_shadow_pulse_animation';
+                            case 'wave-pulse':
+                                return 'vayu_blocks_wave_pulse_animation';
+                            case 'color-pulse':
+                                return 'vayu_blocks_color_pulse_animation';
+                            case 'glow-pulse':
+                                return 'vayu_blocks_glow_pulse_animation';
+                            case 'shadow-expand':
+                                return 'vayu_blocks_shadow_expand_animation';
+                            case 'radial-glow':
+                                return 'vayu_blocks_radial_glow_animation';
+                            case 'ripple-wave':
+                                return 'vayu_blocks_ripple_wave_animation';
+                            case 'concentric':
+                                return 'vayu_blocks_concentric_animation';
+                            default:
+                                return ''; // Return an empty string if no match
+                        }
+        
+                    case 'on-hover':
+                        switch ($imageselectedAnimation) {
+                            case 'shadow-pulse':
+                                return 'vayu_blocks_shadow_pulse_animation-on-hover';
+                            case 'wave-pulse':
+                                return 'vayu_blocks_wave_pulse_animation-on-hover';
+                            case 'color-pulse':
+                                return 'vayu_blocks_color_pulse_animation-on-hover';
+                            case 'glow-pulse':
+                                return 'vayu_blocks_glow_pulse_animation-on-hover';
+                            case 'shadow-expand':
+                                return 'vayu_blocks_shadow_expand_animation-on-hover';
+                            case 'radial-glow':
+                                return 'vayu_blocks_radial_glow_animation-on-hover';
+                            case 'ripple-wave':
+                                return 'vayu_blocks_ripple_wave_animation-on-hover';
+                            case 'concentric':
+                                return 'vayu_blocks_concentric_animation-on-hover';
+                            default:
+                                return ''; // Return an empty string if no match
+                        }
+        
+                    case 'on-click':
+                        if ($isClicked) {
+                            switch ($imageselectedAnimation) {
+                                case 'shadow-pulse':
+                                    return 'vayu_blocks_shadow_pulse_animation';
+                                case 'wave-pulse':
+                                    return 'vayu_blocks_wave_pulse_animation';
+                                case 'color-pulse':
+                                    return 'vayu_blocks_color_pulse_animation';
+                                case 'glow-pulse':
+                                    return 'vayu_blocks_glow_pulse_animation';
+                                case 'shadow-expand':
+                                    return 'vayu_blocks_shadow_expand_animation';
+                                case 'radial-glow':
+                                    return 'vayu_blocks_radial_glow_animation';
+                                case 'ripple-wave':
+                                    return 'vayu_blocks_ripple_wave_animation';
+                                case 'concentric':
+                                    return 'vayu_blocks_concentric_animation';
+                                default:
+                                    return ''; // Return an empty string if no match
+                            }
+                        } else {
+                            return ''; // Return empty if not clicked
+                        }
+        
+                    default:
+                        return ''; // Return an empty string if no effectType match
+                }
+            }
+        }
+        
         // Assuming $attributes is an array with 'iconAnimation' and 'animationsettings' keys
         $iconAnimation = $attributes['iconAnimation'] ?? '';
         $animationsettings = $attributes['animationsettings'] ?? '';
@@ -107,11 +187,27 @@ class Vayu_blocks_icon {
         // If the icon is not empty and is a string
         if (!empty($icon)) {
             // Output the SVG string directly
+        $icon_html .= '<div class="vayu_blcoks_icon_main_blocks_icon">';
+            $icon_html .= '<div class="icon_based_animations_class ' . getAnimationClass($attributes['backgroundsettings'], $attributes['backgroundeffect']) . '"></div>';
+
             $icon_html .= '<div class="vayu_blocks_icon_block_main">';
 
-                $icon_html .= '<div class="vayu_blocks_icon_block_main_icon_front_svg  ' . $iconAnimationClass . '">';
-                    $icon_html .= $icon; // This is the SVG strin
-                $icon_html .= '</div>';
+               if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
+                    $icon_html .= '<a 
+                        href="' . $attributes['link']['url'] . '" 
+                        id="' . (!empty($attributes['link']['id']) ? $attributes['link']['id'] : 'default-id') . '" 
+                        title="' . (!empty($attributes['link']['title']) ? $attributes['link']['title'] : 'Default Title') . '" 
+                        target="' . (!empty($attributes['link']['opensInNewTab']) && $attributes['link']['opensInNewTab'] ? '_blank' : '_self') . '" 
+                        rel="' . (!empty($attributes['link']['opensInNewTab']) && $attributes['link']['opensInNewTab'] ? 'noopener noreferrer' : '') . '">';
+                    $icon_html .= '<div class="vayu_blocks_icon_block_main_icon_front_svg ' . $iconAnimationClass . '">';
+                    $icon_html .= $icon; // This is the SVG string
+                    $icon_html .= '</div>';
+                    $icon_html .= '</a>';
+                } else {
+                    $icon_html .= '<div class="vayu_blocks_icon_block_main_icon_front_svg ' . $iconAnimationClass . '">';
+                    $icon_html .= $icon; // This is the SVG string
+                    $icon_html .= '</div>';
+                }
 
                 if (!empty($attributes['icontextallow']) && !empty($attributes['icontxt'])) {
                     $icon_html .= '<div class="vayu_blocks_txt_palce ';
@@ -125,6 +221,7 @@ class Vayu_blocks_icon {
                 }                
 
             $icon_html .= '</div>';
+        $icon_html .= '</div>';
         }
         
         return '<div class="vayu-blocks-icon-main-container' . $uniqueId . '">' . $icon_html . '</div>';

@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Advance Spacer",
   "category": "vayu-blocks",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "A block to add customizable space between other blocks.",
   "supports": {
     "html": false
   },

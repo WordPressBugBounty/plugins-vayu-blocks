@@ -17,14 +17,6 @@ function generate_inline_image_styles($attr) {
     $wrapper = '.vayu-blocks-image-main-container' . esc_attr($uniqueId);
 
     $inline = '.vayu_blocks_image__wrapper';
-
-    $css .= ".wp_block_vayu-blocks-image-flip-main {";
-        // Check if 'widthType' attribute is set to 'customwidth' and apply the width accordingly
-        $css .= "width: " . esc_attr($attr['customWidth']) . esc_attr($attr['customWidthUnit']) . ";";
-        $css .= "margin-left: auto !important;";
-        $css .= "margin-right: auto !important;";
-        
-    $css .= "}";
     
     // Add media query for tablet screens
     $css .= "@media (max-width: 768px) {";
@@ -131,14 +123,7 @@ function generate_inline_image_styles($attr) {
         // Transition
         $css .= "transition-duration: " . (isset($attr['transitionAll']) ? esc_attr($attr['transitionAll']) : '0') . "s;";
         
-        // Grid properties
-        $css .= "display: grid;";
-        $gridTemplateColumns = isset($attr['pg_postLayoutColumns']) ? esc_attr($attr['pg_postLayoutColumns']) : 'auto-fit';
-        $css .= "grid-template-columns: repeat({$gridTemplateColumns}, 1fr);";
-        $gridGapUp = isset($attr['pg_gapup']) ? esc_attr($attr['pg_gapup']) . "px" : '16px'; // Default value '16px' or whatever default you prefer
-        $gridGap = isset($attr['pg_gap']) ? esc_attr($attr['pg_gap']) . "px" : '16px'; // Default value '16px' or whatever default you prefer
-        //$css .= "grid-gap: {$gridGapUp} {$gridGap};";
-        //$css .= "grid-auto-rows: minmax(100px, auto);";
+
         
     $css .= "}";
      
@@ -420,12 +405,15 @@ function generate_inline_image_styles($attr) {
         $css .= "    opacity: var(--image-hover-effect-opacity, 1);";
     $css .= "}";
 
-    $css .= " .vayu_blocks_image_image-container {";
+    $css .= " .vayu_blocks_main_image_container_image_image {";
         $css .= "justify-content: " . (
             $attr['imagealignment'] === 'center' ? 'center' :
             ($attr['imagealignment'] === 'left' ? 'flex-start' :
             ($attr['imagealignment'] === 'right' ? 'flex-end' : 'center'))
         ) . ";";
+        $css .= "display:flex;";
+        $css .= "width:100%;";
+        $css .= "height:100%;";
     $css .= "}";
 
     $css .= ".flip-front {";
@@ -649,6 +637,7 @@ function generate_inline_image_styles($attr) {
         
     $css .= "}";
 
+    
     // Determine the SVG based on the maskshape attribute
     switch (esc_attr($attr['maskshape'])) {
         case 'circle':
@@ -885,6 +874,18 @@ function generate_inline_image_styles($attr) {
     $vertical = $overlayalignmenttablet[0]; // First part (vertical)
     $horizontal = $overlayalignmenttablet[1]; // Second part (horizontal)
 
+    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
+        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-image  {display:none;}}";
+    }
+    //hide on Tablet
+    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
+        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-image  {display:none;}}";
+    }
+    //hide on Mobile
+    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
+        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-image  {display:none;}}";
+    }
+
 
     // for tablet
     $css .= "@media (max-width: 1024px) {
@@ -892,7 +893,6 @@ function generate_inline_image_styles($attr) {
         $wrapper {
             width: " . (isset($attr['customWidthTablet']) ? esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
 
-            grid-template-columns: repeat(" . (isset($attr['pg_postLayoutColumnsTablet']) ? $attr['pg_postLayoutColumnsTablet'] : 2) . ", 1fr);
             padding-top: " . (isset($attr['buttonpaddingTopTablet']) ? esc_attr($attr['buttonpaddingTopTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
             padding-bottom: " . (isset($attr['buttonpaddingBottomTablet']) ? esc_attr($attr['buttonpaddingBottomTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
             padding-left: " . (isset($attr['buttonpaddingLeftTablet']) ? esc_attr($attr['buttonpaddingLeftTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
@@ -905,7 +905,6 @@ function generate_inline_image_styles($attr) {
             margin-left: auto !important;
             margin-right: auto !important;
 
-            grid-gap: " . (isset($attr['pg_gapupTablet']) ? esc_attr($attr['pg_gapupTablet']) . 'px ' . esc_attr($attr['pg_gapTablet']) . 'px' : '0') . ";
 
             border-top-left-radius: " . (isset($attr['pg_postTopBorderRadiusTablet']) ? esc_attr($attr['pg_postTopBorderRadiusTablet']) . "px" : '0') . ";
             border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusTablet']) ? esc_attr($attr['pg_postBottomBorderRadiusTablet']) . "px" : '0') . ";
@@ -957,6 +956,16 @@ function generate_inline_image_styles($attr) {
             top: " . (isset($attr['overlaytoptablet']) ? esc_attr($attr['overlaytoptablet']) : 'auto') . ";
         }
 
+        $wrapper .vayu_block_caption {
+            text-align:" . (isset($attr['captionalignmentTablet']) ? esc_attr($attr['captionalignmentTablet']) : 'center') . ";
+        }
+
+        $wrapper .vayu_block_caption_text_para {
+            font-size:" . (isset($attr['captionsizeTablet']) ? esc_attr($attr['captionsizeTablet']) : '') . ";
+            font-weight:" . (isset($attr['captionfontweightTablet']) ? esc_attr($attr['captionfontweightTablet']) : '') . ";
+        }
+
+
     }";
 
     $overlayalignmentmobile = explode(' ', $attr['overlayalignmentmobile']); // Split the string
@@ -968,7 +977,6 @@ function generate_inline_image_styles($attr) {
         $wrapper {
             width: " . (isset($attr['customWidthMobile']) ? esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
 
-            grid-template-columns: repeat(" . (isset($attr['pg_postLayoutColumnsMobile']) ? $attr['pg_postLayoutColumnsMobile'] : 1) . ", 1fr);
             padding-top: " . (isset($attr['buttonpaddingTopMobile']) ? esc_attr($attr['buttonpaddingTopMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
             padding-bottom: " . (isset($attr['buttonpaddingBottomMobile']) ? esc_attr($attr['buttonpaddingBottomMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
             padding-left: " . (isset($attr['buttonpaddingLeftMobile']) ? esc_attr($attr['buttonpaddingLeftMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
@@ -977,9 +985,7 @@ function generate_inline_image_styles($attr) {
             margin-bottom: " . (isset($attr['marginBottomMobile']) ? esc_attr($attr['marginBottomMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
             margin-left: " . (isset($attr['marginLeftMobile']) ? esc_attr($attr['marginLeftMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
             margin-right: " . (isset($attr['marginRightMobile']) ? esc_attr($attr['marginRightMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            grid-template-rows: repeat(" . (isset($attr['pg_numberOfRowMobile']) ? $attr['pg_numberOfRowMobile'] : 2) . ", minmax(100px, 1fr));
-            grid-gap: " . (isset($attr['pg_gapupMobile']) ? esc_attr($attr['pg_gapupMobile']) . 'px ' . esc_attr($attr['pg_gapMobile']) . 'px' : '0') . ";
-
+          
             border-top-left-radius: " . (isset($attr['pg_postTopBorderRadiusMobile']) ? esc_attr($attr['pg_postTopBorderRadiusMobile']) . "px" : '0') . ";
             border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusMobile']) ? esc_attr($attr['pg_postBottomBorderRadiusMobile']) . "px" : '0') . ";
             border-bottom-right-radius: " . (isset($attr['pg_postLeftBorderRadiusMobile']) ? esc_attr($attr['pg_postLeftBorderRadiusMobile']) . "px" : '0') . ";
@@ -1030,6 +1036,17 @@ function generate_inline_image_styles($attr) {
             top: " . (isset($attr['overlaytopmobile']) ? esc_attr($attr['overlaytopmobile']) : 'auto') . ";
         }
 
+        $wrapper .vayu_block_caption {
+            text-align:" . (isset($attr['captionalignmentMobile']) ? esc_attr($attr['captionalignmentMobile']) : 'center') . ";
+        }
+
+
+        $wrapper .vayu_block_caption_text_para {
+            font-size:" . (isset($attr['captionsizeMobile']) ? esc_attr($attr['captionsizeMobile']) : '') . ";
+            font-weight:" . (isset($attr['captionfontweightMobile']) ? esc_attr($attr['captionfontweightMobile']) : '') . ";
+        }
+        
+            
     }";
     
     return $css;

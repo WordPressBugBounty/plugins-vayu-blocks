@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "title": "Blurb",
   "category": "vayu-blocks",
-  "description": "Create blurb",
+  "description": "A block to combine text and icons for a concise information presentation.",
   "supports": {
     "html": false,
     "align": [

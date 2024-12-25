@@ -9,7 +9,7 @@
     "carousel",
     "slideshow"
   ],
-  "description": "A custom Loader to display block with options for dots and aerrow.",
+  "description": " A block to showcase images or content in a sliding carousel.",
   "supports": {
     "html": false,
     "align": [

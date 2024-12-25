@@ -524,6 +524,18 @@ function generate_inline_advance_timeline_styles($attr) {
             
     $css .= "}";
 
+    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
+        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-advance-timeline  {display:none;}}";
+    }
+    //hide on Tablet
+    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
+        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-advance-timeline  {display:none;}}";
+    }
+    //hide on Mobile
+    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
+        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-advance-timeline  {display:none;}}";
+    }
+
     // for tablet
     $css .= "@media (max-width: 1024px) {
 

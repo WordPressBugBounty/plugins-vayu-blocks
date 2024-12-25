@@ -866,7 +866,72 @@ class WXR_Importer extends WP_Importer {
 			}
 			$remote_url = ! empty( $data['attachment_url'] ) ? $data['attachment_url'] : $data['guid'];
 			$post_id = $this->process_attachment( $postdata, $meta, $remote_url );
-		} else {
+		} elseif ( 'wp_template_part' === $postdata['post_type'] ) {
+			$post = false;
+			if ( 'header'===$postdata['post_name'] || 'footer'===$postdata['post_name']) {
+			$postdata['tax_input'] = array(
+						'wp_theme' => get_stylesheet(), 
+						'wp_template_part_area' => $postdata['post_name']
+			);
+
+			$postdata['post_excerpt'] = ($postdata['post_name']==='header')?__('Header with site title and navigation','vayu-blocks'):__('Footer columns with logo, title, tagline and links.','vayu-blocks');
+		
+			// $post_id = $this->get_post_id_slug($postdata['post_name']);
+
+			$post = get_page_by_path($postdata['post_name'], OBJECT, 'wp_template_part');
+		
+		}
+		if($post){
+			wp_update_post(
+                array(
+                    'ID' => $post->ID,
+                    'post_content' => $postdata['post_content']
+                )
+				);
+
+				$post_id = $post->ID;
+
+		}else{
+			$post_id = wp_insert_post( $postdata, true );
+		}
+			
+			do_action( 'wp_import_insert_post', $post_id, $original_id, $postdata, $data );
+
+		} elseif ( 'wp_template' === $postdata['post_type'] ) {
+
+
+
+			$post = false;
+			if ( 'front-page'===$postdata['post_name'] ) {
+			$postdata['tax_input'] = array(
+						'wp_theme' => get_stylesheet(), 
+			);
+		
+			// $post_id = $this->get_post_id_slug($postdata['post_name']);
+
+			$post = get_page_by_path($postdata['post_name'], OBJECT, 'wp_template');
+		
+		}
+		if($post){
+			wp_update_post(
+                array(
+                    'ID' => $post->ID,
+                    'post_content' => $postdata['post_content']
+                )
+				);
+
+				$post_id = $post->ID;
+
+		}else{
+			$post_id = wp_insert_post( $postdata, true );
+		}
+			
+			do_action( 'wp_import_insert_post', $post_id, $original_id, $postdata, $data );
+
+
+
+
+		}else {
 			$post_id = wp_insert_post( $postdata, true );
 			do_action( 'wp_import_insert_post', $post_id, $original_id, $postdata, $data );
 		}

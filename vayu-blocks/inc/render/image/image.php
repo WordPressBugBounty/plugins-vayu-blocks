@@ -6,6 +6,7 @@ if (!defined('ABSPATH')) {
 class Vayu_blocks_image {
 
     private $attr; //attributes
+    private $content; // Declare $content property
 
     public function __construct($attr,$content) {
         $this->attr = $attr;
@@ -91,7 +92,7 @@ class Vayu_blocks_image {
             $classhover = 'vayu_blocks_hover_can_apply';
         }
     
-        return '<div class="vayu-blocks-image-main-container' . $uniqueId . ' ' . $classhover .' vayu_blocks_image_image-container">' . $image_html . '</div>';
+        return '<div class="vayu-blocks-image-main-container' . $uniqueId . ' ' . $classhover .' vayu_blocks_image_image-container vayu-blocks-image-block">' . $image_html . '</div>';
     }
     
     //overlay
@@ -119,7 +120,8 @@ class Vayu_blocks_image {
 
         $imagemaskshape = isset($attributes['maskshape']) && $attributes['maskshape'] !== 'none' ? 'maskshapeimage' : '';
 
-        $overlay .= '<div class="vayu_blocks_overlay_main_wrapper_image '. $wrapperanimation .' ' . $overlaywrapper .' ' . $imageHvrEffect . ' ' . $animation_classname . ' ' . $imagemaskshape . '">';
+
+        $overlay .= '<div class="vayu_blocks_overlay_main_wrapper_image '. $wrapperanimation .' ' . $overlaywrapper .' ' . $imageHvrEffect . ' ' . $animation_classname . ' ' . $imagemaskshape . ' ">';
             if(!empty($attributes['overlayshow'])){
                 $overlay .= '<div class="vayu_blocks_inner_content">';
                     $overlay .= $this->content;

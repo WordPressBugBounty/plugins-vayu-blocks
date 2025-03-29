@@ -54,137 +54,59 @@
     "heightMobile": {
       "type": "number"
     },
-    "paddingType": {
-      "type": "string",
-      "default": "linked"
-    },
-    "paddingTypeTablet": {
-      "type": "string",
-      "default": "linked"
-    },
-    "paddingTypeMobile": {
-      "type": "string",
-      "default": "linked"
-    },
     "padding": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingUnit": {
-      "type": "string",
-      "default": "px"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "paddingTablet": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "paddingMobile": {
-      "type": "number"
-    },
-    "paddingTop": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingTopTablet": {
-      "type": "number"
-    },
-    "paddingTopMobile": {
-      "type": "number"
-    },
-    "paddingRight": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingRightTablet": {
-      "type": "number"
-    },
-    "paddingRightMobile": {
-      "type": "number"
-    },
-    "paddingBottom": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingBottomTablet": {
-      "type": "number"
-    },
-    "paddingBottomMobile": {
-      "type": "number"
-    },
-    "paddingLeft": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingLeftTablet": {
-      "type": "number"
-    },
-    "paddingLeftMobile": {
-      "type": "number"
-    },
-    "marginType": {
-      "type": "string",
-      "default": "linked"
-    },
-    "marginTypeTablet": {
-      "type": "string",
-      "default": "linked"
-    },
-    "marginTypeMobile": {
-      "type": "string",
-      "default": "linked"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "margin": {
-      "type": "number",
-      "default": 0
-    },
-    "marginUnit": {
-      "type": "string",
-      "default": "px"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "marginTablet": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "marginMobile": {
-      "type": "number"
-    },
-    "marginTop": {
-      "type": "number",
-      "default": 0
-    },
-    "marginTopTablet": {
-      "type": "number"
-    },
-    "marginTopMobile": {
-      "type": "number"
-    },
-    "marginRight": {
-      "type": "number",
-      "default": 0
-    },
-    "marginRightTablet": {
-      "type": "number"
-    },
-    "marginRightMobile": {
-      "type": "number"
-    },
-    "marginBottom": {
-      "type": "number",
-      "default": 0
-    },
-    "marginBottomTablet": {
-      "type": "number"
-    },
-    "marginBottomMobile": {
-      "type": "number"
-    },
-    "marginLeft": {
-      "type": "number",
-      "default": 0
-    },
-    "marginLeftTablet": {
-      "type": "number"
-    },
-    "marginLeftMobile": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "zindex": {
       "type": "number"

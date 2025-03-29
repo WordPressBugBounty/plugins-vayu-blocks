@@ -13,11 +13,13 @@ function generate_inline_image_styles($attr) {
     $attr = array_merge($default_attributes, $attr);  
     $uniqueId = $attr['uniqueId'];
 
+    $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
+
     // Generate the class selector by concatenating '.' with the unique ID
-    $wrapper = '.vayu-blocks-image-main-container' . esc_attr($uniqueId);
+    $wrapper = '.vayu-blocks-image-block.vayu-blocks-image-main-container' . esc_attr($uniqueId);
 
     $inline = '.vayu_blocks_image__wrapper';
-    
+
     // Add media query for tablet screens
     $css .= "@media (max-width: 768px) {";
         $css .= ".th-image-flip-main-wp-editor-wrapper {";
@@ -33,21 +35,7 @@ function generate_inline_image_styles($attr) {
     $css .= "}";
 
     //Main div
-    $css .= "$wrapper {";
-
-        // Desktop Padding
-        $paddingUnit = isset($attr['paddingUnit']) ? esc_attr($attr['paddingUnit']) : 'px';
-        $css .= isset($attr['buttonpaddingTop']) ? "padding-top: " . esc_attr($attr['buttonpaddingTop']) . $paddingUnit . ";" : '';
-        $css .= isset($attr['buttonpaddingBottom']) ? "padding-bottom: " . esc_attr($attr['buttonpaddingBottom']) . $paddingUnit . ";" : '';
-        $css .= isset($attr['buttonpaddingLeft']) ? "padding-left: " . esc_attr($attr['buttonpaddingLeft']) . $paddingUnit . ";" : '';
-        $css .= isset($attr['buttonpaddingRight']) ? "padding-right: " . esc_attr($attr['buttonpaddingRight']) . $paddingUnit . ";" : '';
-
-        // Desktop Padding
-        $marginUnit = isset($attr['marginUnit']) ? esc_attr($attr['marginUnit']) : 'px';
-        $css .= isset($attr['marginTop']) ? "margin-top: " . esc_attr($attr['marginTop']) . $marginUnit . ";" : '';
-        $css .= isset($attr['marginBottom']) ? "margin-bottom: " . esc_attr($attr['marginBottom']) . $marginUnit . ";" : '';
-        $css .= isset($attr['marginLeft']) ? "margin-left: " . esc_attr($attr['marginLeft']) . $marginUnit . ";" : '';
-        $css .= isset($attr['marginRight']) ? "margin-right: " . esc_attr($attr['marginRight']) . $marginUnit . ";" : '';
+    $css .= "$wrapper{";
 
         // Position and Z-index
         $css .= isset($attr['position']) ? "position: " . esc_attr($attr['position']) . ";" : '';
@@ -56,48 +44,6 @@ function generate_inline_image_styles($attr) {
         // Alignment and Order
         $css .= isset($attr['selfAlign']) ? "align-self: " . esc_attr($attr['selfAlign']) . ";" : '';
         $css .= isset($attr['order']) && $attr['order'] === 'custom' && isset($attr['customOrder']) ? "order: " . esc_attr($attr['customOrder']) . ";" : '';
-
-
-        // Top border
-        if (isset($attr['advanceborder']['topwidth'], $attr['advanceborder']['topstyle'], $attr['advanceborder']['topcolor'])) {
-            $css .= "border-top: " . esc_attr($attr['advanceborder']['topwidth']) . " " . esc_attr($attr['advanceborder']['topstyle']) . " " . esc_attr($attr['advanceborder']['topcolor']) . ";";
-        }
-
-        // Bottom border
-        if (isset($attr['advanceborder']['bottomwidth'], $attr['advanceborder']['bottomstyle'], $attr['advanceborder']['bottomcolor'])) {
-            $css .= "border-bottom: " . esc_attr($attr['advanceborder']['bottomwidth']) . " " . esc_attr($attr['advanceborder']['bottomstyle']) . " " . esc_attr($attr['advanceborder']['bottomcolor']) . ";";
-        }
-
-        // Left border
-        if (isset($attr['advanceborder']['leftwidth'], $attr['advanceborder']['leftstyle'], $attr['advanceborder']['leftcolor'])) {
-            $css .= "border-left: " . esc_attr($attr['advanceborder']['leftwidth']) . " " . esc_attr($attr['advanceborder']['leftstyle']) . " " . esc_attr($attr['advanceborder']['leftcolor']) . ";";
-        }
-
-        // Right border
-        if (isset($attr['advanceborder']['rightwidth'], $attr['advanceborder']['rightstyle'], $attr['advanceborder']['rightcolor'])) {
-            $css .= "border-right: " . esc_attr($attr['advanceborder']['rightwidth']) . " " . esc_attr($attr['advanceborder']['rightstyle']) . " " . esc_attr($attr['advanceborder']['rightcolor']) . ";";
-        }
-
-        // Apply individual border-radius values if not a circle
-        if (isset($attr['advanceRadius']['top'], $attr['advanceRadius']['right'], $attr['advanceRadius']['bottom'], $attr['advanceRadius']['left'])) {
-            $css .= "border-radius: " . esc_attr($attr['advanceRadius']['top']) . " " . esc_attr($attr['advanceRadius']['right']) . " " . esc_attr($attr['advanceRadius']['bottom']) . " " . esc_attr($attr['advanceRadius']['left']) . ";";
-        }
-
-        // Box-shadow
-        if (isset($attr['boxShadow']) && $attr['boxShadow']) {
-            $boxShadowColor = 'rgba(' . implode(', ', [
-                hexdec(substr($attr['boxShadowColor'], 1, 2)), // Red
-                hexdec(substr($attr['boxShadowColor'], 3, 2)), // Green
-                hexdec(substr($attr['boxShadowColor'], 5, 2))  // Blue
-            ]) . ', ' . ((float) $attr['boxShadowColorOpacity'] / 100) . ')';
-            $css .= "box-shadow: " . esc_attr($attr['boxShadowHorizontal']) . 'px ' .
-                                esc_attr($attr['boxShadowVertical']) . 'px ' .
-                                esc_attr($attr['boxShadowBlur']) . 'px ' .
-                                esc_attr($attr['boxShadowSpread']) . 'px ' .
-                                $boxShadowColor . ";";
-        } else {
-            $css .= "box-shadow: none;";
-        }
 
         // Background
         if (isset($attr['backgroundType'])) {
@@ -114,6 +60,18 @@ function generate_inline_image_styles($attr) {
             $css .= "background: " . esc_attr($attr['backgroundColor']) . ";";
         }
 
+        // Box-shadow
+        if (!empty($attr['buttonpadding'])) {
+            $css .= $OBJ_STYLE->dimensions('buttonpadding', 'padding', 'Desktop');
+        }
+        
+        // Box-shadow
+        if (!empty($attr['buttonmargin'])) {
+            $css .= $OBJ_STYLE->dimensions('buttonmargin','margin','Desktop');
+        }
+
+        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Desktop');
+
         // Background properties
         $css .= isset($attr['backgroundPosition']) ? "background-position: " . esc_attr($attr['backgroundPosition']['x']) . ',' . esc_attr($attr['backgroundPosition']['y']) . ";" : 'background-position: 50%, 50%;';
         $css .= isset($attr['backgroundAttachment']) ? "background-attachment: " . esc_attr($attr['backgroundAttachment']) . ";" : '';
@@ -123,91 +81,58 @@ function generate_inline_image_styles($attr) {
         // Transition
         $css .= "transition-duration: " . (isset($attr['transitionAll']) ? esc_attr($attr['transitionAll']) : '0') . "s;";
         
-
-        
     $css .= "}";
      
+    // Add media query for tablet screens
+    $css .= "@media (max-width: 1024px) {";
+        $css .= "$wrapper {";
+            $css .= "width: " . esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) . ";";
+            // Box-shadow
+            if (!empty($attr['buttonpadding'])) {
+                $css .= $OBJ_STYLE ->dimensions('buttonpadding','padding',  'Tablet');	
+            }
+
+            // Box-shadow
+            if (!empty($attr['buttonmargin'])) {
+                $css .= $OBJ_STYLE ->dimensions('buttonmargin','margin',  'Tablet');
+            }
+           
+           
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Tablet');
+        $css .= "}";
+
+        $css .= "$wrapper:hover {";
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Tablet');
+        $css .= "}";
+
+    $css .= "}";
+
+    // Add media query for Mobile screens
+    $css .= "@media (max-width: 300px) {";
+        $css .= "$wrapper {";
+            $css .= "width: " . esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) . ";";
+
+            if (!empty($attr['buttonpadding'])) {
+                $css .= $OBJ_STYLE ->dimensions('buttonpadding','padding',  'Mobile');	
+            }
+
+            // Box-shadow
+            if (!empty($attr['buttonmargin'])) {
+                $css .= $OBJ_STYLE ->dimensions('buttonmargin', 'margin', 'Mobile');
+            }
+
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Mobile');
+        $css .= "}";
+
+        $css .= "$wrapper:hover {";
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Mobile');
+        $css .= "}";
+
+    $css .= "}";
+
     //Hover 
     $css .= "$wrapper:hover {";
-
-       // Top border
-        if (
-            isset($attr['advanceborderhvr']['topwidth']) && !empty($attr['advanceborderhvr']['topwidth']) &&
-            isset($attr['advanceborderhvr']['topstyle']) && !empty($attr['advanceborderhvr']['topstyle']) &&
-            isset($attr['advanceborderhvr']['topcolor']) && !empty($attr['advanceborderhvr']['topcolor'])
-        ) {
-            $css .= "border-top: " . esc_attr($attr['advanceborderhvr']['topwidth']) . " " . esc_attr($attr['advanceborderhvr']['topstyle']) . " " . esc_attr($attr['advanceborderhvr']['topcolor']) . ";";
-        }
-
-
-        // Bottom border
-        if (
-            isset($attr['advanceborderhvr']['bottomwidth']) && !empty($attr['advanceborderhvr']['bottomwidth']) &&
-            isset($attr['advanceborderhvr']['bottomstyle']) && !empty($attr['advanceborderhvr']['bottomstyle']) &&
-            isset($attr['advanceborderhvr']['bottomcolor']) && !empty($attr['advanceborderhvr']['bottomcolor'])
-        ) {
-            $css .= "border-bottom: " . esc_attr($attr['advanceborderhvr']['bottomwidth']) . " " . esc_attr($attr['advanceborderhvr']['bottomstyle']) . " " . esc_attr($attr['advanceborderhvr']['bottomcolor']) . ";";
-        }
-
-        // Left border
-        if (
-            isset($attr['advanceborderhvr']['leftwidth']) && !empty($attr['advanceborderhvr']['leftwidth']) &&
-            isset($attr['advanceborderhvr']['leftstyle']) && !empty($attr['advanceborderhvr']['leftstyle']) &&
-            isset($attr['advanceborderhvr']['leftcolor']) && !empty($attr['advanceborderhvr']['leftcolor'])
-        ) {
-            $css .= "border-left: " . esc_attr($attr['advanceborderhvr']['leftwidth']) . " " . esc_attr($attr['advanceborderhvr']['leftstyle']) . " " . esc_attr($attr['advanceborderhvr']['leftcolor']) . ";";
-        }
-
-        // Right border
-        if (
-            isset($attr['advanceborderhvr']['rightwidth']) && !empty($attr['advanceborderhvr']['rightwidth']) &&
-            isset($attr['advanceborderhvr']['rightstyle']) && !empty($attr['advanceborderhvr']['rightstyle']) &&
-            isset($attr['advanceborderhvr']['rightcolor']) && !empty($attr['advanceborderhvr']['rightcolor'])
-        ) {
-            $css .= "border-right: " . esc_attr($attr['advanceborderhvr']['rightwidth']) . " " . esc_attr($attr['advanceborderhvr']['rightstyle']) . " " . esc_attr($attr['advanceborderhvr']['rightcolor']) . ";";
-        }
-
-
-        // Apply individual border-radius values if all values are set and not empty
-        if (
-            isset($attr['advanceRadiushvr']['top']) && ($attr['advanceRadiushvr']['top'])!='0px' ||
-            isset($attr['advanceRadiushvr']['right']) && ($attr['advanceRadiushvr']['right']) !='0px' ||
-            isset($attr['advanceRadiushvr']['bottom']) && ($attr['advanceRadiushvr']['bottom']) !='0px' ||
-            isset($attr['advanceRadiushvr']['left']) && ($attr['advanceRadiushvr']['left'])!='0px'
-        ) {
-            $css .= "border-radius: " . esc_attr($attr['advanceRadiushvr']['top']) . " " . esc_attr($attr['advanceRadiushvr']['right']) . " " . esc_attr($attr['advanceRadiushvr']['bottom']) . " " . esc_attr($attr['advanceRadiushvr']['left']) . ";";
-        }
-
-        if(!empty($attr['boxShadowColorHvr'])){
-        // Box-shadow
-        if (isset($attr['boxShadowHvr']) && $attr['boxShadowHvr']) {
-            // Ensure the boxShadowColorHvr and boxShadowColorOpacityHvr keys are set
-            if (isset($attr['boxShadowColorHvr'], $attr['boxShadowColorOpacityHvr'])) {
-                $boxShadowColor = 'rgba(' . implode(', ', [
-                    hexdec(substr($attr['boxShadowColorHvr'], 1, 2)), // Red
-                    hexdec(substr($attr['boxShadowColorHvr'], 3, 2)), // Green
-                    hexdec(substr($attr['boxShadowColorHvr'], 5, 2))  // Blue
-                ]) . ', ' . ((float) $attr['boxShadowColorOpacityHvr'] / 100) . ')';
-            } else {
-                $boxShadowColor = 'rgba(0, 0, 0, 0)'; // Default value in case of missing color
-            }
-
-            // Ensure each box shadow dimension key is set, use a default value if not
-            $boxShadowHorizontal = isset($attr['boxShadowHorizontalHvr']) ? esc_attr($attr['boxShadowHorizontalHvr']) : '0';
-            $boxShadowVertical = isset($attr['boxShadowVerticalHvr']) ? esc_attr($attr['boxShadowVerticalHvr']) : '0';
-            $boxShadowBlur = isset($attr['boxShadowBlurHvr']) ? esc_attr($attr['boxShadowBlurHvr']) : '0';
-            $boxShadowSpread = isset($attr['boxShadowSpreadHvr']) ? esc_attr($attr['boxShadowSpreadHvr']) : '0';
-
-            if(!empty($boxShadowColor)){
-                $css .= "box-shadow: " . $boxShadowHorizontal . 'px ' .
-                $boxShadowVertical . 'px ' .
-                $boxShadowBlur . 'px ' .
-                $boxShadowSpread . 'px ' .
-                $boxShadowColor . ";";
-            }
-
-        }
-        }
+        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Desktop');
 
         // Background
         if (isset($attr['backgroundTypeHvr'])) {
@@ -241,24 +166,24 @@ function generate_inline_image_styles($attr) {
     $css .= "}";
 
     // Effect 3 CSS rule
-    $css .= ".vayu_block_styling-effect3::after {";
+    $css .= "$wrapper .vayu_block_styling-effect3::after {";
         $css .= "background:" . esc_attr($attr['wrapppereffect3color']) . ";";
         $css .= "box-shadow: 1rem 1rem 2rem " . esc_attr($attr['wrapppereffect3color']) . ";";
     $css .= "}";
 
     // Effect 10 CSS rule
-    $css .= ".vayu_block_styling-effect10 {";
+    $css .= "$wrapper .vayu_block_styling-effect10 {";
         $css .= "background:" . esc_attr($attr['wrapppereffect3color']) . ";";
     $css .= "}";
 
-    $css .= ".vayu_block_styling-effect10 {";
+    $css .= "$wrapper .vayu_block_styling-effect10 {";
         $css .= " box-shadow:
         1px 1px 0 1px " . esc_attr($attr['wrapppereffect3color']) . ",
         -1px 0 28px 0 rgba(34, 33, 81, 0.01),
         28px 28px 28px 0 rgba(34, 33, 81, 0.25) !important;";
     $css .= "}";
     
-    $css .= ".vayu_block_styling-effect10:hover {";
+    $css .= "$wrapper .vayu_block_styling-effect10:hover {";
         $css .= " box-shadow:
         1px 1px 0 1px " . esc_attr($attr['wrapppereffect3color']) . ",
         -1px 0 28px 0 rgba(34, 33, 81, 0.01),
@@ -277,31 +202,18 @@ function generate_inline_image_styles($attr) {
         if (!empty($attr['imageheight'])) {
             $css .= "height: " . esc_attr($attr['imageheight']) . ";";
         } else {
-            $css .= "height: auto;";
+            $css .= "height: auto";
         }
     
         $css .= " position: relative;";
         $css .= "perspective: 1000px;";
         $css .= "transform-style: preserve-3d;";
 
-                 // Box-shadow
-       if (isset($attr['imageboxShadow']) && $attr['imageboxShadowColor']) {
-        
-        $boxShadowColor = 'rgba(' . implode(', ', [
-            hexdec(substr($attr['imageboxShadowColor'], 1, 2)), // Red
-            hexdec(substr($attr['imageboxShadowColor'], 3, 2)), // Green
-            hexdec(substr($attr['imageboxShadowColor'], 5, 2))  // Blue
-        ]) . ', ' . ((float) $attr['imageboxShadowColorOpacity'] / 100) . ')';
-        $css .= "box-shadow: " . esc_attr($attr['imageboxShadowHorizontal']) . 'px ' .
-                            esc_attr($attr['imageboxShadowVertical']) . 'px ' .
-                            esc_attr($attr['imageboxShadowBlur']) . 'px ' .
-                            esc_attr($attr['imageboxShadowSpread']) . 'px ' .
-                            $boxShadowColor . ";";
-        } else {
-            $css .= "box-shadow: none;";
-        }
-        
-        
+        // // Box-shadow
+        // if (!empty($attr['imageboxShadow'])) {
+        //     $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Desktop');
+        // }
+       
     $css .= "}";
 
     $css .= "$wrapper .vayu_blocks_rotating_div{";
@@ -311,6 +223,7 @@ function generate_inline_image_styles($attr) {
     
     // Assuming $attr['imagetransitiontime'] contains the transition time value
     $transitionTime = isset($attr['imagetransitiontime']) ? esc_attr($attr['imagetransitiontime']) : '0.5'; // Default to 0.5s if not set
+    
     // Append CSS rules to $css
     $css .= "$wrapper .vayu_blocks__image_image {";
 
@@ -318,18 +231,9 @@ function generate_inline_image_styles($attr) {
             $css .= "backface-visibility: hidden;";
         }
 
-        if (!empty($attr['imagewidth'])) {
-            $css .= "width: " . esc_attr($attr['imagewidth']) . ";";
-        } else {
-            $css .= "width: auto;";
-           $css .= "max-width: 100%;";
-        }
-        
-        if (!empty($attr['imageheight'])) {
-            $css .= "height: " . esc_attr($attr['imageheight']) . ";";
-        } else {
-            $css .= "height: auto;";
-        }
+        $css .= "width: 100%;";
+        $css .= "max-width: 100%;";
+        $css .= "height: 100%;";
 
         $css .= "box-sizing: border-box;";
         
@@ -364,29 +268,16 @@ function generate_inline_image_styles($attr) {
             }
         }
 
-        if ($attr['overlaybordertype'] === 'color') {
-            // Apply individual border-radius values
-            if (isset($attr['imageborderRadius']['top'], $attr['imageborderRadius']['right'], $attr['imageborderRadius']['bottom'], $attr['imageborderRadius']['left'])) {
-                $css .= "border-radius: " . esc_attr($attr['imageborderRadius']['top']) . " " . esc_attr($attr['imageborderRadius']['right']) . " " . esc_attr($attr['imageborderRadius']['bottom']) . " " . esc_attr($attr['imageborderRadius']['left']) . ";";
+        if(!empty($attr['imageborderRadius'])){
+            $css .= $OBJ_STYLE->borderRadiusShadow('','imageborderRadius','Desktop');
             }
+
+       // Box-shadow
+       if (!empty($attr['imageboxShadow'])) {
+        $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Desktop');
         }
 
-         // Box-shadow
-       if (isset($attr['imageboxShadow']) && $attr['imageboxShadow']) {
-        $boxShadowColor = 'rgba(' . implode(', ', [
-            hexdec(substr($attr['imageboxShadowColor'], 1, 2)), // Red
-            hexdec(substr($attr['imageboxShadowColor'], 3, 2)), // Green
-            hexdec(substr($attr['imageboxShadowColor'], 5, 2))  // Blue
-        ]) . ', ' . ((float) $attr['imageboxShadowColorOpacity'] / 100) . ')';
-        $css .= "box-shadow: " . esc_attr($attr['imageboxShadowHorizontal']) . 'px ' .
-                            esc_attr($attr['imageboxShadowVertical']) . 'px ' .
-                            esc_attr($attr['imageboxShadowBlur']) . 'px ' .
-                            esc_attr($attr['imageboxShadowSpread']) . 'px ' .
-                            $boxShadowColor . ";";
-        } else {
-            $css .= "box-shadow: none;";
-        }
-
+      
     $css .= "}";
 
     // Append CSS rules to $css
@@ -403,9 +294,21 @@ function generate_inline_image_styles($attr) {
         $css .= "    transform: var(--image-hover-effect-transform, none);";
         $css .= "    filter: var(--image-filter-effect, none);";
         $css .= "    opacity: var(--image-hover-effect-opacity, 1);";
+
+        
+        // Apply individual border-radius values if all values are set and not empty
+        if (
+            isset($attr['advanceRadiushvr']['top']) && ($attr['advanceRadiushvr']['top'])!='0px' ||
+            isset($attr['advanceRadiushvr']['right']) && ($attr['advanceRadiushvr']['right']) !='0px' ||
+            isset($attr['advanceRadiushvr']['bottom']) && ($attr['advanceRadiushvr']['bottom']) !='0px' ||
+            isset($attr['advanceRadiushvr']['left']) && ($attr['advanceRadiushvr']['left'])!='0px'
+        ) {
+            $css .= "border-radius: " . esc_attr($attr['advanceRadiushvr']['top']) . " " . esc_attr($attr['advanceRadiushvr']['right']) . " " . esc_attr($attr['advanceRadiushvr']['bottom']) . " " . esc_attr($attr['advanceRadiushvr']['left']) . ";";
+        }
+        
     $css .= "}";
 
-    $css .= " .vayu_blocks_main_image_container_image_image {";
+    $css .= " $wrapper .vayu_blocks_main_image_container_image_image {";
         $css .= "justify-content: " . (
             $attr['imagealignment'] === 'center' ? 'center' :
             ($attr['imagealignment'] === 'left' ? 'flex-start' :
@@ -416,108 +319,108 @@ function generate_inline_image_styles($attr) {
         $css .= "height:100%;";
     $css .= "}";
 
-    $css .= ".flip-front {";
+    $css .= "$wrapper .flip-front {";
         $css .= "  --image-hover-effect-transform: rotateY(180deg);";
     $css .= "}";
 
-    $css .= ".flip-back {";
+    $css .= "$wrapper .flip-back {";
         $css .= "  --image-hover-effect-transform: rotateX(180deg);";
     $css .= "}";
         
-    $css .= ".flip-front-left {";
+    $css .= "$wrapper .flip-front-left {";
         $css .= "  --image-hover-effect-transform: rotateY(-180deg);";
     $css .= "}";
 
-    $css .= ".flip-back-bottom {";
+    $css .= "$wrapper .flip-back-bottom {";
         $css .= "  --image-hover-effect-transform: rotateX(-180deg);";
     $css .= "}";
 
     /* Grayscale */
-    $css .= ".grayScale {";
+    $css .= "$wrapper .grayScale {";
         $css .= "    --image-filter-effect: grayscale(100%);";
     $css .= "}";
 
     /* Grayscale reverse hover */
-    $css .= ".grayScalereverse {";
+    $css .= "$wrapper .grayScalereverse {";
         $css .= "    filter: grayscale(100%) !important;";
         $css .= "    transition: filter " . esc_attr($attr['imagetransitiontime']) . "s ease;";
     $css .= "}";
 
-    $css .= ".grayScalereverse:hover {";
+    $css .= "$wrapper .grayScalereverse:hover {";
         $css .= "filter: none;";
     $css .= "}";
 
     /* Sepia */
-    $css .= ".sepia {";
+    $css .= "$wrapper .sepia {";
         $css .= "    --image-filter-effect: sepia(100%);";
     $css .= "}";
 
     /* Zoom-in and Zoom-out effects */
-    $css .= ".zoom-in {";
+    $css .= "$wrapper .zoom-in {";
         $css .= "    --image-hover-effect-transform: scale(1.5);";
     $css .= "}";
 
-    $css .= ".zoom-out {";
+    $css .= "$wrapper .zoom-out {";
         $css .= "    --image-hover-effect-transform: scale(0.8);";
     $css .= "}";
 
     /* Fade-in and Fade-out effects */
-    $css .= ".fade-in {";
+    $css .= "$wrapper .fade-in {";
         $css .= "    --image-hover-effect-opacity: 1;";
     $css .= "}";
 
-    $css .= ".fade-out {";
+    $css .= "$wrapper .fade-out {";
         $css .= "    --image-hover-effect-opacity: 0.5;";
     $css .= "}";
 
     /* Slide effects */
-    $css .= ".slide-up {";
+    $css .= "$wrapper .slide-up {";
         $css .= "    --image-hover-effect-transform: translateY(-10px);";
     $css .= "}";
 
-    $css .= ".slide-down {";
+    $css .= "$wrapper .slide-down {";
         $css .= "    --image-hover-effect-transform: translateY(10px);";
     $css .= "}";
 
-    $css .= ".slide-left {";
+    $css .= "$wrapper .slide-left {";
         $css .= "    --image-hover-effect-transform: translateX(-10px);";
     $css .= "}";
 
-    $css .= ".slide-right {";
+    $css .= "$wrapper .slide-right {";
         $css .= "    --image-hover-effect-transform: translateX(10px);";
     $css .= "}";
 
     /* Flip effects */
-    $css .= ".flip-horizontal {";
+    $css .= "$wrapper .flip-horizontal {";
         $css .= "    --image-hover-effect-transform: rotateY(180deg);";
     $css .= "}";
 
-    $css .= ".flip-vertical {";
+    $css .= "$wrapper .flip-vertical {";
         $css .= "    --image-hover-effect-transform: rotateX(180deg);";
     $css .= "}";
 
     /* Rotate */
-    $css .= ".rotate {";
+    $css .= "$wrapper .rotate {";
         $css .= "    --image-hover-effect-transform: rotate(-30deg);";
     $css .= "}";
 
     /* Blur */
-    $css .= ".blur {";
+    $css .= "$wrapper .blur {";
         $css .= "    --image-filter-effect: blur(3px);";
     $css .= "}";
 
     /* Shine */
-    $css .= ".shine {";
+    $css .= "$wrapper .shine {";
         $css .= "    --image-filter-effect: grayscale(100%);";
     $css .= "}";
 
     if($attr['overlayshow']){
         /* Hover the image and show the overlay */
-        $css .= "$wrapper .vayu_blocks_overlay_main_wrapper_image:hover {";
+        $css .= "$wrapper .vayu_blocks_overlay_main_wrapper_image:hover:after {";
                 if($attr['overlayhvrcolor']){
                     $css .= "background: " . esc_attr($attr['overlayhvrcolor']) . " !important;";
-                    $css .= "opacity: " . esc_attr($attr['overlayOpacityhvr']) . " !important;";
                 }
+                $css .= "opacity: " . esc_attr($attr['overlayOpacityhvr']) . " !important;";
         $css .= "}";
     }
 
@@ -554,68 +457,86 @@ function generate_inline_image_styles($attr) {
     
     /* Overlay styles */
     $css .= "$wrapper .vayu_blocks_overlay_main_wrapper_image {";
-        if($attr['overlayshow']){
-            $css .= "background-color: " . esc_attr($attr['overlaycolor']) . ";";
-            $css .= "opacity: " . esc_attr($attr['overlayOpacity']) . " !important;";
-        }
-       
         $css .= "width: " . esc_attr($attr['overlaywidth']) . ";";
         $css .= "height: " . esc_attr($attr['overlayheight']) . ";";
         $css .= "position: absolute;";
         $css .= "top: " . esc_attr($attr['overlaytop']) . ";";
         $css .= "left: " . esc_attr($attr['overlayleft']) . ";";
         $css .= "transition: " . esc_attr($attr['overlaytransitiontime']) . "s ease;";
-        $css .= "opacity: 1; ";
-       
+        // $css .= "opacity:  " . esc_attr($attr['overlayOpacity']) . ";";
         $css .= "z-index: 10;";
         $css .= "display: flex;";
-        
         $css .= "box-sizing: border-box;";
+        $css .= "overflow:hidden;";
 
-        if($attr['frameshow']){
-            if ($attr['overlaybordertype'] === 'color') {
-                // Top border
-                if (isset($attr['imageborder']['topwidth'], $attr['imageborder']['topstyle'], $attr['imageborder']['topcolor'])) {
-                    $css .= "border-top: " . esc_attr($attr['imageborder']['topwidth']) . " " . esc_attr($attr['imageborder']['topstyle']) . " " . esc_attr($attr['imageborder']['topcolor']) . ";";
+        if (!empty($attr['advanceglobaldropshadow'])) {
+            $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'advanceglobaldropshadow', 'Desktop');
+        }
+        
+        if($attr['parentBlock']==="vayu-blocks/advance-slider" && !$attr['frameshow']){
+
+            if ($attr['parentBlockAttributes']['advancebordertype'] === 'color') {
+
+                if(!empty($attr['advanceborderglobal']) && !empty($attr['advanceRadiusglobal'])){
+                    $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderglobal','advanceRadiusglobal','Desktop');
+
                 }
-            
-                // Bottom border
-                if (isset($attr['imageborder']['bottomwidth'], $attr['imageborder']['bottomstyle'], $attr['imageborder']['bottomcolor'])) {
-                    $css .= "border-bottom: " . esc_attr($attr['imageborder']['bottomwidth']) . " " . esc_attr($attr['imageborder']['bottomstyle']) . " " . esc_attr($attr['imageborder']['bottomcolor']) . ";";
-                }
-            
-                // Left border
-                if (isset($attr['imageborder']['leftwidth'], $attr['imageborder']['leftstyle'], $attr['imageborder']['leftcolor'])) {
-                    $css .= "border-left: " . esc_attr($attr['imageborder']['leftwidth']) . " " . esc_attr($attr['imageborder']['leftstyle']) . " " . esc_attr($attr['imageborder']['leftcolor']) . ";";
-                }
-            
-                // Right border
-                if (isset($attr['imageborder']['rightwidth'], $attr['imageborder']['rightstyle'], $attr['imageborder']['rightcolor'])) {
-                    $css .= "border-right: " . esc_attr($attr['imageborder']['rightwidth']) . " " . esc_attr($attr['imageborder']['rightstyle']) . " " . esc_attr($attr['imageborder']['rightcolor']) . ";";
-                }
-            
-                // Apply individual border-radius values
-                if (isset($attr['imageborderRadius']['top'], $attr['imageborderRadius']['right'], $attr['imageborderRadius']['bottom'], $attr['imageborderRadius']['left'])) {
-                    $css .= "border-radius: " . esc_attr($attr['imageborderRadius']['top']) . " " . esc_attr($attr['imageborderRadius']['right']) . " " . esc_attr($attr['imageborderRadius']['bottom']) . " " . esc_attr($attr['imageborderRadius']['left']) . ";";
-                }
-            } elseif ($attr['overlaybordertype'] === 'gradient') {
+
+            }elseif ($attr['parentBlockAttributes']['advancebordertype'] === 'gradient') {
                 
-                $css .= "border-image: " . esc_attr($attr['overlaybordergradient']) . " 30% / " . esc_attr($attr['overlaygradienttop']) . " " . esc_attr($attr['overlaygradientbottom']) . " " . esc_attr($attr['overlaygradientleft']) . " " . esc_attr($attr['overlaygradientright']) . ";"; // Corrected the syntax
+                $css .= "border-image: " . esc_attr($attr['parentBlockAttributes']['advancebordergradient']) . " 30% / " . esc_attr($attr['parentBlockAttributes']['advancegradienttop']) . " " . esc_attr($attr['parentBlockAttributes']['advancegradientbottom']) . " " . esc_attr($attr['parentBlockAttributes']['advancegradientleft']) . " " . esc_attr($attr['parentBlockAttributes']['advancegradientright']) . ";"; // Corrected the syntax
 
-            }elseif ($attr['overlaybordertype'] === 'image') {
-                $borderImage = $attr['overlayborderimagetype'] === 'custom' 
-                    ? 'url(' . esc_url($attr['overlayborderimage']) . ') ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' / ' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
-                    : ($attr['overlayborderimagetype'] === 'image1'
-                        ? 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE3oR0_1fMluZWzbUZo_e-0O-Rkdq6xNudQ&s) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' / ' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
-                        : ($attr['overlayborderimagetype'] === 'image2'
-                            ? 'url(https://t4.ftcdn.net/jpg/00/90/22/23/360_F_90222304_MnOvAi5X9Rr2ywonhlSpaDPWD0MmLgiY.jpg) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' / ' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
-                            : ($attr['overlayborderimagetype'] === 'image3'
-                                ? 'url(https://www.w3schools.com/cssref/border.png) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' /' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
-                                : ($attr['overlayborderimagetype'] === 'image4'
-                                    ? 'url(https://w7.pngwing.com/pngs/169/875/png-transparent-frame-diamond-lace-border-border-frame-symmetry-thumbnail.png) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . '/' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
+                $css .= "border-width:" . esc_attr($attr['parentBlockAttributes']['advancegradienttop']) . " " . esc_attr($attr['parentBlockAttributes']['advancegradientbottom']) . " " . esc_attr($attr['parentBlockAttributes']['advancegradientleft']) . " " . esc_attr($attr['parentBlockAttributes']['advancegradientright']) . ";";
+
+            }elseif ($attr['parentBlockAttributes']['advancebordertype'] === 'image') {
+                $borderImage = $attr['parentBlockAttributes']['advanceborderimagetype'] === 'custom' 
+                    ? 'url(' . esc_url($attr['parentBlockAttributes']['advanceborderimage']) . ') ' . esc_attr($attr['parentBlockAttributes']['advanceborderimagesize']) . '% / ' . esc_attr($attr['parentBlockAttributes']['advanceimagetop']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimagebottom']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageleft']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageright']) . ' / ' . esc_attr($attr['parentBlockAttributes']['advanceborderimageoutset']) . 'px ' . esc_attr($attr['parentBlockAttributes']['advancespace'])
+                    : ($attr['parentBlockAttributes']['advanceborderimagetype'] === 'image1'
+                        ? 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE3oR0_1fMluZWzbUZo_e-0O-Rkdq6xNudQ&s) ' . esc_attr($attr['parentBlockAttributes']['advanceborderimagesize']) . '% / ' . esc_attr($attr['parentBlockAttributes']['advanceimagetop']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimagebottom']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageleft']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageright']) . ' / ' . esc_attr($attr['parentBlockAttributes']['advanceborderimageoutset']) . 'px ' . esc_attr($attr['parentBlockAttributes']['advancespace'])
+                        : ($attr['parentBlockAttributes']['advanceborderimagetype'] === 'image2'
+                            ? 'url(https://t4.ftcdn.net/jpg/00/90/22/23/360_F_90222304_MnOvAi5X9Rr2ywonhlSpaDPWD0MmLgiY.jpg) ' . esc_attr($attr['parentBlockAttributes']['advanceborderimagesize']) . '% / ' . esc_attr($attr['parentBlockAttributes']['advanceimagetop']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimagebottom']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageleft']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageright']) . ' / ' . esc_attr($attr['parentBlockAttributes']['advanceborderimageoutset']) . 'px ' . esc_attr($attr['parentBlockAttributes']['advancespace'])
+                            : ($attr['parentBlockAttributes']['advanceborderimagetype'] === 'image3'
+                                ? 'url(https://www.w3schools.com/cssref/border.png) ' . esc_attr($attr['parentBlockAttributes']['advanceborderimagesize']) . '% / ' . esc_attr($attr['parentBlockAttributes']['advanceimagetop']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimagebottom']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageleft']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageright']) . ' /' . esc_attr($attr['parentBlockAttributes']['advanceborderimageoutset']) . 'px ' . esc_attr($attr['parentBlockAttributes']['advancespace'])
+                                : ($attr['parentBlockAttributes']['advanceborderimagetype'] === 'image4'
+                                    ? 'url(https://w7.pngwing.com/pngs/169/875/png-transparent-frame-diamond-lace-border-border-frame-symmetry-thumbnail.png) ' . esc_attr($attr['parentBlockAttributes']['advanceborderimagesize']) . '% / ' . esc_attr($attr['parentBlockAttributes']['advanceimagetop']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimagebottom']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageleft']) . ' ' . esc_attr($attr['parentBlockAttributes']['advanceimageright']) . '/' . esc_attr($attr['parentBlockAttributes']['advanceborderimageoutset']) . 'px ' . esc_attr($attr['parentBlockAttributes']['advancespace'])
                                     : 'none'))));
             
                 $css .= "border-image: " . $borderImage . ";"; // Use the determined border image
+            }
+
+        }else{
+            if($attr['frameshow']){
+                if ($attr['overlaybordertype'] === 'color') {
+                    if(!empty($attr['imageborder']) && !empty($attr['imageborderRadius'])){
+                    $css .= $OBJ_STYLE->borderRadiusShadow('imageborder','imageborderRadius','Desktop');
+                    }
+                }elseif ($attr['overlaybordertype'] === 'gradient') {
+                    
+                    $css .= "border-image: " . esc_attr($attr['overlaybordergradient']) . " 30% / 1 / 0 stretch;"; 
+
+                    $border_width = esc_attr($attr['overlaygradienttop'] ?? '0px') . " " . 
+                                    esc_attr($attr['overlaygradientbottom'] ?? '0px') . " " . 
+                                    esc_attr($attr['overlaygradientleft'] ?? '0px') . " " . 
+                                    esc_attr($attr['overlaygradientright'] ?? '0px');
+
+                    $css .= "border-width: $border_width;";
+                    $css .= "border-style: solid;";  // Ensure a border is actually applied
+                
+                }elseif ($attr['overlaybordertype'] === 'image') {
+                    $borderImage = $attr['overlayborderimagetype'] === 'custom' 
+                        ? 'url(' . esc_url($attr['overlayborderimage']) . ') ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' / ' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
+                        : ($attr['overlayborderimagetype'] === 'image1'
+                            ? 'url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKE3oR0_1fMluZWzbUZo_e-0O-Rkdq6xNudQ&s) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' / ' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
+                            : ($attr['overlayborderimagetype'] === 'image2'
+                                ? 'url(https://t4.ftcdn.net/jpg/00/90/22/23/360_F_90222304_MnOvAi5X9Rr2ywonhlSpaDPWD0MmLgiY.jpg) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' / ' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
+                                : ($attr['overlayborderimagetype'] === 'image3'
+                                    ? 'url(https://www.w3schools.com/cssref/border.png) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . ' /' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
+                                    : ($attr['overlayborderimagetype'] === 'image4'
+                                        ? 'url(https://w7.pngwing.com/pngs/169/875/png-transparent-frame-diamond-lace-border-border-frame-symmetry-thumbnail.png) ' . esc_attr($attr['borderimagesize']) . '% / ' . esc_attr($attr['overlayimagetop']) . ' ' . esc_attr($attr['overlayimagebottom']) . ' ' . esc_attr($attr['overlayimageleft']) . ' ' . esc_attr($attr['overlayimageright']) . '/' . esc_attr($attr['borderimageoutset']) . 'px ' . esc_attr($attr['overlayspace'])
+                                        : 'none'))));
+                
+                    $css .= "border-image: " . $borderImage . ";"; // Use the determined border image
+                }
             }
         }
 
@@ -637,6 +558,64 @@ function generate_inline_image_styles($attr) {
         
     $css .= "}";
 
+    /* Tablet Styles */
+    $css .= "@media (max-width: 1024px) {";
+        $css .= "$wrapper .vayu_blocks_overlay_main_wrapper_image {";
+        
+            if ($attr['parentBlock'] === "vayu-blocks/advance-slider" && !$attr['frameshow']) {
+                if ($attr['parentBlockAttributes']['advancebordertype'] === 'color') {
+                    if (!empty($attr['advanceborderglobal']) || !empty($attr['advanceRadiusglobal'])) {
+                        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderglobal','advanceRadiusglobal', 'Tablet');
+                    }
+                }
+            }else{
+                if($attr['frameshow']){
+                    if ($attr['overlaybordertype'] === 'color') {
+                        if(!empty($attr['imageborder']) || !empty($attr['imageborderRadius'])){
+                        $css .= $OBJ_STYLE->borderRadiusShadow('imageborder','imageborderRadius','Tablet');
+                        }
+                    }
+                }
+            }
+        $css .= "}";
+    $css .= "}";
+
+    /* Mobile Styles */
+    $css .= "@media (max-width: 1024px) {";
+        $css .= "$wrapper .vayu_blocks_overlay_main_wrapper_image {";
+        
+            if ($attr['parentBlock'] === "vayu-blocks/advance-slider" && !$attr['frameshow']) {
+                if ($attr['parentBlockAttributes']['advancebordertype'] === 'color') {
+                    if (!empty($attr['advanceborderglobal']) || !empty($attr['advanceRadiusglobal'])) {
+                        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderglobal','advanceRadiusglobal', 'Mobile');
+                    }
+                }
+            }else{
+                if($attr['frameshow']){
+                    if ($attr['overlaybordertype'] === 'color') {
+                        if(!empty($attr['imageborder']) || !empty($attr['imageborderRadius'])){
+                        $css .= $OBJ_STYLE->borderRadiusShadow('imageborder','imageborderRadius','Mobile');
+                        }
+                    }
+                }
+            }
+        $css .= "}";
+    $css .= "}";
+
+    $css .= "$wrapper .vayu_blocks_overlay_main_wrapper_image:after {";
+        if($attr['overlayshow']){
+            $css .= "background-color: " . esc_attr($attr['overlaycolor']) . ";";
+            $css .= "opacity: " . esc_attr($attr['overlayOpacity']) . " !important;";
+        }
+
+        $css .= 'content: " ";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1; /* Send background behind inner content */ ';
+    $css .= "}";
     
     // Determine the SVG based on the maskshape attribute
     switch (esc_attr($attr['maskshape'])) {
@@ -716,7 +695,13 @@ function generate_inline_image_styles($attr) {
     $css .= "$wrapper .$inline:hover .overlayzoom-in-circle {";
         $css .= "transform: scale(1); ";
         $css .= "opacity: 1;";
-        $css .= "border-radius: " . esc_attr($attr['imageborderRadius']['top']) . " " . esc_attr($attr['imageborderRadius']['right']) . " " . esc_attr($attr['imageborderRadius']['bottom']) . " " . esc_attr($attr['imageborderRadius']['left']) . ";";
+        $css .= "border-radius: " . (isset($attr['imageborderRadius']['Desktop']['width']) 
+        ? $attr['imageborderRadius']['Desktop']['width'] 
+        : ($attr['imageborderRadius']['Desktop']['top']['width'] ?? '0px') . ' ' .
+          ($attr['imageborderRadius']['Desktop']['right']['width'] ?? '0px') . ' ' .
+          ($attr['imageborderRadius']['Desktop']['bottom']['width'] ?? '0px') . ' ' .
+          ($attr['imageborderRadius']['Desktop']['left']['width'] ?? '0px')) . ";";
+    
     $css .= "}";
 
     /* Repeat the same approach for other effects */
@@ -890,28 +875,6 @@ function generate_inline_image_styles($attr) {
     // for tablet
     $css .= "@media (max-width: 1024px) {
 
-        $wrapper {
-            width: " . (isset($attr['customWidthTablet']) ? esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
-
-            padding-top: " . (isset($attr['buttonpaddingTopTablet']) ? esc_attr($attr['buttonpaddingTopTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-bottom: " . (isset($attr['buttonpaddingBottomTablet']) ? esc_attr($attr['buttonpaddingBottomTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-left: " . (isset($attr['buttonpaddingLeftTablet']) ? esc_attr($attr['buttonpaddingLeftTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-right: " . (isset($attr['buttonpaddingRightTablet']) ? esc_attr($attr['buttonpaddingRightTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-        
-            margin-top: " . (isset($attr['marginTopTablet']) ? esc_attr($attr['marginTopTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-bottom: " . (isset($attr['marginBottomTablet']) ? esc_attr($attr['marginBottomTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-left: " . (isset($attr['marginLeftTablet']) ? esc_attr($attr['marginLeftTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-right: " . (isset($attr['marginRightTablet']) ? esc_attr($attr['marginRightTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-left: auto !important;
-            margin-right: auto !important;
-
-
-            border-top-left-radius: " . (isset($attr['pg_postTopBorderRadiusTablet']) ? esc_attr($attr['pg_postTopBorderRadiusTablet']) . "px" : '0') . ";
-            border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusTablet']) ? esc_attr($attr['pg_postBottomBorderRadiusTablet']) . "px" : '0') . ";
-            border-bottom-right-radius: " . (isset($attr['pg_postLeftBorderRadiusTablet']) ? esc_attr($attr['pg_postLeftBorderRadiusTablet']) . "px" : '0') . ";
-            border-top-right-radius: " . (isset($attr['pg_postRightBorderRadiusTablet']) ? esc_attr($attr['pg_postRightBorderRadiusTablet']) . "px" : '0') . ";
-        }
-
         $wrapper $inline {
             width: " . (isset($attr['imagewidthtablet']) ? esc_attr($attr['imagewidthtablet']) : 'auto') . ";
             height: " . (isset($attr['imageheighttablet']) ? esc_attr($attr['imageheighttablet']) : 'auto') . ";
@@ -974,28 +937,6 @@ function generate_inline_image_styles($attr) {
 
    // for mobile
     $css .= "@media (max-width: 500px) {
-        $wrapper {
-            width: " . (isset($attr['customWidthMobile']) ? esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
-
-            padding-top: " . (isset($attr['buttonpaddingTopMobile']) ? esc_attr($attr['buttonpaddingTopMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-bottom: " . (isset($attr['buttonpaddingBottomMobile']) ? esc_attr($attr['buttonpaddingBottomMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-left: " . (isset($attr['buttonpaddingLeftMobile']) ? esc_attr($attr['buttonpaddingLeftMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-right: " . (isset($attr['buttonpaddingRightMobile']) ? esc_attr($attr['buttonpaddingRightMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            margin-top: " . (isset($attr['marginTopMobile']) ? esc_attr($attr['marginTopMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-bottom: " . (isset($attr['marginBottomMobile']) ? esc_attr($attr['marginBottomMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-left: " . (isset($attr['marginLeftMobile']) ? esc_attr($attr['marginLeftMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-right: " . (isset($attr['marginRightMobile']) ? esc_attr($attr['marginRightMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-          
-            border-top-left-radius: " . (isset($attr['pg_postTopBorderRadiusMobile']) ? esc_attr($attr['pg_postTopBorderRadiusMobile']) . "px" : '0') . ";
-            border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusMobile']) ? esc_attr($attr['pg_postBottomBorderRadiusMobile']) . "px" : '0') . ";
-            border-bottom-right-radius: " . (isset($attr['pg_postLeftBorderRadiusMobile']) ? esc_attr($attr['pg_postLeftBorderRadiusMobile']) . "px" : '0') . ";
-            border-top-right-radius: " . (isset($attr['pg_postRightBorderRadiusMobile']) ? esc_attr($attr['pg_postRightBorderRadiusMobile']) . "px" : '0') . ";
-        }
-
-        $wrapper $inline {
-            width: " . (isset($attr['imagewidthmobile']) ? esc_attr($attr['imagewidthmobile']) : 'auto') . ";
-            height: " . (isset($attr['imageheightmobile']) ? esc_attr($attr['imageheightmobile']) : 'auto') . ";
-        }
 
         $wrapper .vayu_blocks__image_image {
             aspect-ratio: " . ($attr['imageaspectratiomobile'] !== 'none' 
@@ -1050,4 +991,4 @@ function generate_inline_image_styles($attr) {
     }";
     
     return $css;
-}
+}         

@@ -36,20 +36,25 @@ function generate_inline_video_styles($attr) {
     //Main div
     $css .= "$wrapper {";
 
-        // Desktop Padding
-        $paddingUnit = isset($attr['paddingUnit']) ? esc_attr($attr['paddingUnit']) : 'px';
-        $css .= isset($attr['buttonpaddingTop']) ? "padding-top: " . esc_attr($attr['buttonpaddingTop']) . $paddingUnit . ";" : '';
-        $css .= isset($attr['buttonpaddingBottom']) ? "padding-bottom: " . esc_attr($attr['buttonpaddingBottom']) . $paddingUnit . ";" : '';
-        $css .= isset($attr['buttonpaddingLeft']) ? "padding-left: " . esc_attr($attr['buttonpaddingLeft']) . $paddingUnit . ";" : '';
-        $css .= isset($attr['buttonpaddingRight']) ? "padding-right: " . esc_attr($attr['buttonpaddingRight']) . $paddingUnit . ";" : '';
-
-        // Desktop Padding
-        $marginUnit = isset($attr['marginUnit']) ? esc_attr($attr['marginUnit']) : 'px';
-        $css .= isset($attr['marginTop']) ? "margin-top: " . esc_attr($attr['marginTop']) . $marginUnit . ";" : '';
-        $css .= isset($attr['marginBottom']) ? "margin-bottom: " . esc_attr($attr['marginBottom']) . $marginUnit . ";" : '';
-        $css .= isset($attr['marginLeft']) ? "margin-left: " . esc_attr($attr['marginLeft']) . $marginUnit . ";" : '';
-        $css .= isset($attr['marginRight']) ? "margin-right: " . esc_attr($attr['marginRight']) . $marginUnit . ";" : '';
-
+        if (isset($attr['buttonpadding']['Desktop'])) {
+            $desktopPadding = $attr['buttonpadding']['Desktop'];
+            $css .= "padding: " .
+                (isset($desktopPadding['top']) ? esc_attr($desktopPadding['top']) : "0") . " " .
+                (isset($desktopPadding['right']) ? esc_attr($desktopPadding['right']) : "0") . " " .
+                (isset($desktopPadding['bottom']) ? esc_attr($desktopPadding['bottom']) : "0") . " " .
+                (isset($desktopPadding['left']) ? esc_attr($desktopPadding['left']) : "0") . ";";
+        }
+        
+        if (isset($attr['buttonmargin']['Desktop'])) {
+            $desktopMargin = $attr['buttonmargin']['Desktop'];
+        
+            $css .= "margin: " .
+                (isset($desktopMargin['top']) ? esc_attr($desktopMargin['top']) : "0") . " " .
+                (isset($desktopMargin['right']) ? esc_attr($desktopMargin['right']) : "0") . " " .
+                (isset($desktopMargin['bottom']) ? esc_attr($desktopMargin['bottom']) : "0") . " " .
+                (isset($desktopMargin['left']) ? esc_attr($desktopMargin['left']) : "0") . ";";
+        }
+        
         // Position and Z-index
         $css .= isset($attr['position']) ? "position: " . esc_attr($attr['position']) . ";" : '';
         $css .= isset($attr['zIndex']) ? "z-index: " . esc_attr($attr['zIndex']) . ";" : '';
@@ -823,17 +828,18 @@ function generate_inline_video_styles($attr) {
             width: " . (isset($attr['customWidthTablet']) ? esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
 
             grid-template-columns: repeat(" . (isset($attr['pg_postLayoutColumnsTablet']) ? $attr['pg_postLayoutColumnsTablet'] : 2) . ", 1fr);
-            padding-top: " . (isset($attr['buttonpaddingTopTablet']) ? esc_attr($attr['buttonpaddingTopTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-bottom: " . (isset($attr['buttonpaddingBottomTablet']) ? esc_attr($attr['buttonpaddingBottomTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-left: " . (isset($attr['buttonpaddingLeftTablet']) ? esc_attr($attr['buttonpaddingLeftTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-right: " . (isset($attr['buttonpaddingRightTablet']) ? esc_attr($attr['buttonpaddingRightTablet']) . esc_attr($attr['paddingUnit']) : '0') . ";
-        
-            margin-top: " . (isset($attr['marginTopTablet']) ? esc_attr($attr['marginTopTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-bottom: " . (isset($attr['marginBottomTablet']) ? esc_attr($attr['marginBottomTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-left: " . (isset($attr['marginLeftTablet']) ? esc_attr($attr['marginLeftTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-right: " . (isset($attr['marginRightTablet']) ? esc_attr($attr['marginRightTablet']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-left: auto !important;
-            margin-right: auto !important;
+           padding: " . 
+            (isset($attr['buttonpadding']['Tablet']['top']) ? esc_attr($attr['buttonpadding']['Tablet']['top']) : "0") . " " . 
+            (isset($attr['buttonpadding']['Tablet']['right']) ? esc_attr($attr['buttonpadding']['Tablet']['right']) : "0") . " " . 
+            (isset($attr['buttonpadding']['Tablet']['bottom']) ? esc_attr($attr['buttonpadding']['Tablet']['bottom']) : "0") . " " . 
+            (isset($attr['buttonpadding']['Tablet']['left']) ? esc_attr($attr['buttonpadding']['Tablet']['left']) : "0") . "; 
+
+            margin: " . 
+                (isset($attr['buttonmargin']['Tablet']['top']) ? esc_attr($attr['buttonmargin']['Tablet']['top']) : "0") . " " . 
+                (isset($attr['buttonmargin']['Tablet']['right']) ? esc_attr($attr['buttonmargin']['Tablet']['right']) : "0") . " " . 
+                (isset($attr['buttonmargin']['Tablet']['bottom']) ? esc_attr($attr['buttonmargin']['Tablet']['bottom']) : "0") . " " . 
+                (isset($attr['buttonmargin']['Tablet']['left']) ? esc_attr($attr['buttonmargin']['Tablet']['left']) : "0") . "; 
+        } 
 
             grid-gap: " . (isset($attr['pg_gapupTablet']) ? esc_attr($attr['pg_gapupTablet']) . 'px ' . esc_attr($attr['pg_gapTablet']) . 'px' : '0') . ";
 
@@ -906,20 +912,23 @@ function generate_inline_video_styles($attr) {
    // for mobile
     $css .= "@media (max-width: 500px) {
         $wrapper {
-            width: " . (isset($attr['customWidthMobile']) ? esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
+        
+            padding: " . 
+                (isset($attr['buttonpadding']['Mobile']['top']) ? esc_attr($attr['buttonpadding']['Mobile']['top']) : "0") . " " . 
+                (isset($attr['buttonpadding']['Mobile']['right']) ? esc_attr($attr['buttonpadding']['Mobile']['right']) : "0") . " " . 
+                (isset($attr['buttonpadding']['Mobile']['bottom']) ? esc_attr($attr['buttonpadding']['Mobile']['bottom']) : "0") . " " . 
+                (isset($attr['buttonpadding']['Mobile']['left']) ? esc_attr($attr['buttonpadding']['Mobile']['left']) : "0") . "; 
 
+                margin: " . 
+                    (isset($attr['buttonmargin']['Mobile']['top']) ? esc_attr($attr['buttonmargin']['Mobile']['top']) : "0") . " " . 
+                    (isset($attr['buttonmargin']['Mobile']['right']) ? esc_attr($attr['buttonmargin']['Mobile']['right']) : "0") . " " . 
+                    (isset($attr['buttonmargin']['Mobile']['bottom']) ? esc_attr($attr['buttonmargin']['Mobile']['bottom']) : "0") . " " . 
+                    (isset($attr['buttonmargin']['Mobile']['left']) ? esc_attr($attr['buttonmargin']['Mobile']['left']) : "0") . "; 
+            } 
+            width: " . (isset($attr['customWidthMobile']) ? esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) : 'auto') . ";
             grid-template-columns: repeat(" . (isset($attr['pg_postLayoutColumnsMobile']) ? $attr['pg_postLayoutColumnsMobile'] : 1) . ", 1fr);
-            padding-top: " . (isset($attr['buttonpaddingTopMobile']) ? esc_attr($attr['buttonpaddingTopMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-bottom: " . (isset($attr['buttonpaddingBottomMobile']) ? esc_attr($attr['buttonpaddingBottomMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-left: " . (isset($attr['buttonpaddingLeftMobile']) ? esc_attr($attr['buttonpaddingLeftMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            padding-right: " . (isset($attr['buttonpaddingRightMobile']) ? esc_attr($attr['buttonpaddingRightMobile']) . esc_attr($attr['paddingUnit']) : '0') . ";
-            margin-top: " . (isset($attr['marginTopMobile']) ? esc_attr($attr['marginTopMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-bottom: " . (isset($attr['marginBottomMobile']) ? esc_attr($attr['marginBottomMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-left: " . (isset($attr['marginLeftMobile']) ? esc_attr($attr['marginLeftMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
-            margin-right: " . (isset($attr['marginRightMobile']) ? esc_attr($attr['marginRightMobile']) . esc_attr($attr['marginUnit']) : '0') . ";
             grid-template-rows: repeat(" . (isset($attr['pg_numberOfRowMobile']) ? $attr['pg_numberOfRowMobile'] : 2) . ", minmax(100px, 1fr));
             grid-gap: " . (isset($attr['pg_gapupMobile']) ? esc_attr($attr['pg_gapupMobile']) . 'px ' . esc_attr($attr['pg_gapMobile']) . 'px' : '0') . ";
-
             border-top-left-radius: " . (isset($attr['pg_postTopBorderRadiusMobile']) ? esc_attr($attr['pg_postTopBorderRadiusMobile']) . "px" : '0') . ";
             border-bottom-left-radius: " . (isset($attr['pg_postBottomBorderRadiusMobile']) ? esc_attr($attr['pg_postBottomBorderRadiusMobile']) . "px" : '0') . ";
             border-bottom-right-radius: " . (isset($attr['pg_postLeftBorderRadiusMobile']) ? esc_attr($attr['pg_postLeftBorderRadiusMobile']) . "px" : '0') . ";

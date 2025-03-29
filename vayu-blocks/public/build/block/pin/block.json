@@ -9,7 +9,7 @@
     "vayu-blocks/image"
   ],
   "category": "vayu-blocks",
-  "description": "This is a image pin",
+  "description": "The image pin / pointer tool highlights specific areas in images for detailed analysis",
   "supports": {
     "reusable": true,
     "html": false,

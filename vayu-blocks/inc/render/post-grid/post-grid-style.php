@@ -990,7 +990,7 @@ function generate_inline_styles($attr) {
         }
 
         {$wrapper} {$post} {$attr['pg_blockTitleTag']} {
-            line-height: " . (isset($attr['pg_spacingTablet']) ? esc_attr($attr['pg_spacingTablet']) : '') . ";
+            line-height: " . (isset($attr['pg_TitlelineHeightTablet']) ? esc_attr($attr['pg_TitlelineHeightTablet']) : '') . ";
         }
 
         $wrapper $post .post-grid-author-date-container .post-grid-author-span{
@@ -1095,7 +1095,7 @@ function generate_inline_styles($attr) {
         }
 
         {$wrapper} {$post} {$attr['pg_blockTitleTag']} {
-            line-height: " . (isset($attr['pg_spacingMobile']) ? esc_attr($attr['pg_spacingMobile']) : '') . ";
+            line-height: " . (isset($attr['pg_TitlelineHeightMobile']) ? esc_attr($attr['pg_TitlelineHeightMobile']) : '') . ";
         }
 
         $wrapper $post .post-grid-author-date-container .post-grid-author-span{

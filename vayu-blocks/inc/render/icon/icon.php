@@ -224,7 +224,7 @@ class Vayu_blocks_icon {
         $icon_html .= '</div>';
         }
         
-        return '<div class="vayu-blocks-icon-main-container' . $uniqueId . '">' . $icon_html . '</div>';
+        return '<div class="vayu-blocks-icon-main-container-' . $uniqueId . '">' . $icon_html . '</div>';
     }
       
 }

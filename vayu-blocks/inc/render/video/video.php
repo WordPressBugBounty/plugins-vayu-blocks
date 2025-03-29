@@ -6,10 +6,12 @@ if (!defined('ABSPATH')) {
 class Vayu_blocks_video {
 
     private $attr; //attributes
+    private $device_type;
 
     public function __construct($attr,$content) {
         $this->attr = $attr;
         $this->content = $content;
+        $this->device_type = $this->get_device_type();
     }
 
     //Render
@@ -34,8 +36,6 @@ class Vayu_blocks_video {
         $wrapperanimation = isset($attributes['wrapperanimation']) ? esc_attr($attributes['wrapperanimation']) : '';
         $animation_classname = '';
 
-      
-
         if ($attributes['animationsettings'] === 'without-hvr') {
             $animation_classname = $attributes['imagehvranimation'];
         } elseif ($attributes['animationsettings'] === 'with-hvr') {
@@ -47,12 +47,19 @@ class Vayu_blocks_video {
         $image_html .= '<div class="vayu_blocks_video__wrapper ' . $wrapperanimation . ' " id='. $uniqueId .'>';
             $image_html .= '<div class="vayu_blocks_rotating_div">';
             $image_html .= '<div class="vayu_blocks_image_image_wrapping_container ' . $imageHvrFilter . ' ' . $imageHvrEffect . ' ' . $animation_classname . '" >';   
-            
-            
-          
+        
+                if ($this->device_type === 'Mobile'){
+                    $videoSize = !empty($attributes['videosizemobile']) ? esc_attr($attributes['videosizemobile']) : 'auto';
+
+                }elseif($this->device_type === 'Tablet'){
+                    $videoSize = !empty($attributes['videosizetablet']) ? esc_attr($attributes['videosizetablet']) : 'auto';
+
+                }else {
+                    $videoSize = !empty($attributes['videosize']) ? esc_attr($attributes['videosize']) : 'auto';
+                }
+
                 // Render a video element
                 $videoUrl = esc_url($attributes['videoUrl']);
-                $videoSize = !empty($attributes['videosize']) ? esc_attr($attributes['videosize']) : 'auto';
                 $autoplay = !empty($attributes['autoplay']) ? 'autoplay' : '';
                 $loop = !empty($attributes['loop']) ? 'loop' : '';
                 $controls = !empty($attributes['controls']) ? 'controls' : '';
@@ -170,6 +177,57 @@ class Vayu_blocks_video {
         return $overlay;
     }
 
+    //device type
+    private function get_device_type() {
+        $tablet_browser = 0;
+        $mobile_browser = 0;
+        
+        if (preg_match('/(tablet|ipad|playbook)|(android(?!.*(mobi|opera mini)))/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            $tablet_browser++;
+        }
+        
+        if (preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|android|iemobile)/i', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+            $mobile_browser++;
+        }
+        
+        if ((strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') > 0) or ((isset($_SERVER['HTTP_X_WAP_PROFILE']) or isset($_SERVER['HTTP_PROFILE'])))) {
+            $mobile_browser++;
+        }
+        
+        $mobile_ua = strtolower(substr($_SERVER['HTTP_USER_AGENT'], 0, 4));
+        $mobile_agents = array(
+            'w3c ','acs-','alav','alca','amoi','audi','avan','benq','bird','blac',
+            'blaz','brew','cell','cldc','cmd-','dang','doco','eric','hipt','inno',
+            'ipaq','java','jigs','kddi','keji','leno','lg-c','lg-d','lg-g','lge-',
+            'maui','maxo','midp','mits','mmef','mobi','mot-','moto','mwbp','nec-',
+            'newt','noki','palm','pana','pant','phil','play','port','prox',
+            'qwap','sage','sams','sany','sch-','sec-','send','seri','sgh-','shar',
+            'sie-','siem','smal','smar','sony','sph-','symb','t-mo','teli','tim-',
+            'tosh','tsm-','upg1','upsi','vk-v','voda','wap-','wapa','wapi','wapp',
+            'wapr','webc','winw','winw','xda ','xda-');
+        
+        if (in_array($mobile_ua,$mobile_agents)) {
+            $mobile_browser++;
+        }
+        
+        if (strpos(strtolower($_SERVER['HTTP_USER_AGENT']),'opera mini') > 0) {
+            $mobile_browser++;
+            // Check for tablets on opera mini alternative headers
+            $stock_ua = strtolower(isset($_SERVER['HTTP_X_OPERAMINI_PHONE_UA']) ? $_SERVER['HTTP_X_OPERAMINI_PHONE_UA'] : (isset($_SERVER['HTTP_DEVICE_STOCK_UA']) ? $_SERVER['HTTP_DEVICE_STOCK_UA'] : ''));
+            if (preg_match('/(tablet|ipad|playbook)|(android(?!.*mobile))/i', $stock_ua)) {
+                $tablet_browser++;
+            }
+        }
+        
+        if ($tablet_browser > 0) {
+            return 'Tablet';
+        } else if ($mobile_browser > 0) {
+            return 'Mobile';
+        } else {
+            return 'Desktop';
+        }
+    }
+
 }
 
 // Render callback for the block
@@ -189,5 +247,5 @@ function vayu_block_video_render($attr,$content) {
     $animated = isset($attr['className']) ? esc_attr($attr['className']) : ''; // animation
 
     // Render and return the image output inside a div with the dynamic class name
-    return '<div class="wp_block_vayu-blocks-video-main ' . $className . ' ' . $animated . '">' . $image->render() . '</div>';
+    return '<div class="' . trim($className) . ' wp_block_vayu-blocks-video-main  ' . trim($animated) . '">' . $image->render() . '</div>';
 } 

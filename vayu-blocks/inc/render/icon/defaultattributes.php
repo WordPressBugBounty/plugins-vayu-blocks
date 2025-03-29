@@ -20,9 +20,11 @@ return array(
         'backgroundeffect' => 'none',
         'backgroundcolor' => '',
         'backgroundhoverColor' => '',
-        'alignment' => 'center',
-        'alignmentTablet' => 'center',
-        'alignmentMobile' => 'center',
+        'alignment' =>  array(
+                            "Desktop" => "",
+                            "Tablet" => "",
+                            "Mobile" => ""
+                         ),
         'iconpadding' => array(
             'top' => '0px',
             'right' => '0px',

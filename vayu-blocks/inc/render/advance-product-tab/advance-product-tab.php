@@ -51,7 +51,7 @@ class Vayu_Advance_Product_Tab {
                 )
             );
 
-        $block_content = '<div id="wp-block-th-advance-product-tag-' . esc_attr($attr['uniqueID']) . '"  data-attr= "' . esc_attr(json_encode($attr)) . '" class="wp-block-vayu-blocks-advance-product wp-block-th-advance-product-tag-' . esc_attr($attr['uniqueID']) . '  align' . (isset($attr['align']) ? esc_attr($attr['align']) : '') . '">
+        $block_content = '<div id="wp-block-th-advance-product-tag-' . esc_attr($attr['uniqueId']) . '"  data-attr= "' . esc_attr(json_encode($attr)) . '" class="wp-block-vayu-blocks-advance-product wp-block-th-advance-product-tag-' . esc_attr($attr['uniqueId']) . '  align' . (isset($attr['align']) ? esc_attr($attr['align']) : '') . '">
             <div class="th-product-block-wrapper">
                 <div class="wp-block-th-blocks-overlay"></div>';
                     $showTab = isset($attr['showTab']) ? $attr['showTab'] : true;
@@ -98,11 +98,13 @@ class Vayu_Advance_Product_Tab {
     $args = array(
         'status' => 'publish',
         'visibility' => 'catalog',
+        'paginate' => true,
     );
 
-    
+    $stock_status = isset( $attr['stockStatus'] ) ? $attr['stockStatus'] : array( 'instock', 'outofstock', 'onbackorder' );
+    $args['stock_status'] = $stock_status;
+  
     //product per page
-
     $device_type = $this->device_check();
 
     if ($device_type === 'tablet' && isset($attr['productShowTablet'])) {
@@ -119,7 +121,7 @@ class Vayu_Advance_Product_Tab {
 
     }
     
-    $args['posts_per_page'] = $perpageproduct;
+    $args['limit'] = $perpageproduct;
 
     // Selected category
     
@@ -141,27 +143,7 @@ class Vayu_Advance_Product_Tab {
                 );
             }
         }
-    
 
-
-    if (isset($attr['productOrder'])) {
-
-        switch ($attr['productOrder']) {
-
-            case 'desc':
-                
-                $args['order'] = 'desc';
-
-                break;
-               
-            default:
-                    
-                $args['order'] = 'asc';
-    
-                break;    
-            
-        }
-    }
     //product type
     if (isset($attr['productType'])) {
 
@@ -210,6 +192,26 @@ class Vayu_Advance_Product_Tab {
         $args['exclude'] = $excludeProductProductIDs;
     }
    
+     
+
+    if (isset($attr['productOrder'])) {
+
+        switch ($attr['productOrder']) {
+
+            case 'desc':
+                
+                $args['order'] = 'DESC';
+
+                break;
+               
+            default:
+                    
+                $args['order'] = 'ASC';
+    
+                break;    
+            
+        }
+    }
     //orderby
     if (isset($attr['productOrderby'])) {
 
@@ -222,16 +224,18 @@ class Vayu_Advance_Product_Tab {
 
             case 'price':
                 
-                $args['orderby'] = 'meta_value_num';
-                $args['meta_key'] = '_price';
-
-                break;
-            case 'popularity':
+                    $args['orderby'] = 'meta_value_num';
+                    $args['meta_key'] = '_price'; 
+    
                     
+                    break;
+
+            case 'popularity':
+   
                 $args['orderby'] = 'meta_value_num';
                 $args['meta_key'] = 'total_sales';
-    
-                 break; 
+                break; 
+                
             case 'rating':
                     
                 $args['orderby'] = 'meta_value_num';
@@ -240,26 +244,24 @@ class Vayu_Advance_Product_Tab {
                  break; 
              case 'menu-order':
                     
-                $args['orderby'] = 'menu_order';
+                $args['orderby'] = 'menu_order title';
         
                 break;    
             default:
                 // No specific product type specified
                 break;
         }
+
     }
 
-    $total_pages = $this->get_total_pages_count($args , $perpageproduct);
-
     // Get the current page number from the AJAX request
-    $page = '1';
-    $args['paged'] = $page;
+    $page = 1;
+    $args['page'] = $page;
 
-    // Get the products for the current page
-    $args['offset'] = ($page - 1) * $perpageproduct;
+    $results = wc_get_products($args);
 
-    $products = wc_get_products($args);
-
+    $total_pages = $results->max_num_pages;
+    
     $product_content = '';
     
     // Check if 'template' key exists
@@ -279,7 +281,7 @@ class Vayu_Advance_Product_Tab {
     
     $product_content .= '<div class="th-product-block-product-item-wrap" total-page="'.esc_attr($total_pages).'">';
 
-    foreach ($products as $product) {
+    foreach ($results->products as $product) {
 
         $product_content .= '
             <div class="th-product-item" key="' . esc_attr($product->get_id()) . '">
@@ -327,8 +329,8 @@ class Vayu_Advance_Product_Tab {
 
                     // Sale
                     $sale = get_post_meta($product->get_id(), '_sale_price', true);
-
-                    if ($sale && empty($attr['showSale'])) {
+                   
+                    if ($sale && $attr['showSale']) {
                         $product_content .= '<div class="th-product-sale ' . (isset($attr['saleStyle']) ? esc_attr($attr['saleStyle']) : '') . ' ' . (isset($attr['saleDesign']) ? esc_attr($attr['saleDesign']) : '') . ' ' . (isset($attr['salePosition']) ? esc_attr($attr['salePosition']) : '') . '"> ';
 
                         if (isset($attr['saleDesign']) && $attr['saleDesign'] === 'saledigit' && $product->get_regular_price() && $product->get_sale_price()) {
@@ -424,14 +426,6 @@ class Vayu_Advance_Product_Tab {
 
   }
 
-  public function get_total_pages_count($args , $perpageproduct) {
-    // Get total products count without pagination
-    $args['posts_per_page'] = -1;
-    $products = wc_get_products($args);
-    $total_products = count($products);
-    $total_pages = ceil($total_products / $perpageproduct);
-    return $total_pages;
-}
   
 public function add_to_cart_url($product){
     if ($product) {
@@ -561,7 +555,10 @@ public function load_category_products(){
     $args = array(
         'status' => 'publish',
         'visibility' => 'catalog',
+        'paginate' => true,
     );
+    $stock_status = isset( $attr['stockStatus'] ) ? $attr['stockStatus'] : array( 'instock', 'outofstock', 'onbackorder' );
+    $args['stock_status'] = $stock_status;
     
     //product per page
 
@@ -581,7 +578,7 @@ public function load_category_products(){
 
     }
     
-    $args['posts_per_page'] = $perpageproduct;
+    $args['limit'] = $perpageproduct;
 
     // Selected category
     $categoryid = isset($_POST['category_id']) ? sanitize_text_field($_POST['category_id']) : '';
@@ -622,13 +619,13 @@ public function load_category_products(){
 
             case 'desc':
                 
-                $args['order'] = 'desc';
+                $args['order'] = 'DESC';
 
                 break;
                
             default:
                     
-                $args['order'] = 'asc';
+                $args['order'] = 'ASC';
     
                 break;    
             
@@ -712,7 +709,7 @@ public function load_category_products(){
                  break; 
              case 'menu-order':
                     
-                $args['orderby'] = 'menu_order';
+                $args['orderby'] = 'menu_order title';
         
                 break;    
             default:
@@ -721,17 +718,18 @@ public function load_category_products(){
         }
     }
 
-    $total_pages = $this->get_total_pages_count($args , $perpageproduct);
+    
 
     // Get the current page number from the AJAX request
     $page = isset($_POST['page']) ? sanitize_text_field($_POST['page']) : '1';
 
-    $args['paged'] = $page;
-
-    // Get the products for the current page
-    $args['offset'] = ($page - 1) * $perpageproduct;
+    $args['page'] = $page;
 
     $products = wc_get_products($args);
+
+    $results = wc_get_products($args);
+
+    $total_pages = $results->max_num_pages;
 
     $product_content = '';
     
@@ -751,7 +749,7 @@ public function load_category_products(){
    
     $product_content .= '<div class="th-product-block-product-item-wrap" total-page="'.esc_attr($total_pages).'">';
 
-    foreach ($products as $product) {
+    foreach ($results->products as $product) {
 
         $product_content .= '
             <div class="th-product-item" key="' . esc_attr($product->get_id()) . '">
@@ -800,7 +798,7 @@ public function load_category_products(){
                     // Sale
                     $sale = get_post_meta($product->get_id(), '_sale_price', true);
 
-                    if ($sale && empty($attr['showSale'])) {
+                    if ($sale && $attr['showSale']) {
                         $product_content .= '<div class="th-product-sale ' . (isset($attr['saleStyle']) ? esc_attr($attr['saleStyle']) : '') . ' ' . (isset($attr['saleDesign']) ? esc_attr($attr['saleDesign']) : '') . ' ' . (isset($attr['salePosition']) ? esc_attr($attr['salePosition']) : '') . '"> ';
 
                         if (isset($attr['saleDesign']) && $attr['saleDesign'] === 'saledigit' && $product->get_regular_price() && $product->get_sale_price()) {

@@ -72,6 +72,10 @@ function vayu_blocks_advance_slider_render($attr,$content) {
         'sensitivity'=> 7,
     );
 
+    if($effect=== 'cards'){
+        $loop='false';
+    }
+
     // Prepare Swiper attributes
     $swiper_attr = array(
         'navigation' => $navigation,

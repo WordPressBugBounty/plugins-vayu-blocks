@@ -22,7 +22,7 @@
     "id": {
       "type": "string"
     },
-    "uniqueID": {
+    "uniqueId": {
       "type": "string"
     },
     "blurbLayout": {
@@ -631,6 +631,15 @@
     "contentMinHgtUnit": {
       "type": "string",
       "default": "px"
+    },
+    "contentFadeHgt": {
+      "type": "number"
+    },
+    "contentFadeHgtTablet": {
+      "type": "number"
+    },
+    "contentFadeHgtMobile": {
+      "type": "number"
     },
     "paddingBtnWrapType": {
       "type": "string",

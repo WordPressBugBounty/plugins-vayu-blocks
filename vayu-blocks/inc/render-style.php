@@ -131,12 +131,16 @@ function vayu_cycle_through_blocks( $blocks, $post_id ) {
 	   } 
 
 	   if ( $block['blockName'] === 'vayu-blocks/blurb' ) {
-			
+
 		$css .= vayu_blurb_style($block['attrs']);
 
         } 
 
 		if ( $block['blockName'] === 'vayu-blocks/unfold' ) {
+
+			if ( isset($block['attrs']['fontFamily'] ) ){
+				vayu_enqueue_google_fonts($block['attrs']['fontFamily']);
+			}
 			
 			$css .= vayu_unfold_style($block['attrs']);
 	

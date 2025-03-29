@@ -43,44 +43,27 @@ function vayu_advance_spacer_style($attr){
         }else{
           $css .= isset( $attr['backgroundColor'] ) ? "background:{$attr['backgroundColor']};" : '';
         }
+		//padding
+		if (isset($attr['padding']) && is_array($attr['padding'])){
+			// Check for null explicitly and only default empty or missing values
+			$paddingTop = (isset($attr['padding']['top']) && $attr['padding']['top'] !== null) ? $attr['padding']['top'] : '0px';
+			$paddingRight = (isset($attr['padding']['right']) && $attr['padding']['right'] !== null) ? $attr['padding']['right'] : '0px';
+			$paddingBottom = (isset($attr['padding']['bottom']) && $attr['padding']['bottom'] !== null) ? $attr['padding']['bottom'] : '0px';
+			$paddingLeft = (isset($attr['padding']['left']) && $attr['padding']['left'] !== null) ? $attr['padding']['left'] : '0px';
+			// Append the padding to the CSS string
+			$css .= "padding: {$paddingTop} {$paddingRight} {$paddingBottom} {$paddingLeft};\n";	
+		}
 
-          //padding
-        if (isset($attr['paddingType']) && 'unlinked' === $attr['paddingType']) {
-          $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-          $paddingTop = isset($attr['paddingTop']) ? $attr['paddingTop'] : 0;
-          $paddingRight = isset($attr['paddingRight']) ? $attr['paddingRight'] : 0;
-          $paddingBottom = isset($attr['paddingBottom']) ? $attr['paddingBottom'] : 0;
-          $paddingLeft = isset($attr['paddingLeft']) ? $attr['paddingLeft'] : 0;
-          $css .= "padding-top: {$paddingTop}{$paddingUnit}; 
-          padding-right: {$paddingRight}{$paddingUnit}; 
-          padding-bottom: {$paddingBottom}{$paddingUnit}; 
-          padding-left: {$paddingLeft}{$paddingUnit}; 
-            ";
-        } else {
-          $padding = isset($attr['padding']) ? $attr['padding'] : 0;
-          $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-          $css .= "padding: {$padding}{$paddingUnit};";
-        }
-
-            //margin
-        if (isset($attr['marginType']) && 'unlinked' === $attr['marginType']) {
-          $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-          $marginTop = isset($attr['marginTop']) ? $attr['marginTop'] : 0;
-          $marginBottom = isset($attr['marginBottom']) ? $attr['marginBottom'] : 0;
-                $marginLeft = isset($attr['marginLeft']) ? $attr['marginLeft'] : 0;
-                $marginRight = isset($attr['marginRight']) ? $attr['marginRight'] : 0;
-          $css .= "
-                margin-top: {$marginTop}{$marginUnit}; 
-                margin-bottom: {$marginBottom}{$marginUnit}; 
-                margin-left: {$marginLeft}{$marginUnit}; 
-                margin-right: {$marginRight}{$marginUnit}; 
-            ";
-        } else {
-          $margin = isset($attr['margin']) ? $attr['margin'] : 0;
-          $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-          $css .= "margin: {$margin}{$marginUnit}; 
-          ";
-        }
+          //margin
+      if (isset($attr['margin']) && is_array($attr['margin'])){
+        // Check for null explicitly and only default empty or missing values
+        $marginTop = (isset($attr['margin']['top']) && $attr['margin']['top'] !== null) ? $attr['margin']['top'] : '0px';
+        $marginRight = (isset($attr['margin']['right']) && $attr['margin']['right'] !== null) ? $attr['margin']['right'] : '0px';
+        $marginBottom = (isset($attr['margin']['bottom']) && $attr['margin']['bottom'] !== null) ? $attr['margin']['bottom'] : '0px';
+        $marginLeft = (isset($attr['margin']['left']) && $attr['margin']['left'] !== null) ? $attr['margin']['left'] : '0px';
+        // Append the margin to the CSS string
+        $css .= "margin: {$marginTop} {$marginRight} {$marginBottom} {$marginLeft};\n";	
+      }
 
     //border
         $css .= isset( $attr['borderType'] ) ? "border-style:{$attr['borderType'] };" : '';
@@ -277,44 +260,29 @@ if(isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop']
       $css .= isset($attr['widthType']) && $attr['widthType']=='customwidth' ? "width:".(isset($attr['customWidthTablet']) ? ($attr['customWidthTablet']):'').(isset($attr['customWidthUnit']) ? $attr['customWidthUnit'] : 'px') . ";" : '';
       $css .= isset($attr['widthType']) && $attr['widthType']=='customwidth' ? "max-width:".(isset($attr['customWidthTablet']) ? ($attr['customWidthTablet']):'').(isset($attr['customWidthUnit']) ? $attr['customWidthUnit'] : 'px') . ";" : '' ;
     
-      //margin
-      if (isset($attr['marginTypeTablet']) && 'unlinked' === $attr['marginTypeTablet']) {
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $marginTop = isset($attr['marginTopTablet']) ? $attr['marginTopTablet'] : 0;
-        $marginBottom = isset($attr['marginBottomTablet']) ? $attr['marginBottomTablet'] : 0;
-        $marginLeft = isset($attr['marginLeftTablet']) ? $attr['marginLeftTablet'] : 0;
-        $marginRight = isset($attr['marginRightTablet']) ? $attr['marginRightTablet'] : 0;
-        $css .= "
-              margin-top: {$marginTop}{$marginUnit}; 
-              margin-bottom: {$marginBottom}{$marginUnit}; 
-              margin-left: {$marginLeft}{$marginUnit}; 
-              margin-right: {$marginRight}{$marginUnit}; 
-          ";
-      } else {
-        $marginTablet = isset($attr['marginTablet']) ? $attr['marginTablet'] : 0;
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $css .= "margin: {$marginTablet}{$marginUnit}; 
-        ";
-      }
+             
+      //paddingTablet
+		if (isset($attr['paddingTablet']) && is_array($attr['paddingTablet'])){
+			// Check for null explicitly and only default empty or missing values
+			$paddingTabletTop = (isset($attr['paddingTablet']['top']) && $attr['paddingTablet']['top'] !== null) ? $attr['paddingTablet']['top'] : '0px';
+			$paddingTabletRight = (isset($attr['paddingTablet']['right']) && $attr['paddingTablet']['right'] !== null) ? $attr['paddingTablet']['right'] : '0px';
+			$paddingTabletBottom = (isset($attr['paddingTablet']['bottom']) && $attr['paddingTablet']['bottom'] !== null) ? $attr['paddingTablet']['bottom'] : '0px';
+			$paddingTabletLeft = (isset($attr['paddingTablet']['left']) && $attr['paddingTablet']['left'] !== null) ? $attr['paddingTablet']['left'] : '0px';
+			// Append the paddingTablet to the CSS string
+			$css .= "padding: {$paddingTabletTop} {$paddingTabletRight} {$paddingTabletBottom} {$paddingTabletLeft};\n";	
+		}
 
-      //padding
-      if (isset($attr['paddingTypeTablet']) && 'unlinked' === $attr['paddingTypeTablet']) {
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $paddingTop = isset($attr['paddingTopTablet']) ? $attr['paddingTopTablet'] : 0;
-        $paddingBottom = isset($attr['paddingBottomTablet']) ? $attr['paddingBottomTablet'] : 0;
-        $paddingLeft = isset($attr['paddingLeftTablet']) ? $attr['paddingLeftTablet'] : 0;
-        $paddingRight = isset($attr['paddingRightTablet']) ? $attr['paddingRightTablet'] : 0;
-        $css .= "
-              padding-top: {$paddingTop}{$paddingUnit}; 
-              padding-bottom: {$paddingBottom}{$paddingUnit}; 
-              padding-left: {$paddingLeft}{$paddingUnit}; 
-              padding-right: {$paddingRight}{$paddingUnit}; 
-          ";
-      } else {
-        $paddingTablet = isset($attr['paddingTablet']) ? $attr['paddingTablet'] : 0;
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $css .= "padding: {$paddingTablet}{$paddingUnit}; 
-        ";
+
+      
+      //marginTablet
+      if (isset($attr['marginTablet']) && is_array($attr['marginTablet'])){
+        // Check for null explicitly and only default empty or missing values
+        $marginTabletTop = (isset($attr['marginTablet']['top']) && $attr['marginTablet']['top'] !== null) ? $attr['marginTablet']['top'] : '0px';
+        $marginTabletRight = (isset($attr['marginTablet']['right']) && $attr['marginTablet']['right'] !== null) ? $attr['marginTablet']['right'] : '0px';
+        $marginTabletBottom = (isset($attr['marginTablet']['bottom']) && $attr['marginTablet']['bottom'] !== null) ? $attr['marginTablet']['bottom'] : '0px';
+        $marginTabletLeft = (isset($attr['marginTablet']['left']) && $attr['marginTablet']['left'] !== null) ? $attr['marginTablet']['left'] : '0px';
+        // Append the marginTablet to the CSS string
+        $css .= "margin: {$marginTabletTop} {$marginTabletRight} {$marginTabletBottom} {$marginTabletLeft};\n";	
       }
     
       $css .= (isset($attr['zindexTablet']) ? "z-index:{$attr['zindexTablet']};" : '');
@@ -464,44 +432,26 @@ if(isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop']
       $css .= isset($attr['widthType']) && $attr['widthType']=='customwidth' ? "width:".(isset($attr['customWidthMobile']) ? ($attr['customWidthMobile']):'').(isset($attr['customWidthUnit']) ? $attr['customWidthUnit'] : 'px') . ";" : '';
       $css .= isset($attr['widthType']) && $attr['widthType']=='customwidth' ? "max-width:".(isset($attr['customWidthMobile']) ? ($attr['customWidthMobile']):'').(isset($attr['customWidthUnit']) ? $attr['customWidthUnit'] : 'px') . ";" : '';
     
-      //margin
-      if (isset($attr['marginTypeMobile']) && 'unlinked' === $attr['marginTypeMobile']) {
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $marginTop = isset($attr['marginTopMobile']) ? $attr['marginTopMobile'] : 0;
-        $marginBottom = isset($attr['marginBottomMobile']) ? $attr['marginBottomMobile'] : 0;
-        $marginLeft = isset($attr['marginLeftMobile']) ? $attr['marginLeftMobile'] : 0;
-        $marginRight = isset($attr['marginRightMobile']) ? $attr['marginRightMobile'] : 0;
-        $css .= "
-              margin-top: {$marginTop}{$marginUnit}; 
-              margin-bottom: {$marginBottom}{$marginUnit}; 
-              margin-left: {$marginLeft}{$marginUnit}; 
-              margin-right: {$marginRight}{$marginUnit}; 
-          ";
-      } else {
-        $marginMobile = isset($attr['marginMobile']) ? $attr['marginMobile'] : 0;
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $css .= "margin: {$marginMobile}{$marginUnit}; 
-        ";
-      }
+      //paddingMobile
+		if (isset($attr['paddingMobile']) && is_array($attr['paddingMobile'])){
+			// Check for null explicitly and only default empty or missing values
+			$paddingMobileTop = (isset($attr['paddingMobile']['top']) && $attr['paddingMobile']['top'] !== null) ? $attr['paddingMobile']['top'] : '0px';
+			$paddingMobileRight = (isset($attr['paddingMobile']['right']) && $attr['paddingMobile']['right'] !== null) ? $attr['paddingMobile']['right'] : '0px';
+			$paddingMobileBottom = (isset($attr['paddingMobile']['bottom']) && $attr['paddingMobile']['bottom'] !== null) ? $attr['paddingMobile']['bottom'] : '0px';
+			$paddingMobileLeft = (isset($attr['paddingMobile']['left']) && $attr['paddingMobile']['left'] !== null) ? $attr['paddingMobile']['left'] : '0px';
+			// Append the paddingMobile to the CSS string
+			$css .= "padding: {$paddingMobileTop} {$paddingMobileRight} {$paddingMobileBottom} {$paddingMobileLeft};\n";	
+		}
 
-      //padding
-      if (isset($attr['paddingTypeMobile']) && 'unlinked' === $attr['paddingTypeMobile']) {
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $paddingTop = isset($attr['paddingTopMobile']) ? $attr['paddingTopMobile'] : 0;
-        $paddingBottom = isset($attr['paddingBottomMobile']) ? $attr['paddingBottomMobile'] : 0;
-        $paddingLeft = isset($attr['paddingLeftMobile']) ? $attr['paddingLeftMobile'] : 0;
-        $paddingRight = isset($attr['paddingRightMobile']) ? $attr['paddingRightMobile'] : 0;
-        $css .= "
-              padding-top: {$paddingTop}{$paddingUnit}; 
-              padding-bottom: {$paddingBottom}{$paddingUnit}; 
-              padding-left: {$paddingLeft}{$paddingUnit}; 
-              padding-right: {$paddingRight}{$paddingUnit}; 
-          ";
-      } else {
-        $paddingMobile = isset($attr['paddingMobile']) ? $attr['paddingMobile'] : 0;
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $css .= "padding: {$paddingMobile}{$paddingUnit}; 
-        ";
+      //marginMobile
+      if (isset($attr['marginMobile']) && is_array($attr['marginMobile'])){
+        // Check for null explicitly and only default empty or missing values
+        $marginMobileTop = (isset($attr['marginMobile']['top']) && $attr['marginMobile']['top'] !== null) ? $attr['marginMobile']['top'] : '0px';
+        $marginMobileRight = (isset($attr['marginMobile']['right']) && $attr['marginMobile']['right'] !== null) ? $attr['marginMobile']['right'] : '0px';
+        $marginMobileBottom = (isset($attr['marginMobile']['bottom']) && $attr['marginMobile']['bottom'] !== null) ? $attr['marginMobile']['bottom'] : '0px';
+        $marginMobileLeft = (isset($attr['marginMobile']['left']) && $attr['marginMobile']['left'] !== null) ? $attr['marginMobile']['left'] : '0px';
+        // Append the marginMobile to the CSS string
+        $css .= "margin: {$marginMobileTop} {$marginMobileRight} {$marginMobileBottom} {$marginMobileLeft};\n";	
       }
     
       $css .= (isset($attr['zindexMobile']) ? "z-index:{$attr['zindexMobile']};" : '');

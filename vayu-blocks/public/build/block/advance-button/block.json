@@ -7,6 +7,9 @@
   "category": "vayu-blocks",
   "description": "A block to create interactive and visually appealing call-to-action buttons.",
   "textdomain": "vayu-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
   "attributes": {
     "id": {
       "type": "string"
@@ -54,9 +57,6 @@
       "type": "number",
       "default": 2
     },
-    "icon": {
-      "type": "string"
-    },
     "widthType": {
       "type": "string",
       "default": "none"
@@ -74,137 +74,59 @@
     "customWidthMobile": {
       "type": "number"
     },
-    "paddingType": {
-      "type": "string",
-      "default": "linked"
-    },
-    "paddingTypeTablet": {
-      "type": "string",
-      "default": "linked"
-    },
-    "paddingTypeMobile": {
-      "type": "string",
-      "default": "linked"
-    },
     "padding": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingUnit": {
-      "type": "string",
-      "default": "px"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "paddingTablet": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "paddingMobile": {
-      "type": "number"
-    },
-    "paddingTop": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingTopTablet": {
-      "type": "number"
-    },
-    "paddingTopMobile": {
-      "type": "number"
-    },
-    "paddingRight": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingRightTablet": {
-      "type": "number"
-    },
-    "paddingRightMobile": {
-      "type": "number"
-    },
-    "paddingBottom": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingBottomTablet": {
-      "type": "number"
-    },
-    "paddingBottomMobile": {
-      "type": "number"
-    },
-    "paddingLeft": {
-      "type": "number",
-      "default": 0
-    },
-    "paddingLeftTablet": {
-      "type": "number"
-    },
-    "paddingLeftMobile": {
-      "type": "number"
-    },
-    "marginType": {
-      "type": "string",
-      "default": "linked"
-    },
-    "marginTypeTablet": {
-      "type": "string",
-      "default": "linked"
-    },
-    "marginTypeMobile": {
-      "type": "string",
-      "default": "linked"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "margin": {
-      "type": "number",
-      "default": 0
-    },
-    "marginUnit": {
-      "type": "string",
-      "default": "px"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "marginTablet": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "marginMobile": {
-      "type": "number"
-    },
-    "marginTop": {
-      "type": "number",
-      "default": 0
-    },
-    "marginTopTablet": {
-      "type": "number"
-    },
-    "marginTopMobile": {
-      "type": "number"
-    },
-    "marginRight": {
-      "type": "number",
-      "default": 0
-    },
-    "marginRightTablet": {
-      "type": "number"
-    },
-    "marginRightMobile": {
-      "type": "number"
-    },
-    "marginBottom": {
-      "type": "number",
-      "default": 0
-    },
-    "marginBottomTablet": {
-      "type": "number"
-    },
-    "marginBottomMobile": {
-      "type": "number"
-    },
-    "marginLeft": {
-      "type": "number",
-      "default": 0
-    },
-    "marginLeftTablet": {
-      "type": "number"
-    },
-    "marginLeftMobile": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "",
+        "right": "",
+        "bottom": "",
+        "left": ""
+      }
     },
     "zindex": {
       "type": "number"
@@ -245,8 +167,7 @@
       "default": "linear-gradient(90deg,rgba(54,209,220,1) 0%,rgba(91,134,229,1) 100%)"
     },
     "backgroundTypeHvr": {
-      "type": "string",
-      "default": "color"
+      "type": "string"
     },
     "backgroundColorHvr": {
       "type": "string"
@@ -966,71 +887,32 @@
       "type": "number",
       "default": 0
     },
-    "buttonpaddingType": {
-      "type": "string",
-      "default": "unlinked"
-    },
-    "buttonpaddingTypeTablet": {
-      "type": "string",
-      "default": "unlinked"
-    },
-    "buttonpaddingTypeMobile": {
-      "type": "string",
-      "default": "unlinked"
-    },
-    "buttonpaddingUnit": {
-      "type": "string",
-      "default": "px"
-    },
     "buttonpadding": {
-      "type": "number",
-      "default": 0
+      "type": "object",
+      "default": {
+        "top": "12px",
+        "right": "18px",
+        "bottom": "12px",
+        "left": "18px"
+      }
     },
     "buttonpaddingTablet": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "12px",
+        "right": "18px",
+        "bottom": "12px",
+        "left": "18px"
+      }
     },
     "buttonpaddingMobile": {
-      "type": "number"
-    },
-    "buttonpaddingTop": {
-      "type": "number",
-      "default": 16
-    },
-    "buttonpaddingTopTablet": {
-      "type": "number"
-    },
-    "buttonpaddingTopMobile": {
-      "type": "number"
-    },
-    "buttonpaddingRight": {
-      "type": "number",
-      "default": 40
-    },
-    "buttonpaddingRightTablet": {
-      "type": "number"
-    },
-    "buttonpaddingRightMobile": {
-      "type": "number"
-    },
-    "buttonpaddingBottom": {
-      "type": "number",
-      "default": 16
-    },
-    "buttonpaddingBottomTablet": {
-      "type": "number"
-    },
-    "buttonpaddingBottomMobile": {
-      "type": "number"
-    },
-    "buttonpaddingLeft": {
-      "type": "number",
-      "default": 40
-    },
-    "buttonpaddingLeftTablet": {
-      "type": "number"
-    },
-    "buttonpaddingLeftMobile": {
-      "type": "number"
+      "type": "object",
+      "default": {
+        "top": "12px",
+        "right": "18px",
+        "bottom": "12px",
+        "left": "18px"
+      }
     },
     "fontFamily": {
       "type": "string"
@@ -1075,13 +957,38 @@
       "default": "px"
     },
     "fontSize": {
-      "type": "number"
+      "type": "number",
+      "default": 18
     },
     "fontSizeTablet": {
       "type": "number"
     },
     "fontSizeMobile": {
       "type": "number"
+    },
+    "icon": {
+      "type": "string",
+      "default": ""
+    },
+    "iconName": {
+      "type": "string",
+      "default": "wordpress-arrowLeft"
+    },
+    "iconToggle": {
+      "type": "boolean",
+      "default": false
+    },
+    "iconAnimation": {
+      "type": "string",
+      "default": "none"
+    },
+    "backgroundeffect": {
+      "type": "string",
+      "default": "always"
+    },
+    "backgroundsettings": {
+      "type": "string",
+      "default": "always"
     }
   },
   "supports": {

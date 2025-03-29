@@ -12,7 +12,15 @@ function vayu_advance_button_style($attr){
       $css .= ".th-button-wrapper{$attr['uniqueID']}{";
 
         $css .= "box-sizing: border-box;";
-        $css .= "width: 100%;display: flex;";
+       
+
+        if ( isset( $attr['widthType'] ) && $attr['widthType'] == 'inlinewidth' ) {
+          $css .= "width: auto;display: inline-flex;";
+        }
+        else{
+          $css .= "width: 100%;display: flex;";
+        }
+
       //background
       if ( isset( $attr['backgroundType'] ) && $attr['backgroundType'] == 'image' ) {
         $css .= isset( $attr['backgroundImage']['url'] ) ? "background-image: url({$attr['backgroundImage']['url']});" : '';
@@ -27,41 +35,25 @@ function vayu_advance_button_style($attr){
       }
 
       //padding
-      if (isset($attr['paddingType']) && 'unlinked' === $attr['paddingType']) {
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $paddingTop = isset($attr['paddingTop']) ? $attr['paddingTop'] : 0;
-        $paddingRight = isset($attr['paddingRight']) ? $attr['paddingRight'] : 0;
-        $paddingBottom = isset($attr['paddingBottom']) ? $attr['paddingBottom'] : 0;
-        $paddingLeft = isset($attr['paddingLeft']) ? $attr['paddingLeft'] : 0;
-        $css .= "padding-top: {$paddingTop}{$paddingUnit}; 
-        padding-right: {$paddingRight}{$paddingUnit}; 
-        padding-bottom: {$paddingBottom}{$paddingUnit}; 
-        padding-left: {$paddingLeft}{$paddingUnit}; 
-          ";
-      } else {
-        $padding = isset($attr['padding']) ? $attr['padding'] : 0;
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $css .= "padding: {$padding}{$paddingUnit};";
-      }
+		if (isset($attr['padding']) && is_array($attr['padding'])){
+			// Check for null explicitly and only default empty or missing values
+			$paddingTop = (isset($attr['padding']['top']) && $attr['padding']['top'] !== null) ? $attr['padding']['top'] : '0px';
+			$paddingRight = (isset($attr['padding']['right']) && $attr['padding']['right'] !== null) ? $attr['padding']['right'] : '0px';
+			$paddingBottom = (isset($attr['padding']['bottom']) && $attr['padding']['bottom'] !== null) ? $attr['padding']['bottom'] : '0px';
+			$paddingLeft = (isset($attr['padding']['left']) && $attr['padding']['left'] !== null) ? $attr['padding']['left'] : '0px';
+			// Append the padding to the CSS string
+			$css .= "padding: {$paddingTop} {$paddingRight} {$paddingBottom} {$paddingLeft};\n";	
+		}
 
       //margin
-      if (isset($attr['marginType']) && 'unlinked' === $attr['marginType']) {
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $marginTop = isset($attr['marginTop']) ? $attr['marginTop'] : 0;
-        $marginBottom = isset($attr['marginBottom']) ? $attr['marginBottom'] : 0;
-              $marginLeft = isset($attr['marginLeft']) ? $attr['marginLeft'] : 0;
-              $marginRight = isset($attr['marginRight']) ? $attr['marginRight'] : 0;
-        $css .= "
-              margin-top: {$marginTop}{$marginUnit}; 
-              margin-bottom: {$marginBottom}{$marginUnit}; 
-              margin-left: {$marginLeft}{$marginUnit}; 
-              margin-right: {$marginRight}{$marginUnit}; 
-          ";
-      } else {
-        $margin = isset($attr['margin']) ? $attr['margin'] : 0;
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $css .= "margin: {$margin}{$marginUnit}; 
-        ";
+      if (isset($attr['margin']) && is_array($attr['margin'])){
+        // Check for null explicitly and only default empty or missing values
+        $marginTop = (isset($attr['margin']['top']) && $attr['margin']['top'] !== null) ? $attr['margin']['top'] : '0px';
+        $marginRight = (isset($attr['margin']['right']) && $attr['margin']['right'] !== null) ? $attr['margin']['right'] : '0px';
+        $marginBottom = (isset($attr['margin']['bottom']) && $attr['margin']['bottom'] !== null) ? $attr['margin']['bottom'] : '0px';
+        $marginLeft = (isset($attr['margin']['left']) && $attr['margin']['left'] !== null) ? $attr['margin']['left'] : '0px';
+        // Append the margin to the CSS string
+        $css .= "margin: {$marginTop} {$marginRight} {$marginBottom} {$marginLeft};\n";	
       }
 
       //border
@@ -182,7 +174,7 @@ function vayu_advance_button_style($attr){
 
   $css .= "text-decoration: none;";
 
-  if (isset($attr['align']) && $attr['align'] !=='space-around'){
+  if (isset($attr['align'])){
     $css .= "justify-content: {$attr['align']};";
    }
 
@@ -260,6 +252,7 @@ function vayu_advance_button_style($attr){
 
       $css .= "box-sizing: border-box; 
                max-width: 100%;";
+               
       //button buttonbackground
       if ( isset( $attr['buttonbackgroundType'] ) && $attr['buttonbackgroundType'] == 'image' ) {
         $css .= isset( $attr['buttonbackgroundImage']['url'] ) ? "background-image: url({$attr['buttonbackgroundImage']['url']});" : '';
@@ -273,25 +266,14 @@ function vayu_advance_button_style($attr){
         $css .= isset( $attr['buttonbackgroundColor'] ) ? "background-color:{$attr['buttonbackgroundColor']};" : 'background-color:#ff6912;';
       }
 
-
       //buttonpadding
-      //Note This is a reverse solution if you select padding type unlinked by default
-      if (isset($attr['buttonpaddingType']) && 'linked' === $attr['buttonpaddingType']) {
-        $buttonpadding = isset($attr['buttonpadding']) ? $attr['buttonpadding'] : 0;
-        $buttonpaddingUnit = isset($attr['buttonpaddingUnit']) ? $attr['buttonpaddingUnit'] : 'px';
-        $css .= "padding: {$buttonpadding}{$buttonpaddingUnit};";
-      } else {
-        $buttonpaddingUnit = isset($attr['buttonpaddingUnit']) ? $attr['buttonpaddingUnit'] : 'px';
-        $buttonpaddingTop = isset($attr['buttonpaddingTop']) ? $attr['buttonpaddingTop'] : 16;
-        $buttonpaddingRight = isset($attr['buttonpaddingRight']) ? $attr['buttonpaddingRight'] : 40;
-        $buttonpaddingBottom = isset($attr['buttonpaddingBottom']) ? $attr['buttonpaddingBottom'] : 16;
-        $buttonpaddingLeft = isset($attr['buttonpaddingLeft']) ? $attr['buttonpaddingLeft'] : 40;
-        $css .= "padding-top: {$buttonpaddingTop}{$buttonpaddingUnit}; 
-        padding-right: {$buttonpaddingRight}{$buttonpaddingUnit}; 
-        padding-bottom: {$buttonpaddingBottom}{$buttonpaddingUnit}; 
-        padding-left: {$buttonpaddingLeft}{$buttonpaddingUnit}; 
-          ";
-      }
+			// Check for null explicitly and only default empty or missing values
+			$buttonpaddingTop = (isset($attr['buttonpadding']['top']) && $attr['buttonpadding']['top'] !== null) ? $attr['buttonpadding']['top'] : '12px';
+			$buttonpaddingRight = (isset($attr['buttonpadding']['right']) && $attr['buttonpadding']['right'] !== null) ? $attr['buttonpadding']['right'] : '18px';
+			$buttonpaddingBottom = (isset($attr['buttonpadding']['bottom']) && $attr['buttonpadding']['bottom'] !== null) ? $attr['buttonpadding']['bottom'] : '12px';
+			$buttonpaddingLeft = (isset($attr['buttonpadding']['left']) && $attr['buttonpadding']['left'] !== null) ? $attr['buttonpadding']['left'] : '18px';
+			// Append the buttonpadding to the CSS string
+			$css .= "padding: {$buttonpaddingTop} {$buttonpaddingRight} {$buttonpaddingBottom} {$buttonpaddingLeft};\n";	
 
       $css .= isset( $attr['buttonColor']) ? "color: {$attr['buttonColor']};" : 'color: #FFF;';
 
@@ -365,7 +347,7 @@ function vayu_advance_button_style($attr){
     
     $css .= "transition: all ". (isset($attr['transitionAll']) ? $attr['transitionAll'] : '0.2' ). "s ease;";
 
-     if (isset($attr['align']) && $attr['align']=='space-around'){
+     if (isset($attr['align']) && $attr['align']=='justify'){
       $css .= "
       width: 100%;
       justify-content: center;";
@@ -392,7 +374,7 @@ function vayu_advance_button_style($attr){
       }elseif( isset( $attr['buttonbackgroundTypeHvr'] ) && $attr['buttonbackgroundTypeHvr'] == 'gradient' ){
         $css .= isset( $attr['buttonbackgroundGradientHvr'] ) ? "background-image:{$attr['buttonbackgroundGradientHvr']};" : '';  
       }else{
-        $css .= isset( $attr['buttonbackgroundColorHvr'] ) ? "background:{$attr['buttonbackgroundColorHvr']};" : 'background-color:#ff6912;';
+        $css .= isset( $attr['buttonbackgroundColorHvr'] ) ? "background:{$attr['buttonbackgroundColorHvr']};" : '';
       }
       
       $css .= isset( $attr['buttonborderColorHvr'] ) ? "border-color:{$attr['buttonborderColorHvr'] };" : '';
@@ -425,46 +407,31 @@ function vayu_advance_button_style($attr){
     
         $css .= ".th-button-wrapper{$attr['uniqueID']}{";
         
-             
+        if (isset($attr['alignTablet'])){
+          $css .= "justify-content: {$attr['alignTablet']};";
+         }   
             
-              //margin
-              if (isset($attr['marginTypeTablet']) && 'unlinked' === $attr['marginTypeTablet']) {
-                $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-                $marginTop = isset($attr['marginTopTablet']) ? $attr['marginTopTablet'] : 0;
-                $marginBottom = isset($attr['marginBottomTablet']) ? $attr['marginBottomTablet'] : 0;
-                $marginLeft = isset($attr['marginLeftTablet']) ? $attr['marginLeftTablet'] : 0;
-                $marginRight = isset($attr['marginRightTablet']) ? $attr['marginRightTablet'] : 0;
-                $css .= "
-                      margin-top: {$marginTop}{$marginUnit}; 
-                      margin-bottom: {$marginBottom}{$marginUnit}; 
-                      margin-left: {$marginLeft}{$marginUnit}; 
-                      margin-right: {$marginRight}{$marginUnit}; 
-                  ";
-              } else {
-                $marginTablet = isset($attr['marginTablet']) ? $attr['marginTablet'] : 0;
-                $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-                $css .= "margin: {$marginTablet}{$marginUnit}; 
-                ";
-              }
-        
-              //padding
-              if (isset($attr['paddingTypeTablet']) && 'unlinked' === $attr['paddingTypeTablet']) {
-                $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-                $paddingTop = isset($attr['paddingTopTablet']) ? $attr['paddingTopTablet'] : 0;
-                $paddingBottom = isset($attr['paddingBottomTablet']) ? $attr['paddingBottomTablet'] : 0;
-                $paddingLeft = isset($attr['paddingLeftTablet']) ? $attr['paddingLeftTablet'] : 0;
-                $paddingRight = isset($attr['paddingRightTablet']) ? $attr['paddingRightTablet'] : 0;
-                $css .= "
-                      padding-top: {$paddingTop}{$paddingUnit}; 
-                      padding-bottom: {$paddingBottom}{$paddingUnit}; 
-                      padding-left: {$paddingLeft}{$paddingUnit}; 
-                      padding-right: {$paddingRight}{$paddingUnit}; 
-                  ";
-              } else {
-                $paddingTablet = isset($attr['paddingTablet']) ? $attr['paddingTablet'] : 0;
-                $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-                $css .= "padding: {$paddingTablet}{$paddingUnit};";
-              }
+      //paddingTablet
+		if (isset($attr['paddingTablet']) && is_array($attr['paddingTablet'])){
+			// Check for null explicitly and only default empty or missing values
+			$paddingTabletTop = (isset($attr['paddingTablet']['top']) && $attr['paddingTablet']['top'] !== null) ? $attr['paddingTablet']['top'] : '0px';
+			$paddingTabletRight = (isset($attr['paddingTablet']['right']) && $attr['paddingTablet']['right'] !== null) ? $attr['paddingTablet']['right'] : '0px';
+			$paddingTabletBottom = (isset($attr['paddingTablet']['bottom']) && $attr['paddingTablet']['bottom'] !== null) ? $attr['paddingTablet']['bottom'] : '0px';
+			$paddingTabletLeft = (isset($attr['paddingTablet']['left']) && $attr['paddingTablet']['left'] !== null) ? $attr['paddingTablet']['left'] : '0px';
+			// Append the paddingTablet to the CSS string
+			$css .= "padding: {$paddingTabletTop} {$paddingTabletRight} {$paddingTabletBottom} {$paddingTabletLeft};\n";	
+		}
+
+      //marginTablet
+      if (isset($attr['marginTablet']) && is_array($attr['marginTablet'])){
+        // Check for null explicitly and only default empty or missing values
+        $marginTabletTop = (isset($attr['marginTablet']['top']) && $attr['marginTablet']['top'] !== null) ? $attr['marginTablet']['top'] : '0px';
+        $marginTabletRight = (isset($attr['marginTablet']['right']) && $attr['marginTablet']['right'] !== null) ? $attr['marginTablet']['right'] : '0px';
+        $marginTabletBottom = (isset($attr['marginTablet']['bottom']) && $attr['marginTablet']['bottom'] !== null) ? $attr['marginTablet']['bottom'] : '0px';
+        $marginTabletLeft = (isset($attr['marginTablet']['left']) && $attr['marginTablet']['left'] !== null) ? $attr['marginTablet']['left'] : '0px';
+        // Append the marginTablet to the CSS string
+        $css .= "margin: {$marginTabletTop} {$marginTabletRight} {$marginTabletBottom} {$marginTabletLeft};\n";	
+      }
             
               // $css .= (isset($attr['zindexTablet']) ? "z-index:{$attr['zindexTablet']};}" : '');
               $css .= isset( $attr['zindexTablet'] ) ? "z-index:{$attr['zindexTablet'] };" : '';
@@ -597,33 +564,22 @@ function vayu_advance_button_style($attr){
 			$borderWidthHvrUnit = isset($attr['borderWidthHvrUnit']) ? $attr['borderWidthHvrUnit'] : 'px';
 			$css .= "border-width: {$borderWidthHvr}{$borderWidthHvrUnit};";
 		}
-
     $css .= "}";
 
     //************************************************** */
     // Button Style TablET
     //************************************************** */
   $css .= ".th-button-wrapper{$attr['uniqueID']} .th-button.th-button-inside{";
-    //padding
-    if (isset($attr['buttonpaddingTypeTablet']) && 'linked' === $attr['buttonpaddingTypeTablet']) {
-      $paddingTablet = isset($attr['buttonpaddingTablet']) ? $attr['buttonpaddingTablet'] : 0;
-      $paddingUnit = isset($attr['buttonpaddingUnit']) ? $attr['buttonpaddingUnit'] : 'px';
-      $css .= "padding: {$paddingTablet}{$paddingUnit};";
-      
-    } else {
-      $paddingUnit = isset($attr['buttonpaddingUnit']) ? $attr['buttonpaddingUnit'] : 'px';
-      $paddingTop = isset($attr['buttonpaddingTopTablet']) ? $attr['buttonpaddingTopTablet'] : 0;
-      $paddingBottom = isset($attr['buttonpaddingBottomTablet']) ? $attr['buttonpaddingBottomTablet'] : 0;
-      $paddingLeft = isset($attr['buttonpaddingLeftTablet']) ? $attr['buttonpaddingLeftTablet'] : 0;
-      $paddingRight = isset($attr['buttonpaddingRightTablet']) ? $attr['buttonpaddingRightTablet'] : 0;
-      $css .= "
-            padding-top: {$paddingTop}{$paddingUnit}; 
-            padding-bottom: {$paddingBottom}{$paddingUnit}; 
-            padding-left: {$paddingLeft}{$paddingUnit}; 
-            padding-right: {$paddingRight}{$paddingUnit}; 
-        ";
-    }
+   //buttonpaddingTablet
 
+			// Check for null explicitly and only default empty or missing values
+			$buttonpaddingTabletTop = (isset($attr['buttonpaddingTablet']['top']) && $attr['buttonpaddingTablet']['top'] !== null) ? $attr['buttonpaddingTablet']['top'] : '12px';
+			$buttonpaddingTabletRight = (isset($attr['buttonpaddingTablet']['right']) && $attr['buttonpaddingTablet']['right'] !== null) ? $attr['buttonpaddingTablet']['right'] : '18px';
+			$buttonpaddingTabletBottom = (isset($attr['buttonpaddingTablet']['bottom']) && $attr['buttonpaddingTablet']['bottom'] !== null) ? $attr['buttonpaddingTablet']['bottom'] : '12px';
+			$buttonpaddingTabletLeft = (isset($attr['buttonpaddingTablet']['left']) && $attr['buttonpaddingTablet']['left'] !== null) ? $attr['buttonpaddingTablet']['left'] : '18px';
+			// Append the buttonpaddingTablet to the CSS string
+			$css .= "padding: {$buttonpaddingTabletTop} {$buttonpaddingTabletRight} {$buttonpaddingTabletBottom} {$buttonpaddingTabletLeft};\n";	
+		
     //buttonborder-width
     if (isset($attr['buttonborderWidthTypeTablet']) && 'unlinked' === $attr['buttonborderWidthTypeTablet']) {
       $buttonborderWidthUnit = isset($attr['buttonborderWidthUnit']) ? $attr['buttonborderWidthUnit'] : 'px';
@@ -678,53 +634,44 @@ function vayu_advance_button_style($attr){
     $css .= "letter-spacing: {$attr['letterSpacingTablet']}{$letterSpacingUnit}; ";
   }
 
+  
+  if (isset($attr['alignTablet']) && $attr['alignTablet']=='justify'){
+    $css .= "
+    width: 100%;
+    justify-content: center;";
+   }
+   
     $css .= "}";
 
-    $css .= "}";
-
-             
+    $css .= "}";     
      //    Mobile view
       $css .= "@media screen and (max-width: 767px){";
       $css .= ".th-button-wrapper{$attr['uniqueID']}{";
             
-      //margin
-      if (isset($attr['marginTypeMobile']) && 'unlinked' === $attr['marginTypeMobile']) {
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $marginTop = isset($attr['marginTopMobile']) ? $attr['marginTopMobile'] : 0;
-        $marginBottom = isset($attr['marginBottomMobile']) ? $attr['marginBottomMobile'] : 0;
-        $marginLeft = isset($attr['marginLeftMobile']) ? $attr['marginLeftMobile'] : 0;
-        $marginRight = isset($attr['marginRightMobile']) ? $attr['marginRightMobile'] : 0;
-        $css .= "
-              margin-top: {$marginTop}{$marginUnit}; 
-              margin-bottom: {$marginBottom}{$marginUnit}; 
-              margin-left: {$marginLeft}{$marginUnit}; 
-              margin-right: {$marginRight}{$marginUnit}; 
-          ";
-      } else {
-        $marginMobile = isset($attr['marginMobile']) ? $attr['marginMobile'] : 0;
-        $marginUnit = isset($attr['marginUnit']) ? $attr['marginUnit'] : 'px';
-        $css .= "margin: {$marginMobile}{$marginUnit}; 
-        ";
-      }
+      if (isset($attr['alignMobile'])){
+        $css .= "justify-content: {$attr['alignMobile']};";
+       }   
 
-      //padding
-      if (isset($attr['paddingTypeMobile']) && 'unlinked' === $attr['paddingTypeMobile']) {
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $paddingTop = isset($attr['paddingTopMobile']) ? $attr['paddingTopMobile'] : 0;
-        $paddingBottom = isset($attr['paddingBottomMobile']) ? $attr['paddingBottomMobile'] : 0;
-        $paddingLeft = isset($attr['paddingLeftMobile']) ? $attr['paddingLeftMobile'] : 0;
-        $paddingRight = isset($attr['paddingRightMobile']) ? $attr['paddingRightMobile'] : 0;
-        $css .= "
-              padding-top: {$paddingTop}{$paddingUnit}; 
-              padding-bottom: {$paddingBottom}{$paddingUnit}; 
-              padding-left: {$paddingLeft}{$paddingUnit}; 
-              padding-right: {$paddingRight}{$paddingUnit}; 
-          ";
-      } else {
-        $paddingMobile = isset($attr['paddingMobile']) ? $attr['paddingMobile'] : 0;
-        $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
-        $css .= "padding: {$paddingMobile}{$paddingUnit}; 
-        ";
+    //paddingMobile
+		if (isset($attr['paddingMobile']) && is_array($attr['paddingMobile'])){
+			// Check for null explicitly and only default empty or missing values
+			$paddingMobileTop = (isset($attr['paddingMobile']['top']) && $attr['paddingMobile']['top'] !== null) ? $attr['paddingMobile']['top'] : '0px';
+			$paddingMobileRight = (isset($attr['paddingMobile']['right']) && $attr['paddingMobile']['right'] !== null) ? $attr['paddingMobile']['right'] : '0px';
+			$paddingMobileBottom = (isset($attr['paddingMobile']['bottom']) && $attr['paddingMobile']['bottom'] !== null) ? $attr['paddingMobile']['bottom'] : '0px';
+			$paddingMobileLeft = (isset($attr['paddingMobile']['left']) && $attr['paddingMobile']['left'] !== null) ? $attr['paddingMobile']['left'] : '0px';
+			// Append the paddingMobile to the CSS string
+			$css .= "padding: {$paddingMobileTop} {$paddingMobileRight} {$paddingMobileBottom} {$paddingMobileLeft};\n";	
+		}
+
+      //marginMobile
+      if (isset($attr['marginMobile']) && is_array($attr['marginMobile'])){
+        // Check for null explicitly and only default empty or missing values
+        $marginMobileTop = (isset($attr['marginMobile']['top']) && $attr['marginMobile']['top'] !== null) ? $attr['marginMobile']['top'] : '0px';
+        $marginMobileRight = (isset($attr['marginMobile']['right']) && $attr['marginMobile']['right'] !== null) ? $attr['marginMobile']['right'] : '0px';
+        $marginMobileBottom = (isset($attr['marginMobile']['bottom']) && $attr['marginMobile']['bottom'] !== null) ? $attr['marginMobile']['bottom'] : '0px';
+        $marginMobileLeft = (isset($attr['marginMobile']['left']) && $attr['marginMobile']['left'] !== null) ? $attr['marginMobile']['left'] : '0px';
+        // Append the marginMobile to the CSS string
+        $css .= "margin: {$marginMobileTop} {$marginMobileRight} {$marginMobileBottom} {$marginMobileLeft};\n";	
       }
     
       $css .= isset( $attr['zindexMobile'] ) ? "z-index:{$attr['zindexMobile'] };" : '';
@@ -780,9 +727,7 @@ function vayu_advance_button_style($attr){
 				$verticalOrientationOffsetBottomUnit = isset($attr['verticalOrientationOffsetBottomUnit']) ? $attr['verticalOrientationOffsetBottomUnit'] : 'px';
 				$css .= "bottom: {$verticalOrientationOffsetBottomMobile}{$verticalOrientationOffsetBottomUnit};";
 			}
-
 		}
-
       // flex properties
 			$css .= "align-self: " . (isset($attr['alignSelfMobile']) ? $attr['alignSelfMobile'] : 'inherit;' ). ";";
 			if(isset($attr['orderMobile']) && $attr['orderMobile'] === 'start'){
@@ -861,24 +806,15 @@ function vayu_advance_button_style($attr){
     // Button Style Mobile
     //************************************************** */
   $css .= ".th-button-wrapper{$attr['uniqueID']} .th-button.th-button-inside{";
-    //padding
-    if (isset($attr['buttonpaddingTypeMobile']) && 'linked' === $attr['buttonpaddingTypeMobile']) {
-      $paddingMobile = isset($attr['buttonpaddingMobile']) ? $attr['buttonpaddingMobile'] : 0;
-      $paddingUnit = isset($attr['buttonpaddingUnit']) ? $attr['buttonpaddingUnit'] : 'px';
-      $css .= "padding: {$paddingMobile}{$paddingUnit};";
-    } else {
-      $paddingUnit = isset($attr['buttonpaddingUnit']) ? $attr['buttonpaddingUnit'] : 'px';
-      $paddingTop = isset($attr['buttonpaddingTopMobile']) ? $attr['buttonpaddingTopMobile'] : 0;
-      $paddingBottom = isset($attr['buttonpaddingBottomMobile']) ? $attr['buttonpaddingBottomMobile'] : 0;
-      $paddingLeft = isset($attr['buttonpaddingLeftMobile']) ? $attr['buttonpaddingLeftMobile'] : 0;
-      $paddingRight = isset($attr['buttonpaddingRightMobile']) ? $attr['buttonpaddingRightMobile'] : 0;
-      $css .= "
-            padding-top: {$paddingTop}{$paddingUnit}; 
-            padding-bottom: {$paddingBottom}{$paddingUnit}; 
-            padding-left: {$paddingLeft}{$paddingUnit}; 
-            padding-right: {$paddingRight}{$paddingUnit}; 
-        ";
-    }
+  //buttonpaddingMobile
+
+    // Check for null explicitly and only default empty or missing values
+    $buttonpaddingMobileTop = (isset($attr['buttonpaddingMobile']['top']) && $attr['buttonpaddingMobile']['top'] !== null) ? $attr['buttonpaddingMobile']['top'] : '12px';
+    $buttonpaddingMobileRight = (isset($attr['buttonpaddingMobile']['right']) && $attr['buttonpaddingMobile']['right'] !== null) ? $attr['buttonpaddingMobile']['right'] : '18px';
+    $buttonpaddingMobileBottom = (isset($attr['buttonpaddingMobile']['bottom']) && $attr['buttonpaddingMobile']['bottom'] !== null) ? $attr['buttonpaddingMobile']['bottom'] : '12px';
+    $buttonpaddingMobileLeft = (isset($attr['buttonpaddingMobile']['left']) && $attr['buttonpaddingMobile']['left'] !== null) ? $attr['buttonpaddingMobile']['left'] : '18px';
+    // Append the buttonpaddingMobile to the CSS string
+    $css .= "padding: {$buttonpaddingMobileTop} {$buttonpaddingMobileRight} {$buttonpaddingMobileBottom} {$buttonpaddingMobileLeft};\n";	
 
     //buttonborder-width
     if (isset($attr['buttonborderWidthTypeMobile']) && 'unlinked' === $attr['buttonborderWidthTypeMobile']) {
@@ -897,7 +833,6 @@ function vayu_advance_button_style($attr){
       $buttonborderWidthUnit = isset($attr['buttonborderWidthUnit']) ? $attr['buttonborderWidthUnit'] : 'px';
       $css .= "border-width: {$buttonborderWidth}{$buttonborderWidthUnit}; ";
   }
-
   //buttonborder-radius
   if (isset($attr['buttonborderRadiusTypeMobile']) && 'unlinked' === $attr['buttonborderRadiusTypeMobile']) {
     $buttonborderRadiusUnit = isset($attr['buttonborderRadiusUnit']) ? $attr['buttonborderRadiusUnit'] : 'px';
@@ -915,34 +850,57 @@ function vayu_advance_button_style($attr){
     $buttonborderRadiusUnit = isset($attr['buttonborderRadiusUnit']) ? $attr['buttonborderRadiusUnit'] : 'px';
     $css .= "border-radius: {$buttonborderRadius}{$buttonborderRadiusUnit};";
   }
-
   // Font Size
   if (isset($attr['fontSizeMobile'])) {
     $fontSizeUnit = isset($attr['fontSizeUnit']) ? $attr['fontSizeUnit'] : 'px';
     $css .= "font-size: {$attr['fontSizeMobile']}{$fontSizeUnit}; ";
   }
-
   // Line Height
   if (isset($attr['lineHeightMobile'])) {
     $lineHeightUnit = isset($attr['lineHeightUnit']) ? $attr['lineHeightUnit'] : 'px';
     $css .= "line-height: {$attr['lineHeightMobile']}{$lineHeightUnit}; ";
   }
-
   // Letter Spacing
   if (isset($attr['letterSpacingMobile'])) {
     $letterSpacingUnit = isset($attr['letterSpacingUnit']) ? $attr['letterSpacingUnit'] : 'px';
     $css .= "letter-spacing: {$attr['letterSpacingMobile']}{$letterSpacingUnit}; ";
   }
-  
-    $css .= "}";
+
+  if (isset($attr['alignMobile']) && $attr['alignMobile']=='justify'){
+    $css .= "
+    width: 100%;
+    justify-content: center;";
+   }
 
     $css .= "}";
 
-
+    $css .= "}";
+    
     $css .= ".th-button-wrapper{$attr['uniqueID']}:focus{outline: none;
     text-decoration: none;
     }"; 
     
+    $css .= ".th-button-wrapper{$attr['uniqueID']} .vayu_blocks_icon_block_main_icon_svg{
+      min-width: 18px;
+      display: flex;
+      align-items: center;
+    
+    }";
+
+    //Icon Style
+    $css .= ".th-button-wrapper{$attr['uniqueID']} .vayu_blocks_icon_block_main_icon_svg{";
+          if (isset($attr['fontSize'])) {
+          $fontSizeUnit = isset($attr['fontSizeUnit']) ? $attr['fontSizeUnit'] : 'px';
+    $css .= "width: {$attr['fontSize']}{$fontSizeUnit}; ";
+        }
+    $css .= isset( $attr['buttonColor']) ? "fill: {$attr['buttonColor']};" : 'fill: #FFF;';
+    $css .= "}";
+
+    //Icon Style Hover
+    $css .= ".th-button-wrapper{$attr['uniqueID']} .th-button.th-button-inside:hover .vayu_blocks_icon_block_main_icon_svg{";
+    $css .= isset( $attr['buttonColorHvr'] ) ? "fill:{$attr['buttonColorHvr'] };" : '';
+    $css .= "}";
+
     }
 
     return $css;

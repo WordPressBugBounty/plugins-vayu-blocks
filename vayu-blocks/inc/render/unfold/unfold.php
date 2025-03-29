@@ -4,10 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function vayu_block_unfold_render($attributes, $content, $block) {
+
     $is_unfolded = !empty($attributes['isUnfolded']);
     $unfold_content_template = $content;
-    $fold_text = $attributes['foldBtnTxt'] ?? 'Fold';
-    $unfold_text = $attributes['unfoldBtnTxt'] ?? 'Unfold';
+    $fold_text = !empty($attributes['foldBtnTxt']) ? $attributes['foldBtnTxt'] : __('Fold', 'vayu-blocks');
+    $unfold_text = !empty($attributes['unfoldBtnTxt']) ? $attributes['unfoldBtnTxt'] : __('UnFold', 'vayu-blocks');
 
     // Set the fold icon based on selectedFoldIcon attribute
     switch ($attributes['selectedFoldIcon'] ?? '') {
@@ -83,7 +84,7 @@ function vayu_block_unfold_render($attributes, $content, $block) {
 
     ob_start();
     ?>
-    <div <?php echo get_block_wrapper_attributes(); ?>>
+    <div id="<?php echo esc_attr($attributes['uniqueId']);?>" <?php echo get_block_wrapper_attributes(); ?>>
         <div class="unfold-inner"
             style="cursor: <?php echo in_array($attributes['contentShowEvent'], ['contentclick', 'contenthover']) ? 'pointer' : 'auto'; ?>;"
             data-content-show-event="<?php echo esc_attr($attributes['contentShowEvent']); ?>"
@@ -91,7 +92,7 @@ function vayu_block_unfold_render($attributes, $content, $block) {
             data-unfold-text="<?php echo esc_attr($unfold_text); ?>"
             data-fold-text="<?php echo esc_attr($fold_text); ?>"
             >
-            <div class="unfold-content <?php echo $is_unfolded ? 'unfolded' : ''; ?>">
+            <div class="unfold-content <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
                 <?php echo $unfold_content_template; ?>
             </div>
 
@@ -103,14 +104,14 @@ function vayu_block_unfold_render($attributes, $content, $block) {
                 style="cursor: pointer;"
                 data-fold-text="<?php echo esc_attr($fold_text); ?>"
                 data-unfold-text="<?php echo esc_attr($unfold_text); ?>">
-                <span class="btn-fold-icon" style="display: <?php echo $is_unfolded ? 'inline-flex' : 'none'; ?>;">
-                    <?php echo $fold_icon; ?>
+                <span class="btn-fold-icon" style="display: <?php echo esc_attr($is_unfolded) ? 'inline-flex' : 'none'; ?>;">
+                <?php echo $fold_icon; ?>
                 </span>
-                <span class="btn-unfold-icon" style="display: <?php echo $is_unfolded ? 'none' : 'inline-flex'; ?>;">
+                <span class="btn-unfold-icon" style="display: <?php echo esc_attr($is_unfolded) ? 'none' : 'inline-flex'; ?>;">
                     <?php echo $unfold_icon; ?>
                 </span>
                 <span class="btn-text">
-                    <?php echo $is_unfolded ? $fold_text : $unfold_text; ?>
+                <?php echo esc_attr($is_unfolded) ? esc_attr($fold_text) : esc_attr($unfold_text); ?>
                 </span>
             </div>
                 </div>

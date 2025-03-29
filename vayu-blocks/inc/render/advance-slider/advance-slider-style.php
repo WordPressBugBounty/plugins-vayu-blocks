@@ -14,12 +14,11 @@ function generate_inline_slider_styles($attr) {
 
     // Generate the class selector by concatenating '.' with the unique ID
     $wrapper = '.wp_block_vayu-blocks-advance-slider-main.vayu-block-' . $uniqueId;
+    $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
 
     //Main div
     $css .= "$wrapper {";
 
-        $css .= "--swiper-navigation-backgroundTablet: " . esc_attr($attr['navigationbackgroundTablet']) . " !important;";
-        $css .= "--swiper-navigation-backgroundMobile: " . esc_attr($attr['navigationbackgroundMobile']) . " !important;";
         $css .= "--swiper-navigation-sizeTablet: " . esc_attr($attr['navigationsizeTablet']) . "px !important;";
         $css .= "--swiper-navigation-sizeMobile: " . esc_attr($attr['navigationsizeMobile']) . "px !important;";
         $css .= "--swiper-navigation-navigationtopTablet: " . esc_attr($attr['navigationtopTablet']) . "% !important;";
@@ -43,62 +42,10 @@ function generate_inline_slider_styles($attr) {
         $css .= "--swiper-pagination-bullet-width: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-pagination-bullet-height: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-navigation-size: " . esc_attr($attr['navigationsize']) . "px !important;";
-        
-       // Desktop Padding
-       $paddingUnit = isset($attr['paddingUnit']) ? esc_attr($attr['paddingUnit']) : 'px';
-       $css .= isset($attr['buttonpaddingTop']) ? "padding-top: " . esc_attr($attr['buttonpaddingTop']) . $paddingUnit . ";" : '';
-       $css .= isset($attr['buttonpaddingBottom']) ? "padding-bottom: " . esc_attr($attr['buttonpaddingBottom']) . $paddingUnit . ";" : '';
-       $css .= isset($attr['buttonpaddingLeft']) ? "padding-left: " . esc_attr($attr['buttonpaddingLeft']) . $paddingUnit . ";" : '';
-       $css .= isset($attr['buttonpaddingRight']) ? "padding-right: " . esc_attr($attr['buttonpaddingRight']) . $paddingUnit . ";" : '';
 
-       // Desktop Padding
-       $marginUnit = isset($attr['marginUnit']) ? esc_attr($attr['marginUnit']) : 'px';
-       $css .= isset($attr['marginTop']) ? "margin-top: " . esc_attr($attr['marginTop']) . $marginUnit . ";" : '';
-       $css .= isset($attr['marginBottom']) ? "margin-bottom: " . esc_attr($attr['marginBottom']) . $marginUnit . ";" : '';
-    //    $css .= isset($attr['marginLeft']) ? "margin-left: " . esc_attr($attr['marginLeft']) . $marginUnit . ";" : '';
-    //    $css .= isset($attr['marginRight']) ? "margin-right: " . esc_attr($attr['marginRight']) . $marginUnit . ";" : '';
-       
-
-       // Top border
-       if (isset($attr['advanceborder']['topwidth'], $attr['advanceborder']['topstyle'], $attr['advanceborder']['topcolor'])) {
-        $css .= "border-top: " . esc_attr($attr['advanceborder']['topwidth']) . " " . esc_attr($attr['advanceborder']['topstyle']) . " " . esc_attr($attr['advanceborder']['topcolor']) . ";";
-        }
-
-        // Bottom border
-        if (isset($attr['advanceborder']['bottomwidth'], $attr['advanceborder']['bottomstyle'], $attr['advanceborder']['bottomcolor'])) {
-            $css .= "border-bottom: " . esc_attr($attr['advanceborder']['bottomwidth']) . " " . esc_attr($attr['advanceborder']['bottomstyle']) . " " . esc_attr($attr['advanceborder']['bottomcolor']) . ";";
-        }
-
-        // Left border
-        if (isset($attr['advanceborder']['leftwidth'], $attr['advanceborder']['leftstyle'], $attr['advanceborder']['leftcolor'])) {
-            $css .= "border-left: " . esc_attr($attr['advanceborder']['leftwidth']) . " " . esc_attr($attr['advanceborder']['leftstyle']) . " " . esc_attr($attr['advanceborder']['leftcolor']) . ";";
-        }
-
-        // Right border
-        if (isset($attr['advanceborder']['rightwidth'], $attr['advanceborder']['rightstyle'], $attr['advanceborder']['rightcolor'])) {
-            $css .= "border-right: " . esc_attr($attr['advanceborder']['rightwidth']) . " " . esc_attr($attr['advanceborder']['rightstyle']) . " " . esc_attr($attr['advanceborder']['rightcolor']) . ";";
-        }
-
-        // Apply individual border-radius values if not a circle
-        if (isset($attr['advanceRadius']['top'], $attr['advanceRadius']['right'], $attr['advanceRadius']['bottom'], $attr['advanceRadius']['left'])) {
-            $css .= "border-radius: " . esc_attr($attr['advanceRadius']['top']) . " " . esc_attr($attr['advanceRadius']['right']) . " " . esc_attr($attr['advanceRadius']['bottom']) . " " . esc_attr($attr['advanceRadius']['left']) . ";";
-        }
-
-       // Box-shadow
-       if (isset($attr['boxShadow']) && $attr['boxShadow']) {
-           $boxShadowColor = 'rgba(' . implode(', ', [
-               hexdec(substr($attr['boxShadowColor'], 1, 2)), // Red
-               hexdec(substr($attr['boxShadowColor'], 3, 2)), // Green
-               hexdec(substr($attr['boxShadowColor'], 5, 2))  // Blue
-           ]) . ', ' . ((float) $attr['boxShadowColorOpacity'] / 100) . ')';
-           $css .= "box-shadow: " . esc_attr($attr['boxShadowHorizontal']) . 'px ' .
-                               esc_attr($attr['boxShadowVertical']) . 'px ' .
-                               esc_attr($attr['boxShadowBlur']) . 'px ' .
-                               esc_attr($attr['boxShadowSpread']) . 'px ' .
-                               $boxShadowColor . ";";
-       } else {
-           $css .= "box-shadow: none;";
-       }
+        $css .= $OBJ_STYLE->dimensions('buttonpadding','padding','Desktop');	
+        $css .= $OBJ_STYLE->dimensions('buttonmargin','margin','Desktop');
+        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Desktop');
 
        // Background
        if (isset($attr['backgroundType'])) {
@@ -115,6 +62,8 @@ function generate_inline_slider_styles($attr) {
            $css .= "background: " . esc_attr($attr['backgroundColor']) . ";";
        }
 
+       $css .= "width: 100%;";
+
        // Background properties
        $css .= isset($attr['backgroundPosition']) ? "background-position: " . esc_attr($attr['backgroundPosition']['x']) . ',' . esc_attr($attr['backgroundPosition']['y']) . ";" : 'background-position: 50%, 50%;';
        $css .= isset($attr['backgroundAttachment']) ? "background-attachment: " . esc_attr($attr['backgroundAttachment']) . ";" : '';
@@ -124,104 +73,43 @@ function generate_inline_slider_styles($attr) {
        // Transition
        $css .= "transition-duration: " . (isset($attr['transitionAll']) ? esc_attr($attr['transitionAll']) : '0') . "s;";
 
-       
     $css .= "}";
    
     // Add media query for tablet screens
     $css .= "@media (max-width: 1024px) {";
         $css .= "$wrapper {";
             $css .= "width: " . esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) . ";";
+            $css .= $OBJ_STYLE ->dimensions('buttonpadding','padding',  'Tablet');	
+            $css .= $OBJ_STYLE ->dimensions('buttonmargin', 'margin', 'Tablet');
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Tablet');
         $css .= "}";
+
+        $css .= "$wrapper:hover {";
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Tablet');
+        $css .= "}";
+
     $css .= "}";
 
     // Add media query for Mobile screens
     $css .= "@media (max-width: 300px) {";
         $css .= "$wrapper {";
             $css .= "width: " . esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) . ";";
+            $css .= $OBJ_STYLE ->dimensions('buttonpadding','padding',  'Mobile');	
+            $css .= $OBJ_STYLE ->dimensions('buttonmargin','margin',  'Mobile');
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Mobile');
         $css .= "}";
+
+        $css .= "$wrapper:hover {";
+            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Mobile');
+        $css .= "}";
+
     $css .= "}";
 
     //Hover 
     $css .= "$wrapper:hover {";
 
-         // Top border
-         if (
-            isset($attr['advanceborderhvr']['topwidth']) && !empty($attr['advanceborderhvr']['topwidth']) &&
-            isset($attr['advanceborderhvr']['topstyle']) && !empty($attr['advanceborderhvr']['topstyle']) &&
-            isset($attr['advanceborderhvr']['topcolor']) && !empty($attr['advanceborderhvr']['topcolor'])
-        ) {
-            $css .= "border-top: " . esc_attr($attr['advanceborderhvr']['topwidth']) . " " . esc_attr($attr['advanceborderhvr']['topstyle']) . " " . esc_attr($attr['advanceborderhvr']['topcolor']) . ";";
-        }
 
-
-        // Bottom border
-        if (
-            isset($attr['advanceborderhvr']['bottomwidth']) && !empty($attr['advanceborderhvr']['bottomwidth']) &&
-            isset($attr['advanceborderhvr']['bottomstyle']) && !empty($attr['advanceborderhvr']['bottomstyle']) &&
-            isset($attr['advanceborderhvr']['bottomcolor']) && !empty($attr['advanceborderhvr']['bottomcolor'])
-        ) {
-            $css .= "border-bottom: " . esc_attr($attr['advanceborderhvr']['bottomwidth']) . " " . esc_attr($attr['advanceborderhvr']['bottomstyle']) . " " . esc_attr($attr['advanceborderhvr']['bottomcolor']) . ";";
-        }
-
-        // Left border
-        if (
-            isset($attr['advanceborderhvr']['leftwidth']) && !empty($attr['advanceborderhvr']['leftwidth']) &&
-            isset($attr['advanceborderhvr']['leftstyle']) && !empty($attr['advanceborderhvr']['leftstyle']) &&
-            isset($attr['advanceborderhvr']['leftcolor']) && !empty($attr['advanceborderhvr']['leftcolor'])
-        ) {
-            $css .= "border-left: " . esc_attr($attr['advanceborderhvr']['leftwidth']) . " " . esc_attr($attr['advanceborderhvr']['leftstyle']) . " " . esc_attr($attr['advanceborderhvr']['leftcolor']) . ";";
-        }
-
-        // Right border
-        if (
-            isset($attr['advanceborderhvr']['rightwidth']) && !empty($attr['advanceborderhvr']['rightwidth']) &&
-            isset($attr['advanceborderhvr']['rightstyle']) && !empty($attr['advanceborderhvr']['rightstyle']) &&
-            isset($attr['advanceborderhvr']['rightcolor']) && !empty($attr['advanceborderhvr']['rightcolor'])
-        ) {
-            $css .= "border-right: " . esc_attr($attr['advanceborderhvr']['rightwidth']) . " " . esc_attr($attr['advanceborderhvr']['rightstyle']) . " " . esc_attr($attr['advanceborderhvr']['rightcolor']) . ";";
-        }
-
-
-        // Apply individual border-radius values if all values are set and not empty
-        if (
-            isset($attr['advanceRadiushvr']['top']) && ($attr['advanceRadiushvr']['top'])!='0px' ||
-            isset($attr['advanceRadiushvr']['right']) && ($attr['advanceRadiushvr']['right']) !='0px' ||
-            isset($attr['advanceRadiushvr']['bottom']) && ($attr['advanceRadiushvr']['bottom']) !='0px' ||
-            isset($attr['advanceRadiushvr']['left']) && ($attr['advanceRadiushvr']['left'])!='0px'
-        ) {
-            $css .= "border-radius: " . esc_attr($attr['advanceRadiushvr']['top']) . " " . esc_attr($attr['advanceRadiushvr']['right']) . " " . esc_attr($attr['advanceRadiushvr']['bottom']) . " " . esc_attr($attr['advanceRadiushvr']['left']) . ";";
-        }
-
-        if(!empty($attr['boxShadowColorHvr'])){
-        // Box-shadow
-        if (isset($attr['boxShadowHvr']) && $attr['boxShadowHvr']) {
-            // Ensure the boxShadowColorHvr and boxShadowColorOpacityHvr keys are set
-            if (isset($attr['boxShadowColorHvr'], $attr['boxShadowColorOpacityHvr'])) {
-                $boxShadowColor = 'rgba(' . implode(', ', [
-                    hexdec(substr($attr['boxShadowColorHvr'], 1, 2)), // Red
-                    hexdec(substr($attr['boxShadowColorHvr'], 3, 2)), // Green
-                    hexdec(substr($attr['boxShadowColorHvr'], 5, 2))  // Blue
-                ]) . ', ' . ((float) $attr['boxShadowColorOpacityHvr'] / 100) . ')';
-            } else {
-                $boxShadowColor = 'rgba(0, 0, 0, 0)'; // Default value in case of missing color
-            }
-
-            // Ensure each box shadow dimension key is set, use a default value if not
-            $boxShadowHorizontal = isset($attr['boxShadowHorizontalHvr']) ? esc_attr($attr['boxShadowHorizontalHvr']) : '0';
-            $boxShadowVertical = isset($attr['boxShadowVerticalHvr']) ? esc_attr($attr['boxShadowVerticalHvr']) : '0';
-            $boxShadowBlur = isset($attr['boxShadowBlurHvr']) ? esc_attr($attr['boxShadowBlurHvr']) : '0';
-            $boxShadowSpread = isset($attr['boxShadowSpreadHvr']) ? esc_attr($attr['boxShadowSpreadHvr']) : '0';
-
-            if(!empty($boxShadowColor)){
-                $css .= "box-shadow: " . $boxShadowHorizontal . 'px ' .
-                $boxShadowVertical . 'px ' .
-                $boxShadowBlur . 'px ' .
-                $boxShadowSpread . 'px ' .
-                $boxShadowColor . ";";
-            }
-
-        }
-        }
+        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Desktop');
 
         // Background
         if (isset($attr['backgroundTypeHvr'])) {
@@ -283,76 +171,18 @@ function generate_inline_slider_styles($attr) {
         $css .= "background: " . esc_attr($attr['navigationbackground']) . " !important;";
         $css .= "color: " . esc_attr($attr['navigationcolor']) . ";";
         $css .= "top: " . esc_attr($attr['navigationtop']) . "% !important;"; // Added space for proper CSS syntax
-        $css .= "padding: " . esc_attr($attr['navigationpadding']['top']) . " " . esc_attr($attr['navigationpadding']['right']) . " " . esc_attr($attr['navigationpadding']['bottom']) . " " . esc_attr($attr['navigationpadding']['left']) . ";";
         $css .= "opacity: $displayopacity;"; // Ensuring displayopacity is escaped correctly
 
-        // Border radius for arrow
-        if (isset($attr['arrowradius'])) {
-            $css .= "border-top-left-radius: " . esc_attr($attr['arrowradius']['top']) . ";";
-            $css .= "border-top-right-radius: " . esc_attr($attr['arrowradius']['right']) . ";";
-            $css .= "border-bottom-right-radius: " . esc_attr($attr['arrowradius']['bottom']) . ";";
-            $css .= "border-bottom-left-radius: " . esc_attr($attr['arrowradius']['left']) . ";";
-        }
+        $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Desktop');
+        $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Desktop');	
 
-        if (isset($attr['arrowradiusTablet'])) {
-            $css .= "@media (max-width: 1024px) {";
-            $css .= "border-top-left-radius: " . esc_attr($attr['arrowradiusTablet']['top']) . ";";
-            $css .= "border-top-right-radius: " . esc_attr($attr['arrowradiusTablet']['right']) . ";";
-            $css .= "border-bottom-right-radius: " . esc_attr($attr['arrowradiusTablet']['bottom']) . ";";
-            $css .= "border-bottom-left-radius: " . esc_attr($attr['arrowradiusTablet']['left']) . ";";
-            $css .= "padding: " . esc_attr($attr['navigationpaddingTablet']['top']) . " " . esc_attr($attr['navigationpaddingTablet']['right']) . " " . esc_attr($attr['navigationpaddingTablet']['bottom']) . " " . esc_attr($attr['navigationpaddingTablet']['left']) . ";";
-            $css .= "}";
-        }
-
-        if (isset($attr['arrowradiusMobile'])) {
-            $css .= "@media (max-width: 768px) {";
-            $css .= "border-top-left-radius: " . esc_attr($attr['arrowradiusMobile']['top']) . ";";
-            $css .= "border-top-right-radius: " . esc_attr($attr['arrowradiusMobile']['right']) . ";";
-            $css .= "border-bottom-right-radius: " . esc_attr($attr['arrowradiusMobile']['bottom']) . ";";
-            $css .= "border-bottom-left-radius: " . esc_attr($attr['arrowradiusMobile']['left']) . ";";
-            $css .= "padding: " . esc_attr($attr['navigationpaddingMobile']['top']) . " " . esc_attr($attr['navigationpaddingMobile']['right']) . " " . esc_attr($attr['navigationpaddingMobile']['bottom']) . " " . esc_attr($attr['navigationpaddingMobile']['left']) . ";";
-            $css .= "}";
-        }
-
-        // Border for Desktop
-        $css .= isset($attr['arrowTopborderType']) && isset($attr['arrowTopBorder']) && isset($attr['arrowTopBorderColor']) ? 
-            "border-top: " . esc_attr($attr['arrowTopborderType']) . ' ' . esc_attr($attr['arrowTopBorder']) . " " . esc_attr($attr['arrowTopBorderColor']) . ";" : '';
-        $css .= isset($attr['arrowBottomborderType']) && isset($attr['arrowBottomBorder']) && isset($attr['arrowBottomBorderColor']) ? 
-            "border-bottom: " . esc_attr($attr['arrowBottomborderType']) . ' ' . esc_attr($attr['arrowBottomBorder']) . " " . esc_attr($attr['arrowBottomBorderColor']) . ";" : '';
-        $css .= isset($attr['arrowLeftborderType']) && isset($attr['arrowLeftBorder']) && isset($attr['arrowLeftBorderColor']) ? 
-            "border-left: " . esc_attr($attr['arrowLeftborderType']) . ' ' . esc_attr($attr['arrowLeftBorder']) . " " . esc_attr($attr['arrowLeftBorderColor']) . ";" : '';
-        $css .= isset($attr['arrowRightborderType']) && isset($attr['arrowRightBorder']) && isset($attr['arrowRightBorderColor']) ? 
-            "border-right: " . esc_attr($attr['arrowRightborderType']) . ' ' . esc_attr($attr['arrowRightBorder']) . " " . esc_attr($attr['arrowRightBorderColor']) . ";" : '';
-
-        // Media Query for Tablet
-        $css .= "@media (max-width: 1024px) {";
-            $css .= isset($attr['arrowTopborderTypeTablet']) && isset($attr['arrowTopBorderTablet']) && isset($attr['arrowTopBorderColorTablet']) ? 
-                "border-top: " . esc_attr($attr['arrowTopborderTypeTablet']) . ' ' . esc_attr($attr['arrowTopBorderTablet']) . " " . esc_attr($attr['arrowTopBorderColorTablet']) . ";" : '';
-            $css .= isset($attr['arrowBottomborderTypeTablet']) && isset($attr['arrowBottomBorderTablet']) && isset($attr['arrowBottomBorderColorTablet']) ? 
-                "border-bottom: " . esc_attr($attr['arrowBottomborderTypeTablet']) . ' ' . esc_attr($attr['arrowBottomBorderTablet']) . " " . esc_attr($attr['arrowBottomBorderColorTablet']) . ";" : '';
-            $css .= isset($attr['arrowLeftborderTypeTablet']) && isset($attr['arrowLeftBorderTablet']) && isset($attr['arrowLeftBorderColorTablet']) ? 
-                "border-left: " . esc_attr($attr['arrowLeftborderTypeTablet']) . ' ' . esc_attr($attr['arrowLeftBorderTablet']) . " " . esc_attr($attr['arrowLeftBorderColorTablet']) . ";" : '';
-            $css .= isset($attr['arrowRightborderTypeTablet']) && isset($attr['arrowRightBorderTablet']) && isset($attr['arrowRightBorderColorTablet']) ? 
-                "border-right: " . esc_attr($attr['arrowRightborderTypeTablet']) . ' ' . esc_attr($attr['arrowRightBorderTablet']) . " " . esc_attr($attr['arrowRightBorderColorTablet']) . ";" : '';
-        $css .= "}";
-
-        // Media Query for Mobile
-        $css .= "@media (max-width: 768px) {";
-            $css .= isset($attr['arrowTopborderTypeMobile']) && isset($attr['arrowTopBorderMobile']) && isset($attr['arrowTopBorderColorMobile']) ? 
-                "border-top: " . esc_attr($attr['arrowTopborderTypeMobile']) . ' ' . esc_attr($attr['arrowTopBorderMobile']) . " " . esc_attr($attr['arrowTopBorderColorMobile']) . ";" : '';
-            $css .= isset($attr['arrowBottomborderTypeMobile']) && isset($attr['arrowBottomBorderMobile']) && isset($attr['arrowBottomBorderColorMobile']) ? 
-                "border-bottom: " . esc_attr($attr['arrowBottomborderTypeMobile']) . ' ' . esc_attr($attr['arrowBottomBorderMobile']) . " " . esc_attr($attr['arrowBottomBorderColorMobile']) . ";" : '';
-            $css .= isset($attr['arrowLeftborderTypeMobile']) && isset($attr['arrowLeftBorderMobile']) && isset($attr['arrowLeftBorderColorMobile']) ? 
-                "border-left: " . esc_attr($attr['arrowLeftborderTypeMobile']) . ' ' . esc_attr($attr['arrowLeftBorderMobile']) . " " . esc_attr($attr['arrowLeftBorderColorMobile']) . ";" : '';
-            $css .= isset($attr['arrowRightborderTypeMobile']) && isset($attr['arrowRightBorderMobile']) && isset($attr['arrowRightBorderColorMobile']) ? 
-                "border-right: " . esc_attr($attr['arrowRightborderTypeMobile']) . ' ' . esc_attr($attr['arrowRightBorderMobile']) . " " . esc_attr($attr['arrowRightBorderColorMobile']) . ";" : '';
-        $css .= "}";
     $css .= "}";
-    
+   
     // Tablet Navigation
     $css .= "@media (max-width: 1024px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
-            $css .= "background: " . esc_attr($attr['navigationbackgroundTablet']) . " !important;";
+            $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Tablet');
+            $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Tablet');	
             $css .= "top: " . esc_attr($attr['navigationtopTablet']) . "% !important;";
         $css .= "}";
 
@@ -386,7 +216,8 @@ function generate_inline_slider_styles($attr) {
     // Mobile Navigation
     $css .= "@media (max-width: 768px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
-            $css .= "background: " . esc_attr($attr['navigationbackgroundMobile']) . " !important;";
+            $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Mobile');
+            $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Mobile');	
             $css .= "top: " . esc_attr($attr['navigationtopMobile']) . "% !important;";
         $css .= "}";
 

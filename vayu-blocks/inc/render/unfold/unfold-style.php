@@ -9,7 +9,9 @@ function vayu_unfold_style($attr){
 
     $css = "";
 
-    $css .= ".wp-block-vayu-blocks-unfold{";
+    if(isset( $attr['uniqueId'] )){
+
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold{";
         //padding
 		if (isset($attr['paddingType']) && 'unlinked' === $attr['paddingType']) {
 			$paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
@@ -108,7 +110,7 @@ function vayu_unfold_style($attr){
     $css .= "}";
 
 
-    $css .=".wp-block-vayu-blocks-unfold::after{";
+    $css .="#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold::after{";
     //overlay
     if ( isset( $attr['overlaybackgroundType'] ) && $attr['overlaybackgroundType'] == 'image' ) {
         $css .= isset( $attr['overlaybackgroundImage']['url'] ) ? "background-image: url({$attr['overlaybackgroundImage']['url']});" : '';
@@ -127,7 +129,7 @@ function vayu_unfold_style($attr){
      //Hover
     /**************/
 
-    $css .=".wp-block-vayu-blocks-unfold:hover::after{";
+    $css .="#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold:hover::after{";
     //overlay
     if ( isset( $attr['overlaybackgroundTypeHvr'] ) && $attr['overlaybackgroundTypeHvr'] == 'image' ) {
         $css .= isset( $attr['overlaybackgroundImageHvr']['url'] ) ? "background-image: url({$attr['overlaybackgroundImageHvr']['url']});" : '';
@@ -142,7 +144,7 @@ function vayu_unfold_style($attr){
     }
     $css .="}";
 
-    $css .= ".wp-block-vayu-blocks-unfold:hover{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold:hover{";
     if ( isset( $attr['backgroundTypeHvr'] ) && $attr['backgroundTypeHvr'] == 'image' ) {
         $css .= isset( $attr['backgroundImageHvr']['url'] ) ? "background-image: url({$attr['backgroundImageHvr']['url']});" : '';
         $css .= isset( $attr['backgroundAttachmentHvr']) ? "background-attachment: {$attr['backgroundAttachmentHvr']};" : '';
@@ -205,7 +207,7 @@ function vayu_unfold_style($attr){
     $css .= "}";
 
     //button content
-    $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn{";
     //padding
 		if (isset($attr['paddingBtnWrapType']) && 'unlinked' === $attr['paddingBtnWrapType']) {
 			$paddingBtnWrapUnit = isset($attr['paddingBtnWrapUnit']) ? $attr['paddingBtnWrapUnit'] : 'px';
@@ -228,19 +230,25 @@ function vayu_unfold_style($attr){
     
         if (isset($attr['contentMinHgt'])) {
             $contentMinHgtUnit = isset($attr['contentMinHgtUnit']) ? $attr['contentMinHgtUnit'] : 'px';
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: {$attr['contentMinHgt']}{$contentMinHgtUnit}; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded){max-height: {$attr['contentMinHgt']}{$contentMinHgtUnit}; }";
         }else{
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: 150px; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded){max-height: 100px; }";
         }
     
         if (isset($attr['contentGradient'])) {
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded)::after { background: {$attr['contentGradient']}; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded)::after { 
+            background: {$attr['contentGradient']}; }";
+        } 
+
+        if (isset($attr['contentFadeHgt'])) {
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded)::after { 
+            height: {$attr['contentFadeHgt']}%; }";
         } 
 
         if (isset($attr['align']) && $attr['align']=='space-around') {
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width: 100%; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width: 100%; }";
         } 
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
         //Btnpadding
         if (isset($attr['paddingBtnType']) && 'unlinked' === $attr['paddingBtnType']) {
             $paddingBtnUnit = isset($attr['paddingBtnUnit']) ? $attr['paddingBtnUnit'] : 'px';
@@ -346,7 +354,7 @@ function vayu_unfold_style($attr){
 
     $css .= "}";
 
-    $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button:hover{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button:hover{";
 
             $css .= isset( $attr['btnHvrClr'] ) ? "color:{$attr['btnHvrClr']};" : 'color:#fff;';
 
@@ -409,16 +417,16 @@ function vayu_unfold_style($attr){
 
     if (isset($attr['fontSize'])){
     $fontSizeUnit = isset($attr['fontSizeUnit']) ? $attr['fontSizeUnit'] : 'px';
-    $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
-    .wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
+    #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
     $css .= "font-size: {$attr['fontSize']}{$fontSizeUnit}; height:auto;width:auto;line-height:normal;";
     $css .= "}";
     }
 
     if (isset($attr['iconFontSize'])){
         $iconFontSizeUnit = isset($attr['iconFontSizeUnit']) ? $attr['iconFontSizeUnit'] : 'px';
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
-        .wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
+        #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
         $css .= "margin-right: {$attr['iconFontSize']}{$iconFontSizeUnit};";
         $css .= "}";
         }
@@ -430,7 +438,7 @@ function vayu_unfold_style($attr){
     /******************/
     $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) {";
 
-    $css .= ".wp-block-vayu-blocks-unfold{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold{";
     //padding
     if (isset($attr['paddingTypeTablet']) && 'unlinked' === $attr['paddingTypeTablet']) {
         $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
@@ -509,7 +517,7 @@ function vayu_unfold_style($attr){
 
          $css .="}";
          //button content
-         $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn{";
+         $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn{";
          //padding
 		if (isset($attr['paddingBtnWrapTypeTablet']) && 'unlinked' === $attr['paddingBtnWrapTypeTablet']) {
 			$paddingBtnWrapUnit = isset($attr['paddingBtnWrapUnit']) ? $attr['paddingBtnWrapUnit'] : 'px';
@@ -529,18 +537,17 @@ function vayu_unfold_style($attr){
 		}
         $css .= "}";
 
-    
         if (isset($attr['contentMinHgtTablet'])) {
             $contentMinHgtUnit = isset($attr['contentMinHgtUnit']) ? $attr['contentMinHgtUnit'] : 'px';
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: {$attr['contentMinHgtTablet']}{$contentMinHgtUnit}; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded){max-height: {$attr['contentMinHgtTablet']}{$contentMinHgtUnit}; }";
         }else{
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: 150px; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded){max-height: 150px; }";
         }
         
         if (isset($attr['alignTablet']) && $attr['alignTablet']=='space-around') {
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width:100%; }";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width:100%; }";
         } 
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
         //Btnpadding
         if (isset($attr['paddingBtnTypeTablet']) && 'unlinked' === $attr['paddingBtnTypeTablet']) {
             $paddingBtnUnit = isset($attr['paddingBtnUnit']) ? $attr['paddingBtnUnit'] : 'px';
@@ -617,7 +624,7 @@ function vayu_unfold_style($attr){
         
         $css .= "}";
 
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button:hover{";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button:hover{";
         //button border-width
 		if (isset($attr['borderBtnWidthHvrTypeTablet']) && 'unlinked' === $attr['borderBtnWidthHvrTypeTablet']) {
 			$borderBtnWidthHvrUnit = isset($attr['borderBtnWidthHvrUnit']) ? $attr['borderBtnWidthHvrUnit'] : 'px';
@@ -657,19 +664,24 @@ function vayu_unfold_style($attr){
 
         if (isset($attr['fontSizeTablet'])){
             $fontSizeUnit = isset($attr['fontSizeUnit']) ? $attr['fontSizeUnit'] : 'px';
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
-            .wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
+            #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
             $css .= "font-size: {$attr['fontSizeTablet']}{$fontSizeUnit}; height:auto;width:auto;line-height:normal;";
             $css .= "}";
             }
         
             if (isset($attr['iconFontSizeTablet'])){
                 $iconFontSizeUnit = isset($attr['iconFontSizeUnit']) ? $attr['iconFontSizeUnit'] : 'px';
-                $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
-                .wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
+                $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
+                #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
                 $css .= "margin-right: {$attr['iconFontSizeTablet']}{$iconFontSizeUnit};";
                 $css .= "}";
                 }
+
+                if (isset($attr['contentFadeHgtTablet'])) {
+                    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded)::after { 
+                    height: {$attr['contentFadeHgtTablet']}%; }";
+                } 
     
     $css .= "}";
     /******************/
@@ -677,7 +689,7 @@ function vayu_unfold_style($attr){
     /******************/
     $css .= "@media only screen and (max-width: 767px) {";
 
-    $css .= ".wp-block-vayu-blocks-unfold{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold{";
     //padding
     if (isset($attr['paddingTypeMobile']) && 'unlinked' === $attr['paddingTypeMobile']) {
         $paddingUnit = isset($attr['paddingUnit']) ? $attr['paddingUnit'] : 'px';
@@ -757,7 +769,7 @@ function vayu_unfold_style($attr){
     $css .= "}";
 
     //button content
-    $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn{";
     //padding
     if (isset($attr['paddingBtnWrapTypeMobile']) && 'unlinked' === $attr['paddingBtnWrapTypeMobile']) {
         $paddingBtnWrapUnit = isset($attr['paddingBtnWrapUnit']) ? $attr['paddingBtnWrapUnit'] : 'px';
@@ -781,16 +793,16 @@ function vayu_unfold_style($attr){
     
     if (isset($attr['contentMinHgtMobile'])) {
         $contentMinHgtUnit = isset($attr['contentMinHgtUnit']) ? $attr['contentMinHgtUnit'] : 'px';
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: {$attr['contentMinHgtMobile']}{$contentMinHgtUnit}; }";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded){max-height: {$attr['contentMinHgtMobile']}{$contentMinHgtUnit}; }";
     } else {
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content{max-height: 150px; }";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded){max-height: 150px; }";
     }
    
     
     if (isset($attr['alignMobile']) && $attr['alignMobile']=='space-around') {
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width: 100%; }";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{ width: 100%; }";
     } 
-    $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button{";
     // Btn padding
     if (isset($attr['paddingBtnTypeMobile']) && 'unlinked' === $attr['paddingBtnTypeMobile']) {
         $paddingBtnUnit = isset($attr['paddingBtnUnit']) ? $attr['paddingBtnUnit'] : 'px';
@@ -865,7 +877,7 @@ function vayu_unfold_style($attr){
     
     $css .= "}";
     
-    $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button:hover {";
+    $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button:hover {";
         
     // button border-width on hover (mobile)
     if (isset($attr['borderBtnWidthHvrTypeMobile']) && 'unlinked' === $attr['borderBtnWidthHvrTypeMobile']) {
@@ -907,35 +919,40 @@ function vayu_unfold_style($attr){
 
     if (isset($attr['fontSizeMobile'])){
         $fontSizeUnit = isset($attr['fontSizeUnit']) ? $attr['fontSizeUnit'] : 'px';
-        $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
-        .wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
+        $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
+        #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
         $css .= "font-size: {$attr['fontSizeMobile']}{$fontSizeUnit}; height:auto;width:auto;line-height:normal;";
         $css .= "}";
         }
     
         if (isset($attr['iconFontSizeMobile'])){
             $iconFontSizeUnit = isset($attr['iconFontSizeUnit']) ? $attr['iconFontSizeUnit'] : 'px';
-            $css .= ".wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
-            .wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
+            $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-unfold-icon span,
+            #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content-btn .unfold-button .btn-fold-icon span{";
             $css .= "margin-right: {$attr['iconFontSizeMobile']}{$iconFontSizeUnit};";
             $css .= "}";
             }
-    
 
+            if (isset($attr['contentFadeHgtMobile'])) {
+                $css .= "#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold .unfold-content:not(.unfolded)::after { 
+                height: {$attr['contentFadeHgtMobile']}%; }";
+            } 
     
     $css .= "}";
 
     if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
-        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-unfold{display:none;}}";
+        $css .= "@media only screen and (min-width: 1024px) {#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold{display:none;}}";
     }
     //hide on Tablet
     if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
-        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-unfold{display:none;}}";
+        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { #{$attr['uniqueId']}.wp-block-vayu-blocks-unfold{display:none;}}";
     }
     //hide on Mobile
     if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
-        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-unfold{display:none;}}";
+        $css .= "@media only screen and (max-width: 767px) {#{$attr['uniqueId']}.wp-block-vayu-blocks-unfold{display:none;}}";
     }
+
+}
 
     return $css;
 

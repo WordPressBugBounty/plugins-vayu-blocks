@@ -2,6 +2,7 @@
 require_once VAYU_BLOCKS_DIR_PATH . '/inc/option-panel.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/function.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/functions-style.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/responsive-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-animation/class-blocks-animation.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-heading/advance-heading.php';
@@ -40,3 +41,5 @@ require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-timeline/advance-timeline
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/image-hotspot/image-hotspot.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/pin-child/pin-child.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/pin-child/pin-child-style.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/swipe-slider/swipe-slider.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/slide-item/slide-item.php';

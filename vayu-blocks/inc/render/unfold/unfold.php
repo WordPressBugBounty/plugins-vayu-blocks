@@ -86,17 +86,24 @@ function vayu_block_unfold_render($attributes, $content, $block) {
     ?>
     <div id="<?php echo esc_attr($attributes['uniqueId']);?>" <?php echo get_block_wrapper_attributes(); ?>>
         <div class="unfold-inner"
-            style="cursor: <?php echo in_array($attributes['contentShowEvent'], ['contentclick', 'contenthover']) ? 'pointer' : 'auto'; ?>;"
-            data-content-show-event="<?php echo esc_attr($attributes['contentShowEvent']); ?>"
-            data-hide-unfold-button="<?php echo esc_attr($attributes['hideUnfoldButton']); ?>"
+            style="cursor: <?php echo isset($attributes['contentShowEvent']) && in_array($attributes['contentShowEvent'], ['contentclick', 'contenthover']) ? 'pointer' : 'auto'; ?>;"
+            data-content-show-event="<?php echo esc_attr(isset($attributes['contentShowEvent']) ? $attributes['contentShowEvent'] : ''); ?>"
+            data-hide-unfold-button="<?php echo esc_attr(isset($attributes['hideUnfoldButton']) ? $attributes['hideUnfoldButton'] : ''); ?>"
             data-unfold-text="<?php echo esc_attr($unfold_text); ?>"
             data-fold-text="<?php echo esc_attr($fold_text); ?>"
             >
-            <div class="unfold-content <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
-                <?php echo $unfold_content_template; ?>
+            <div class="vb-bg-unfold-full-button <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
+                <div class="unfold-content <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
+                    <?php echo $unfold_content_template; ?>
+                </div>
             </div>
 
-            <?php if ( ! $attributes['hideUnfoldButton'] || $attributes['contentShowEvent'] == 'buttonclick' ) : ?>
+            <?php
+if (
+    ! (isset($attributes['hideUnfoldButton']) && $attributes['hideUnfoldButton']) ||
+    (isset($attributes['contentShowEvent']) && $attributes['contentShowEvent'] === 'buttonclick')
+) :
+?>
                 <div class="unfold-content-btn">
                 <div class="unfold-button" 
                 role="button"

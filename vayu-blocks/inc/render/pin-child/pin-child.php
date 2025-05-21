@@ -17,7 +17,7 @@ function vayu_block_pin_child_render( $attributes, $content ) {
     <div 
         id="<?php echo $id; ?>" 
         class="<?php echo $className; ?>" 
-        style="position: absolute; top: <?php echo $y; ?>%; left: <?php echo $x; ?>%; transform: translate(-50%, -50%); z-index: 108;"
+        style="position: absolute; top: <?php echo $y; ?>%; left: <?php echo $x; ?>%; transform: none; z-index: 108;"
         data-parent-block="<?php echo $parentBlock; ?>"
     >
         <div class="vayu-pin-spot-wrapper7 <?php echo 'tooltip-'.$tooltipDisplay; ?>" style="position: relative;"  data-arrow="<?php echo $triangleArrowColor;  ?>">

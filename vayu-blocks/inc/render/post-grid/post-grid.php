@@ -26,19 +26,19 @@ class VayuBlocksPostGrid {
         $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
         $pagination_link = home_url('/' . get_post_type() . '/' . $post_id . '/page/' . ($paged + 1) . '/');
 
-        $columns = $this->attr['pg_postLayoutColumns']; // Default value
-        $rows = $this->attr['pg_numberOfRow']; // Default value
+        $columns = isset($this->attr['column']['Desktop']) ? $this->attr['column']['Desktop'] : '';
+        $rows = isset($this->attr['row']['Desktop']) ? $this->attr['row']['Desktop'] : ''; 
 
         // Adjust columns and rows based on device type
         if ($this->device_type === 'Desktop') {
-            $columns = isset($this->attr['pg_postLayoutColumns']) ? $this->attr['pg_postLayoutColumns'] : $columns;
-            $rows = isset($this->attr['pg_numberOfRow']) ? $this->attr['pg_numberOfRow'] : $rows;
+            $columns = isset($this->attr['column']['Desktop']) ? $this->attr['column']['Desktop'] : '';
+            $rows = isset($this->attr['row']['Desktop']) ? $this->attr['row']['Desktop'] : ''; 
         } else if ($this->device_type === 'Tablet') {
-            $columns = isset($this->attr['pg_postLayoutColumnsTablet']) ? $this->attr['pg_postLayoutColumnsTablet'] : 2;
-            $rows = isset($this->attr['pg_numberOfRowTablet']) ? $this->attr['pg_numberOfRowTablet'] : $rows;
+            $columns = isset($this->attr['column']['Tablet']) ? $this->attr['column']['Tablet'] : '';
+            $rows = isset($this->attr['row']['Tablet']) ? $this->attr['row']['Tablet'] : ''; 
         } else if ($this->device_type === 'Mobile') {
-            $columns = isset($this->attr['pg_postLayoutColumnsMobile']) ? $this->attr['pg_postLayoutColumnsMobile'] : 1;
-            $rows = isset($this->attr['pg_numberOfRowMobile']) ? $this->attr['pg_numberOfRowMobile'] : $rows;
+            $columns = isset($this->attr['column']['Mobile']) ? $this->attr['column']['Mobile'] : '';
+            $rows = isset($this->attr['row']['Mobile']) ? $this->attr['row']['Mobile'] : ''; 
         }
 
         // Default sorting
@@ -85,54 +85,71 @@ class VayuBlocksPostGrid {
         // Rendering posts
         $output = '';
         if ($query->have_posts()) {
-            $output .= '<div class="' . esc_attr($className) . ' ' . $animated . ' th-post-grid-main-wp-editor-wrapper">';
-            $output .= '<div>';
-            $output .= '<div class="th-post-grid-wrapper th-post-grid-wrapper-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">';
+
+            $classes = [ 'th-post-grid-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) ];
             
-            while ($query->have_posts()) {
-                $query->the_post();
-        
-                $categories = get_the_category();
-                $category_links = array();
-                if (!empty($categories)) {
-                    foreach ($categories as $category) {
-                        $category_links[] = array(
-                            'name' => $category->name,
-                            'link' => get_category_link($category->term_id)
-                        );
+            if (!empty($classhover)) {
+                $classes[] = esc_attr($classhover);
+            }
+            
+            if (!empty($animated) && $animated !== 'none') {
+                $classes[] = esc_attr($animated);
+            }
+
+            if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
+                $classes[] = $attributes['advAnimation']['className'];
+            }
+            
+            $finalClass = implode(' ', $classes);
+            
+            $output .= ' <div ' . get_block_wrapper_attributes(['class' => $finalClass]) . '>';
+            
+                $output .= '<div class="th-post-grid-wrapper-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">';
+
+                    while ($query->have_posts()) {
+                        $query->the_post();
+                
+                        $categories = get_the_category();
+                        $category_links = array();
+                        if (!empty($categories)) {
+                            foreach ($categories as $category) {
+                                $category_links[] = array(
+                                    'name' => $category->name,
+                                    'link' => get_category_link($category->term_id)
+                                );
+                            }
+                        }
+                
+                        $tags = get_the_tags();
+                        $tag_links = array();
+                        if (!empty($tags)) {
+                            foreach ($tags as $tag) {
+                                $tag_links[] = array(
+                                    'name' => $tag->name,
+                                    'link' => get_tag_link($tag->term_id)
+                                );
+                            }
+                        }
+                
+                        $output .= '<div class="th-post-grid-inline th-post-grid-inline-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">';
+                        $output .= $this->render_featured_image();
+                        $output .= $this->render_category($category_links);
+                        $output .= $this->render_title();
+                        $output .= $this->render_author_and_date();
+                        $output .= $this->render_excerpt();
+                        $output .= $this->render_full_content();
+                        $output .= $this->render_tags($tag_links);
+                        $output .= '</div>';
                     }
-                }
-        
-                $tags = get_the_tags();
-                $tag_links = array();
-                if (!empty($tags)) {
-                    foreach ($tags as $tag) {
-                        $tag_links[] = array(
-                            'name' => $tag->name,
-                            'link' => get_tag_link($tag->term_id)
-                        );
-                    }
-                }
-        
-                $output .= '<div class="th-post-grid-inline th-post-grid-inline-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">';
-                $output .= $this->render_featured_image();
-                $output .= $this->render_category($category_links);
-                $output .= $this->render_title();
-                $output .= $this->render_author_and_date();
-                $output .= $this->render_excerpt();
-                $output .= $this->render_full_content();
-                $output .= $this->render_tags($tag_links);
+
                 $output .= '</div>';
-            }
 
-            $output .= '</div>';
-
-            if ($this->attr['showpagination']) {
-                $output .= '<div class="pagination">' . $this->render_pagination($query, $paged) . '</div>'; // Render pagination controls
-            }
+                if ($this->attr['showpagination']) {
+                    $output .= '<div class="pagination">' . $this->render_pagination($query, $paged) . '</div>'; // Render pagination controls
+                }
             
             $output .= '</div>';
-            $output .= '</div>';
+    
          
         } else {
             $output .= '<p>' . esc_html__('No posts found.', 'plugin-textdomain') . '</p>';
@@ -155,13 +172,13 @@ class VayuBlocksPostGrid {
             'total'         => $query->max_num_pages,
             'current'       => max(1, $paged),
             'prev_next'     => true,
-            'prev_text'     => '<span class="page-numbers page-numbers-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">&laquo;</span>',
-            'next_text'     => '<span class="page-numbers page-numbers-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">&raquo;</span>',
+            'prev_text'     => '⯇',
+            'next_text'     => '⯈',
             'end_size'      => 2,  // Number of page numbers to show at the beginning and end
             'mid_size'      => 2,  // Number of page numbers to show around the current page
             'type'          => 'plain',
-            'before_page_number' => '<span class="page-numbers page-numbers-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">',
-            'after_page_number'  => '</span>',
+            'before_page_number' => '',
+            'after_page_number'  => '',
             'add_args'      => false, // Don't add extra args to the pagination URLs
         );
         // Generate and return pagination
@@ -172,13 +189,8 @@ class VayuBlocksPostGrid {
     private function render_featured_image() {
         $output = '';
         $post_id = get_the_ID();
-        if ($this->device_type  === 'Desktop') {
-            $FeaturedImage = isset($this->attr['pg_showFeaturedImage']) ? $this->attr['pg_showFeaturedImage'] : true;
-        } else if ($this->device_type  === 'Tablet') {
-           $FeaturedImage = isset($this->attr['pg_showFeaturedImageTablet']) ? $this->attr['pg_showFeaturedImageTablet'] : true;
-        } else if ($this->device_type  === 'Mobile') {
-           $FeaturedImage = isset($this->attr['pg_showFeaturedImageMobile']) ? $this->attr['pg_showFeaturedImageMobile'] : true;
-        }
+
+        $FeaturedImage = isset($this->attr['featuredImage'][$this->device_type]) ? $this->attr['featuredImage'][$this->device_type] : false;
 
         if ($FeaturedImage) {
             $featured_image_url = get_the_post_thumbnail_url($post_id, 'full');
@@ -203,14 +215,9 @@ class VayuBlocksPostGrid {
     //category
     private function render_category($categories) {
         $output='';
-        if ($this->device_type  === 'Desktop') {
-            $showCategories = isset($this->attr['pg_showCategories']) ? $this->attr['pg_showCategories'] : true;
-        } else if ($this->device_type  === 'Tablet') {
-            $showCategories = isset($this->attr['pg_showCategoriesTablet']) ? $this->attr['pg_showCategoriesTablet'] : true;
-        } else if ($this->device_type  === 'Mobile') {
-            $showCategories = isset($this->attr['pg_showCategoriesMobile']) ? $this->attr['pg_showCategoriesMobile'] : true;
-        }
-    
+        
+        $showCategories = isset($this->attr['categori'][$this->device_type]) ? $this->attr['categori'][$this->device_type] : false;
+
         // Check pg_numberOfCategories attribute to limit displayed categories
         $numberOfCategories = isset($this->attr['pg_numberOfCategories']) ? intval($this->attr['pg_numberOfCategories']) : 1;
     
@@ -231,12 +238,10 @@ class VayuBlocksPostGrid {
 
         $post_title = get_the_title();
         $post_permalink = get_permalink();
-
-        $output .= '<div class="vayu_blocks_title_post_grid">';
         
         
         if (isset($this->attr['pg_blockTitleTag'])) {
-            $output .= '<' . esc_attr($this->attr['pg_blockTitleTag']) . '>';
+            $output .= '<' . esc_attr($this->attr['pg_blockTitleTag']) . ' class="vayu_blocks_title_post_grid">';
         } else {
             $output .= '<h4>';
         }
@@ -249,7 +254,6 @@ class VayuBlocksPostGrid {
             $output .= '</h4>';
         }
     
-        $output .= '</div>';
 
         return $output;
     }
@@ -260,32 +264,17 @@ class VayuBlocksPostGrid {
         $post_date = get_the_date();
         $post_author_id = get_the_author_meta('ID');
         $post_author_name = get_the_author();
-        $showAuthor = true; // Default value for showing author
+
+        $showAuthor = isset($this->attr['auth'][$this->device_type]) ? $this->attr['auth'][$this->device_type] : false;
     
-        if ($this->device_type  === 'Desktop') {
-            $showAuthor = isset($this->attr['pg_showAuthor']) ? $this->attr['pg_showAuthor'] : $showAuthor;
-        } else if ($this->device_type  === 'Tablet') {
-            $showAuthor = isset($this->attr['pg_showAuthorTablet']) ? $this->attr['pg_showAuthorTablet'] : $showAuthor;
-        } else if ($this->device_type  === 'Mobile') {
-            $showAuthor = isset($this->attr['pg_showAuthorMobile']) ? $this->attr['pg_showAuthorMobile'] : $showAuthor;
-        }
-    
-        $showDate = true; // Default value for showing date
-    
-        if ($this->device_type  === 'Desktop') {
-            $showDate = isset($this->attr['pg_showDate']) ? $this->attr['pg_showDate'] : $showDate;
-        } else if ($this->device_type  === 'Tablet') {
-           $showDate = isset($this->attr['pg_showDateTablet']) ? $this->attr['pg_showDateTablet'] : $showDate;
-        } else if ($this->device_type  === 'Mobile') {
-           $showDate = isset($this->attr['pg_showDateMobile']) ? $this->attr['pg_showDateMobile'] : $showDate;
-        }
-    
+        $showDate = isset($this->attr['date'][$this->device_type]) ? $this->attr['date'][$this->device_type] : false;
+
         if ($showAuthor || $showDate) {
             $output .= '<div class="post-grid-author-date-container">';
     
             if ($showAuthor) {
                 $output .= '<div class="datecontainer">';
-                $output .= '<img src="https://cdn-icons-png.flaticon.com/512/1144/1144760.png" alt="Author Logo" class="post-grid-author-image">';
+                $output .= ' <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" focusable="false"><path fill-rule="evenodd" d="M7.25 16.437a6.5 6.5 0 1 1 9.5 0V16A2.75 2.75 0 0 0 14 13.25h-4A2.75 2.75 0 0 0 7.25 16v.437Zm1.5 1.193a6.47 6.47 0 0 0 3.25.87 6.47 6.47 0 0 0 3.25-.87V16c0-.69-.56-1.25-1.25-1.25h-4c-.69 0-1.25.56-1.25 1.25v1.63ZM4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm10-2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z" clip-rule="evenodd"></path></svg>';
                 $output .= '<a class="post-grid-author-span" href="' . esc_url(get_author_posts_url($post_author_id)) . '">';
                 $output .= esc_html($post_author_name);
                 $output .= '</a>';
@@ -294,7 +283,7 @@ class VayuBlocksPostGrid {
     
             if ($showDate) {
                 $output .= '<div class="datecontainer">';
-                $output .= '<img src="https://cdn-icons-png.flaticon.com/512/2782/2782901.png" alt="Date Image" class="post-grid-date-image">';
+                $output .= '  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" focusable="false"><path d="M11.696 13.972c.356-.546.599-.958.728-1.235a1.79 1.79 0 00.203-.783c0-.264-.077-.47-.23-.618-.148-.153-.354-.23-.618-.23-.295 0-.569.07-.82.212a3.413 3.413 0 00-.738.571l-.147-1.188c.289-.234.59-.41.903-.526.313-.117.66-.175 1.041-.175.375 0 .695.08.959.24.264.153.46.362.59.626.135.265.203.556.203.876 0 .362-.08.734-.24 1.115-.154.381-.427.87-.82 1.466l-.756 1.152H14v1.106h-4l1.696-2.609z"></path><path d="M19.5 7h-15v12a.5.5 0 00.5.5h14a.5.5 0 00.5-.5V7zM3 7V5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"></path></svg>';
                 $output .= '<span class="post-grid-date-span">' . esc_html($post_date) . '</span>';
                 $output .= '</div>';
             }
@@ -309,23 +298,21 @@ class VayuBlocksPostGrid {
     private function render_excerpt() {
         $output = '';
         $post_permalink = get_permalink();
+        
+        $excerpt = isset($this->attr['expertview'][$this->device_type]) ? $this->attr['expertview'][$this->device_type] : false;
+        $excerpt_selector = isset($this->attr['pg_excerptSelector']) ? $this->attr['pg_excerptSelector'] : $excerpt_selector;
+
         if ($this->device_type  === 'Desktop') {
-            $excerpt = isset($this->attr['pg_showExcerpt']) ? $this->attr['pg_showExcerpt'] : false;
             $excerpt_length = isset($this->attr['pg_excerptWords']) ? $this->attr['pg_excerptWords'] : $excerpt_length;
-            $excerpt_selector = isset($this->attr['pg_excerptSelector']) ? $this->attr['pg_excerptSelector'] : $excerpt_selector;
         } else if ($this->device_type  === 'Tablet') {
-            $excerpt = isset($this->attr['pg_showExcerptTablet']) ? $this->attr['pg_showExcerptTablet'] : false;
             $excerpt_length = isset($this->attr['pg_excerptWordsTablet']) ? $this->attr['pg_excerptWordsTablet'] : $excerpt_length;
-            $excerpt_selector = isset($this->attr['pg_excerptSelectorTablet']) ? $this->attr['pg_excerptSelectorTablet'] : $excerpt_selector;
         } else if ($this->device_type  === 'Mobile') {
-            $excerpt = isset($this->attr['pg_showExcerptMobile']) ? $this->attr['pg_showExcerptMobile'] : false;
             $excerpt_length = isset($this->attr['pg_excerptWordsMobile']) ? $this->attr['pg_excerptWordsMobile'] : $excerpt_length;
-            $excerpt_selector = isset($this->attr['pg_excerptSelectorMobile']) ? $this->attr['pg_excerptSelectorMobile'] : $excerpt_selector;
         }
        
         if ($excerpt) {
             $excerpt_text = wp_trim_words(get_the_excerpt(), $excerpt_length, '');
-            $linked_excerpt_selector = '<a class="excerpt_selector" href="' . esc_url($post_permalink) . '">' . $excerpt_selector . '</a>';
+            $linked_excerpt_selector = '<a class="vb-excerpt_selector" href="' . esc_url($post_permalink) . '">' . $excerpt_selector . '</a>';
             $output .= '<div class="post-grid-excerpt-view">' . $excerpt_text .' '. $linked_excerpt_selector . '</div>';
         }
 
@@ -336,13 +323,8 @@ class VayuBlocksPostGrid {
     //full content
     private function render_full_content() { 
         $output ='';
-        if ($this->device_type  === 'Desktop') {
-            $FullContent = isset($this->attr['pg_showFullContent']) ? $this->attr['pg_showFullContent'] : false;
-        } else if ($this->device_type  === 'Tablet') {
-           $FullContent = isset($this->attr['pg_showFullContentTablet']) ? $this->attr['pg_showFullContentTablet'] : false;
-        } else if ($this->device_type  === 'Mobile') {
-           $FullContent = isset($this->attr['pg_showFullContentMobile']) ? $this->attr['pg_showFullContentMobile'] : false;
-        }
+
+        $FullContent = isset($this->attr['fullContent'][$this->device_type]) ? $this->attr['fullContent'][$this->device_type] : false;
 
         if ($FullContent) {
             // Get the content and strip HTML tags
@@ -361,14 +343,9 @@ class VayuBlocksPostGrid {
     //tags
     private function render_tags($tags) {
         $output ='';
-        if ($this->device_type  === 'Desktop') {
-            $showTags = isset($this->attr['pg_showTags']) ? $this->attr['pg_showTags'] : false;
-        } else if ($this->device_type  === 'Tablet') {
-            $showTags = isset($this->attr['pg_showTagTablet']) ? $this->attr['pg_showTagTablet'] : false;
-        } else if ($this->device_type  === 'Mobile') {
-            $showTags = isset($this->attr['pg_showTagMobile']) ? $this->attr['pg_showTagMobile'] : false;
-        }
-    
+        
+        $showTags = isset($this->attr['Showtag'][$this->device_type]) ? $this->attr['Showtag'][$this->device_type] : false;
+
         $numberOfTags = isset($this->attr['pg_numberOfTags']) ? intval($this->attr['pg_numberOfTags']) : 1;
     
         if ($showTags) {
@@ -438,8 +415,6 @@ function post_grid_render($attr) {
     $default_attributes = include('defaultattributes.php'); //attributes Merged
     $attr = array_merge($default_attributes, $attr); 
     $renderer = new VayuBlocksPostGrid($attr);
-    $style = "<style id='post-grid-style'>";
-        $style .= generate_inline_styles($attr);
-    $style .= "</style>";
-    return $renderer->render_posts().$style;
+
+    return $renderer->render_posts();
 }

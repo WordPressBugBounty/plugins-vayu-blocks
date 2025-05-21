@@ -31,23 +31,19 @@ class Vayu_blocks_front_image {
                 $image_html .= $this->content;
         $image_html .= '</div>';
     
-        return '<div class="vayu-blocks-front_image-main-container-for-front' . $uniqueId . ' ' . $animated . '">' . $image_html . '</div>';
+        return '<div class="vb-flip-innerblock-' . $uniqueId . ' ' . $animated . '">' . $image_html . '</div>';
     }
     
 }
 
 // Render callback for the block
 function vayu_blocks_flip_wrapper_render($attr,$content) {
-    // Include default attributes
     $default_attributes = include('defaultattributes.php');
 
-    // Merge default attributes with provided attributes
     $attr = array_merge($default_attributes, $attr);
 
-    // Initialize the image with the merged attributes
     $image = new Vayu_blocks_front_image($attr,$content);
     
-    // Ensure className is sanitized and applied correctly
     $className = isset($attr['classNamemain']) ? esc_attr($attr['classNamemain']) : '';
 
     // Render and return the image output inside a div with the dynamic class name

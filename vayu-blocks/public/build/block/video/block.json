@@ -3,8 +3,15 @@
   "apiVersion": 2,
   "name": "vayu-blocks/video",
   "version": "0.2.0",
-  "title": "Video",
+  "title": "Advance Video",
   "category": "vayu-blocks",
+  "keywords": [
+    "video",
+    "youtube",
+    "media",
+    "embed",
+    "advance video"
+  ],
   "description": "A block to embed and display videos from various sources, like Media, and YouTube, directly on your website.",
   "supports": {
     "html": false,

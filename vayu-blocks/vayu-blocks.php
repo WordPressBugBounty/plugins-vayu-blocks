@@ -5,7 +5,7 @@
  * Description:       The Vayu Blocks is an add-on plugin For Gutenberg Block Editor. Quickstart the Gutenberg editor with Powerful and elegant blocks to design stunning websites. Free Vayu Blocks plugin that amplifies the default WordPress Gutenberg Editor with powerful blocks.
  * Requires at least: 6.2
  * Requires PHP:      7.4
- * Version:           1.2.3
+ * Version:           1.3.0
  * Author:            ThemeHunk
  * Author URI:        https://themehunk.com
  * License:           GPLv3
@@ -23,7 +23,7 @@ define( 'VAYU_BLOCKS_BASEFILE', __FILE__ );
 define( 'VAYU_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
 define( 'VAYU_BLOCKS_PATH', dirname( __FILE__ ) );
 define( 'VAYU_BLOCKS_DIR_PATH', plugin_dir_path( __FILE__ ) );
-define( 'VAYU_BLOCKS_VERSION', '1.2.0' );
+define( 'VAYU_BLOCKS_VERSION', '1.3.0' );
 define( 'VAYU_BLOCKS_PRO_SUPPORT', true );
 define( 'VAYU_BLOCKS_SHOW_NOTICES', false );
 
@@ -35,17 +35,16 @@ class Vayu_Block_Plugin {
 	 *
 	 * @var string
 	*/
-	const VERSION = '1.2.0';
+	const VERSION = VAYU_BLOCKS_VERSION;
 
 	/**
 	 * Initialize the plugin.
 	*/
 
     public function __construct() {
-
+        
         require_once VAYU_BLOCKS_DIR_PATH .'inc/init.php';
         add_action( 'init', array( $this, 'vayu_register_blocks' ) );
-        add_action( 'init', array( $this, 'vayu_register_blocks_new' ) );
         add_action('admin_menu',  array( $this, 'vayu_plugin_menu'));
 
     }
@@ -61,6 +60,7 @@ class Vayu_Block_Plugin {
                 'editor_style'   => 'advance-container-editor-style',
                 'frontend_style' => 'advance-container-frontend-style',
                 'status'         => $options['container']['isActive'],
+                'render_callback' => 'vayu_blocks_advance_container_render',
                 'localize_data'  => array(
                     'homeUrl' => get_home_url(),
                     'container_width' => $options['global']['containerWidth'],
@@ -75,13 +75,6 @@ class Vayu_Block_Plugin {
                 'frontend_style' => 'advance-spacer-frontend-style',
                 'status'         => $options['spacer']['isActive'],
             ),
-            // array(
-            //     'name'           => 'vayu-blocks/advance-button',
-            //     'script_handle'  => 'advance-button',
-            //     'editor_style'   => 'advance-button-editor-style',
-            //     'frontend_style' => 'advance-button-frontend-style',
-            //     'status'         => $options['button']['isActive'],
-            // )
         );
     
         foreach ($blocks as $key => $block) {
@@ -146,132 +139,7 @@ class Vayu_Block_Plugin {
         }
     }
     
-    public function vayu_register_blocks_new() {
-        $options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option(); // Fetch the options array
-        $blocks_dir = __DIR__ . '/public/build/block';
-        // Define the block-specific render callbacks in an associative array
-        $blocks_with_render_callbacks = array(
-            'advance-heading' => array(
-                'isActive'        => 1,
-                'render_callback' => 'vayu_blocks_advance_heading_render',
-            ),
-            'advance-button'=> array(
-                'isActive'        => isset($options['button']['isActive']) ? $options['button']['isActive'] : 1,
-                'render_callback' => '',
-            ),
-            'flip-box'      => array(
-                'isActive'        => isset($options['flipBox']['isActive']) ? $options['flipBox']['isActive'] : 0,
-                'render_callback' => 'vayu_blocks_flip_box_render',
-            ),
-            'advance-slider'=> array(
-                'isActive'        => isset($options['advanceSlider']['isActive']) ? $options['advanceSlider']['isActive'] : 0,
-                'render_callback' => 'vayu_blocks_advance_slider_render',
-            ),
-            'post-grid'     => array(
-                'isActive'        => isset($options['postgrid']['isActive']) ? $options['postgrid']['isActive'] : 0,
-                'render_callback' => 'post_grid_render',
-            ),
-            'image'         => array(
-                'isActive'        => isset($options['image']['isActive']) ? $options['image']['isActive'] : 0,
-                'render_callback' => 'vayu_block_image_render',
-            ),
-            'video'         => array(
-                'isActive'        => isset($options['video']['isActive']) ? $options['video']['isActive'] : 0,
-                'render_callback' => 'vayu_block_video_render',
-            ),
-            'icon'         => array(
-                'isActive'        => isset($options['icon']['isActive']) ? $options['icon']['isActive'] : 0,
-                'render_callback' => 'vayu_block_icon_render',
-            ),
-            'flip-wrapper'  => array(
-                'isActive'        => 1, // Assuming always active for this block
-                'render_callback' => 'vayu_blocks_flip_wrapper_render',
-            ),
-            'advance-query-loop'       => array(
-                'isActive'        => 1, 
-                'render_callback' => 'vayu_block_loop_render',
-            ),
-            'wrapper'       => array(
-                'isActive'        => 1, // Assuming always active for this block
-                'render_callback' => 'vayu_block_wrapper_render',
-                'skip_inner_blocks' => true,
-            ),
-            'blurb'       => array(
-                'isActive'        => isset($options['blurb']['isActive']) ? $options['blurb']['isActive'] : 1,
-                'render_callback' => 'vayu_block_blurb_render',
-                
-            ),
-            'unfold'       => array(
-                'isActive'        => isset($options['unfold']['isActive']) ? $options['unfold']['isActive'] : 1,
-                'render_callback' => 'vayu_block_unfold_render',
-                
-            ),
-            'image-hotspot'       => array(
-                'isActive'        => isset($options['imageHotspot']['isActive']) ? $options['imageHotspot']['isActive'] : 1,
-                'render_callback' => 'vayu_blocks_render_image_hotspot_block',
-            ),
-            'pin'       => array(
-                'isActive'        => 1, // Assuming always active for this block
-                'render_callback' => 'vayu_block_pin_child_render',
-            ),
-            'timeline-child'  => array(
-                'isActive'        => 1, // Assuming always active for this block
-                'render_callback' => 'vayu_block_timeline_child_render',
-            ),
-            'advance-timeline'  => array(
-                'isActive'        => isset($options['advanceTimeline']['isActive']) ? $options['advanceTimeline']['isActive'] : 0,
-                'render_callback' => 'vayu_block_advance_timeline_render',
-            ),
-            'post-pagination'  => array(
-                'isActive'        => 1,
-                'render_callback' => 'vayu_block_post_pagination_render',
-            ),
-            'swipe-slider'       => array(
-                'isActive'        => 1,
-                'render_callback' => 'vayu_block_swipe_slider_render',
-                
-            ),
-            'slide-item'       => array(
-                'isActive'        => 1,
-                'render_callback' => 'vayu_block_slide_item_render',
-            ),
-            
-        );
-
-        // Check if WooCommerce is active before adding the advance-product block
-        if (class_exists('WooCommerce')) {
-            $blocks_with_render_callbacks['advance-product'] = array(
-                'isActive'        => 1,
-                'render_callback' => array( new Vayu_Advance_Product_Tab(), 'render_callback' ),
-            );
-        }
-    
-        foreach ( $blocks_with_render_callbacks as $block_name => $block_options ) {
-            if ($block_options['isActive'] == 1) {
-                $block_path = $blocks_dir . '/' . $block_name;
-
-                
-                if ( isset($block_options['skip_inner_blocks']) ) {
-                    // If the block has additional options like 'skip_inner_blocks'
-                    register_block_type(
-                        $block_path,
-                        array(
-                            'render_callback'   => $block_options['render_callback'],
-                            'skip_inner_blocks' => $block_options['skip_inner_blocks'],
-                        )
-                    );
-                } else {
-                    // Simple block with only a render callback
-                    register_block_type(
-                        $block_path,
-                        array(
-                            'render_callback' => $block_options['render_callback'],
-                        )
-                    );
-                }
-            }
-        }
-    }
+ 
     // plugin menu option add
     public function vayu_plugin_menu() {
         
@@ -324,3 +192,25 @@ function vayu_block_plugin_init( ) {
 }
 add_action( 'init', 'vayu_block_plugin_init', 1 );
 
+
+
+
+/**
+ * Adds a custom template part area for mega menus to the list of template part areas.
+ *
+ * @param array $areas Existing array of template part areas.
+ * @return array Modified array of template part areas including the new "Menu" area.
+ */
+function vayu_blocks_mega_menu_template_part_areas( array $areas ) {
+	$areas[] = array(
+		'area'        => 'menu',
+		'area_tag'    => 'div',
+		'description' => __( 'Menu templates are used to create sections of a mega menu.', 'mega-menu-block' ),
+		'icon'        => '',
+		'label'       => __( 'Menu', 'mega-menu-block' ),
+	);
+
+	return $areas;
+}
+// add_filter( 'default_wp_template_part_areas', 'vayu_blocks_mega_menu_template_part_areas' );
+// require_once VAYU_BLOCKS_DIR_PATH .'inc/patterns/single.php';

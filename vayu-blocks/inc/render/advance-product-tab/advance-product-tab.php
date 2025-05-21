@@ -328,9 +328,14 @@ class Vayu_Advance_Product_Tab {
                     $product_content .= '</div>';
 
                     // Sale
+
+                    
+                    
                     $sale = get_post_meta($product->get_id(), '_sale_price', true);
                    
-                    if ($sale && $attr['showSale']) {
+                    if ($sale && (array_key_exists('showSale', $attr) ? $attr['showSale'] : true)) {
+
+                        
                         $product_content .= '<div class="th-product-sale ' . (isset($attr['saleStyle']) ? esc_attr($attr['saleStyle']) : '') . ' ' . (isset($attr['saleDesign']) ? esc_attr($attr['saleDesign']) : '') . ' ' . (isset($attr['salePosition']) ? esc_attr($attr['salePosition']) : '') . '"> ';
 
                         if (isset($attr['saleDesign']) && $attr['saleDesign'] === 'saledigit' && $product->get_regular_price() && $product->get_sale_price()) {
@@ -798,7 +803,7 @@ public function load_category_products(){
                     // Sale
                     $sale = get_post_meta($product->get_id(), '_sale_price', true);
 
-                    if ($sale && $attr['showSale']) {
+                    if ($sale && (array_key_exists('showSale', $attr) ? $attr['showSale'] : true)) {
                         $product_content .= '<div class="th-product-sale ' . (isset($attr['saleStyle']) ? esc_attr($attr['saleStyle']) : '') . ' ' . (isset($attr['saleDesign']) ? esc_attr($attr['saleDesign']) : '') . ' ' . (isset($attr['salePosition']) ? esc_attr($attr['salePosition']) : '') . '"> ';
 
                         if (isset($attr['saleDesign']) && $attr['saleDesign'] === 'saledigit' && $product->get_regular_price() && $product->get_sale_price()) {

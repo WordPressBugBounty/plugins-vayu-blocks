@@ -9,7 +9,7 @@
     "vayu-blocks/image"
   ],
   "category": "vayu-blocks",
-  "description": "The image pin / pointer tool highlights specific areas in images for detailed analysis",
+  "description": "The Pin block supports drag-and-drop, allowing users to easily select, drag, and place pins onto a image.",
   "supports": {
     "reusable": true,
     "html": false,
@@ -29,7 +29,7 @@
     "id": {
       "type": "string"
     },
-    "uniqueID": {
+    "uniqueId": {
       "type": "string"
     },
     "x": {

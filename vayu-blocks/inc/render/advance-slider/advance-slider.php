@@ -38,7 +38,6 @@ function vayu_blocks_advance_slider_render($attr,$content) {
         $spaceBetween=$attr['spaceBetweenMobile'];
     }
 
-
     $keyboard= true;
     $simulateTouch= empty($attr['simulateTouch']) ? false : $attr['simulateTouch'];
     $loop= empty($attr['loop']) ? false : $attr['loop'];
@@ -98,7 +97,6 @@ function vayu_blocks_advance_slider_render($attr,$content) {
         $swiper_attr['effect'] = $effect;
     }
 
-    // print_r($swiper_attr);
    // Conditionally add 'autoplay' to the array
     if ($autoplay) {
         $swiper_attr['autoplay'] = array(
@@ -112,12 +110,10 @@ function vayu_blocks_advance_slider_render($attr,$content) {
 
     $swiper_attr = htmlspecialchars(wp_json_encode($swiper_attr));
     
-    // Prepare wrapper attributes
-    $wrapper_attributes = get_block_wrapper_attributes(
-        array(
-            'class' => 'swiper',
-        )
-    );
+    $wrapper_attributes = get_block_wrapper_attributes([
+        'class' => 'swiper',
+    ]);
+    
 
     // Render and return the slider output inside a div with the dynamic class name
     $slider_content = '<div ' . wp_kses_data($wrapper_attributes) . ' data-swiper="' . esc_attr($swiper_attr) . '">';
@@ -126,7 +122,22 @@ function vayu_blocks_advance_slider_render($attr,$content) {
         $slider_content .= '</div>'; // Close swiper-wrapper
     $slider_content .= '</div>'; // Close swiper
 
-    return '<div id="' . $uniqueId . '" class="wp_block_vayu-blocks-advance-slider-main vayu-block-' . $uniqueId . ' ' . $className . '">' . $slider_content . '</div>';
+    // Start with your base class
+    $outer_classes = 'wp_block_vayu-blocks-advance-slider-main vayu-block-' . esc_attr($uniqueId);
+
+    if (strpos($wrapper_attributes, 'alignfull') !== false) {
+        $outer_classes .= ' has-global-padding';
+    }
+
+    if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
+        $outer_classes .= $attributes['advAnimation']['className'];
+    }
+
+    // Now return with conditional class
+    return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+        'class' => $outer_classes
+    ]) . '>' . $slider_content . '</div>';
+    
 }
 
 //device type

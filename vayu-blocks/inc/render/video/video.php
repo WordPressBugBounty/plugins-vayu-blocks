@@ -17,164 +17,298 @@ class Vayu_blocks_video {
     //Render
     public function render() {
         ob_start(); // Start output buffering
+
+        if ( ! empty( $this->attr['duotone'] ) && count( $this->attr['duotone'] ) > 1 ) {
+            echo $this->DuotoneFilters();
+        }
         echo $this->render_image();
+        
         return ob_get_clean(); // Return the buffered output
     }
 
-    //main container containing image and overlay
     private function render_image() {
-        $attributes = $this->attr; // Access attributes
+        $attributes = $this->attr;
         $image_html = '';
-        $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
-        $imageSrc = !empty($attributes['image']) ? esc_url($attributes['image']) :  plugins_url('../../assets/img/no-image.png', __FILE__);
+        $uniqueId = $this->safe_attr($attributes, 'uniqueId');
+        $imageSrc = $this->safe_attr($attributes, 'image', plugins_url('../../assets/img/no-image.png', __FILE__));
+        $imageAlt = $this->safe_attr($attributes, 'imagealttext', 'Image ' . rand(1, 100));
+        $imageHvrEffect = $this->safe_attr($attributes, 'animationData.hovereffect.value');
+        $imageHvrAnimation = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
+        $imageHvrFilter = $this->safe_attr($attributes, 'imagehvrfilter');
+        $imagemaskshape = $this->safe_attr($attributes, 'animationData.mask.maskshape') !== 'none' ? 'maskshapeimage' : '';
+        $wrapperanimation = $this->safe_attr($attributes, 'animationData.effect.animationValue');
 
-        $imageAlt = isset($attributes['imagealttext']) ? esc_attr($attributes['imagealttext']) : 'Image ' . rand(1, 100);
-        $imageHvrEffect = isset($attributes['imagehvreffect']) ? esc_attr($attributes['imagehvreffect']) : '';
-        $imageHvrAnimation = isset($attributes['imagehvranimation']) ? esc_attr($attributes['imagehvranimation']) : '';
-        $imageHvrFilter = isset($attributes['imagehvrfilter']) ? esc_attr($attributes['imagehvrfilter']) : '';
-        $imagemaskshape = isset($attributes['maskshape']) && $attributes['maskshape'] !== 'none' ? 'maskshapeimage' : '';
-        $wrapperanimation = isset($attributes['wrapperanimation']) ? esc_attr($attributes['wrapperanimation']) : '';
-        $animation_classname = '';
+        // Render a video element
+        $videoUrl = esc_url($attributes['videoUrl']);
+        $autoplay = !empty($attributes['autoplay']) ? 'autoplay' : '';
+        $loop = !empty($attributes['loop']) ? 'loop' : '';
+        $controls = !empty($attributes['controls']) ? 'controls' : '';
+        $muted = !empty($attributes['muted']) ? 'muted' : '';
+        $poster = !empty($attributes['fallbackImageUrl']) ? esc_url($attributes['fallbackImageUrl']) : '';
 
-        if ($attributes['animationsettings'] === 'without-hvr') {
-            $animation_classname = $attributes['imagehvranimation'];
-        } elseif ($attributes['animationsettings'] === 'with-hvr') {
-            $animation_classname = $attributes['imagehvranimation'] . 'hvr';
-        } elseif ($attributes['animationsettings'] === 'one-time') {
-            $animation_classname = $attributes['imagehvranimation'] . 'onetime';
+        $nofullscreen = !empty($attributes['nofullscreen']) ? 'nofullscreen' : '';
+        $nodownload = !empty($attributes['nodownload']) ? 'nodownload' : ''; // Check for nodownload
+        $noremoteplayback = !empty($attributes['noremoteplayback']) ? 'noremoteplayback' : ''; // Check for remote playback
+        $noplaybackrate = !empty($attributes['noplaybackrate']) ? 'noplaybackrate' : ''; // Check for playback rate
+    
+        $hover_type = $this->safe_attr($attributes, 'animationData.imageAnimation.hover', 'without-hvr');
+        $animation_value = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue', '');
+
+        $classhover='';
+        if (isset($attributes['animationData']['effect']['effectHover']) && $attributes['animationData']['effect']['effectHover']) {
+            $classhover = 'vb-video-hover';
+        } else {
+            $classhover = '';
         }
 
-        $image_html .= '<div class="vayu_blocks_video__wrapper ' . $wrapperanimation . ' " id='. $uniqueId .'>';
-            $image_html .= '<div class="vayu_blocks_rotating_div">';
-            $image_html .= '<div class="vayu_blocks_image_image_wrapping_container ' . $imageHvrFilter . ' ' . $imageHvrEffect . ' ' . $animation_classname . '" >';   
+        $animated = isset($attributes['className']) ? esc_attr($attributes['className']) : '';
+
+        $screenfit = '';
+        if($attributes['screenfit']==='screenfit'){
+            $screenfit = 'alignfull';
+        }
+
+        $animation_classname = '';
+        if ($hover_type === 'without-hvr') {
+            $animation_classname = $animation_value;
+        } elseif ($hover_type === 'with-hvr') {
+            $animation_classname = $animation_value . 'hvr';
+        } elseif ($hover_type === 'one-time') {
+            $animation_classname = $animation_value . 'onetime';
+        }
         
-                if ($this->device_type === 'Mobile'){
-                    $videoSize = !empty($attributes['videosizemobile']) ? esc_attr($attributes['videosizemobile']) : 'auto';
+        $videoSize = 'auto';
+        $videoHeight = 'auto';
 
-                }elseif($this->device_type === 'Tablet'){
-                    $videoSize = !empty($attributes['videosizetablet']) ? esc_attr($attributes['videosizetablet']) : 'auto';
-
-                }else {
-                    $videoSize = !empty($attributes['videosize']) ? esc_attr($attributes['videosize']) : 'auto';
-                }
-
-                // Render a video element
-                $videoUrl = esc_url($attributes['videoUrl']);
-                $autoplay = !empty($attributes['autoplay']) ? 'autoplay' : '';
-                $loop = !empty($attributes['loop']) ? 'loop' : '';
-                $controls = !empty($attributes['controls']) ? 'controls' : '';
-                $muted = !empty($attributes['muted']) ? 'muted' : '';
-                $poster = !empty($attributes['fallbackImageUrl']) ? esc_url($attributes['fallbackImageUrl']) : '';
-                // Check for specific attributes like fullscreen, download, etc.
-                $nofullscreen = !empty($attributes['nofullscreen']) ? 'nofullscreen' : '';
-                $nodownload = !empty($attributes['nodownload']) ? 'nodownload' : ''; // Check for nodownload
-                $noremoteplayback = !empty($attributes['noremoteplayback']) ? 'noremoteplayback' : ''; // Check for remote playback
-                $noplaybackrate = !empty($attributes['noplaybackrate']) ? 'noplaybackrate' : ''; // Check for playback rate
-
-                if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
-
-                    $image_html .= '<video 
-                        ' .(isset($attributes['pipfront']) && $attributes['pipfront'] ? 'id="videoElement"' : '') .' 
-                        width="' . $videoSize . '" 
-                        class="vayu_blocks__image_image ' . $imageHvrFilter . ' ' . $imagemaskshape . '" 
-                        ' . $autoplay . ' 
-                        ' . $loop . ' 
-                        ' . $controls . ' 
-                        ' . $muted . ' 
-                        poster="' . $poster . '"
-                        controlsList="' . 
-                            ($nofullscreen ? 'nofullscreen ' : '') .
-                            ($nodownload ? 'nodownload ' : '') . 
-                            ($noremoteplayback ? 'noremoteplayback ' : '') . 
-                            ($noplaybackrate ? 'noplaybackrate ' : '') .'">
-                        <source src="' . $videoUrl . '" type="video/mp4" />
-                        Your browser does not support the video tag.
-                    </video>';
-                }
-
-                else if($attributes['blockValue'] === 'you-tube' && !empty($attributes['youvideoUrl'])) {
-                    $image_html .= '<iframe
-                        width="' . esc_attr($attributes['videosize']) . '"
-                        height="' . esc_attr($attributes['heightvideosize']) . '"
-                        class="vayu_blocks__image_image ' . esc_attr($attributes['imagehvrfilter']) . ' ' . (esc_attr($attributes['maskshape']) !== 'none' ? 'maskshapeimage' : '') . '"
-                        src="https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . 
-                            ($attributes['youautoplay'] ? 'autoplay=1&mute=1' : '') . 
-                            ($attributes['youcontrols'] ? '&controls=0' : '') . 
-                            ($attributes['youloop'] ? '&loop=1&playlist=' . esc_attr($attributes['youvideoUrl']) : '') . 
-                            ($attributes['startTime'] ? '&start=' . esc_attr($attributes['startTime']) : '') . '"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="autoplay; encrypted-media; web-share; picture-in-picture"
-                        referrerpolicy="strict-origin-when-cross-origin">
-                    </iframe>';
-
-                }
-
-            $image_html .= '</div>';
-            // Append the overlay HTML
-
-            // Conditionally append overlay HTML
-            if (!empty($attributes['overlayshow']) || !empty($attributes['frameshow'])) {
-                $image_html .= $this->overlay(); // Ensure this method returns valid HTML
+        if (!empty($attributes['screenfit']) && $attributes['screenfit'] === 'custom') {
+            if (!empty($attributes['videowidth'][$this->device_type])) {
+                $videoSize = $attributes['videowidth'][$this->device_type];
             }
 
+            if (!empty($attributes['videoheight'][$this->device_type])) {
+                $videoHeight = $attributes['videoheight'][$this->device_type];
+            }
+        }
+
+      
+        if(!$attributes['youtubeshorts'] && $attributes['blockValue'] === 'you-tube'){
+            $videoSize =  560;
+        }
+
+        $image_html .= '<div class="vb-video-container' . 
+        (!empty($wrapperanimation) && $wrapperanimation !== 'none' ? ' ' . esc_attr($wrapperanimation) : '') . 
+        ' ' . ( !empty($attributes['contentani']) ? 'vb-start-cont-ani' : '' ) . '" id="' . esc_attr($uniqueId) . '">';
+    
+            $image_html .= '<div class="vb-video-rotation">';
+                $image_html .= '<div class="' . 
+                trim(
+                    ($imageHvrFilter && $imageHvrFilter !== 'none' ? esc_attr($imageHvrFilter) . ' ' : '') .
+                    ($imageHvrEffect && $imageHvrEffect !== 'none' ? esc_attr($imageHvrEffect) . ' ' : '') .
+                    ($animation_classname && $animation_classname !== 'none' ? esc_attr($animation_classname) : '')
+                ) .
+                '">';
+                    if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
+
+                        $image_html .= '<video 
+                            ' .(isset($attributes['pipfront']) && $attributes['pipfront'] ? 'id="videoElement"' : '') .' 
+                            width="' . $videoSize . '" 
+                            height = "' . $videoHeight .'"
+                            class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                            ' . $autoplay . ' 
+                            ' . $loop . ' 
+                            ' . $controls . ' 
+                            ' . $muted . ' 
+                            poster="' . $poster . '"
+                            controlsList="' . 
+                                ($nofullscreen ? 'nofullscreen ' : '') .
+                                ($nodownload ? 'nodownload ' : '') . 
+                                ($noremoteplayback ? 'noremoteplayback ' : '') . 
+                                ($noplaybackrate ? 'noplaybackrate ' : '') .'">
+                            <source src="' . $videoUrl . '" type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>';
+                    }
+
+                    else if($attributes['blockValue'] === 'you-tube' && !empty($attributes['youvideoUrl'])) {
+
+                        $query_params = [];
+
+                        if (!empty($attributes['youautoplay'])) {
+                            $query_params[] = 'autoplay=1';
+                            $query_params[] = 'mute=1';
+                        } else {
+                            $query_params[] = 'autoplay=0';
+                            $query_params[] = !empty($attributes['youtubemuted']) ? 'mute=1' : 'mute=0';
+                        }
+                
+                        if (!empty($attributes['youcontrols'])) {
+                            $query_params[] = 'controls=0';
+                        }
+
+                        if (!empty($attributes['youloop'])) {
+                            $query_params[] = 'loop=1';
+                            $query_params[] = 'playlist=' . esc_attr($attributes['youvideoUrl']);
+                        }
+                
+                        if (!empty($attributes['startTime'])) {
+                            $query_params[] = 'start=' . intval($attributes['startTime']);
+                        }
+                
+                        if (!empty($attributes['endTime'])) {
+                            $query_params[] = 'end=' . intval($attributes['endTime']);
+                        }
+                
+                        if (isset($attributes['rel'])) {
+                            $query_params[] = $attributes['rel'] ? 'rel=1' : 'rel=0';
+                        }
+
+                        $query_string = implode('&', $query_params);
+
+                        $iframe_src = 'https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . $query_string;
+
+                        $image_html .= '<iframe
+                            width="' . $videoSize . '" 
+                            height = "' . $videoHeight .'"
+                            class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                            src="' . esc_url($iframe_src) . '"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="autoplay; encrypted-media; web-share; picture-in-picture"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            ' . (!empty($attributes['youtubefullscreen']) ? 'allowfullscreen' : '') . '>
+                        </iframe>';
+
+                    }
+
+                    else if($attributes['blockValue'] === 'vimeo' && !empty($attributes['vimeourl'])){
+
+                        $vimeoQueryParams = [];
+
+                        if ( ! empty( $attributes['vimeoautoplay'] ) ) {
+                            $vimeoQueryParams[] = 'autoplay=1';
+                            $vimeoQueryParams[] ='muted=1';
+                        }
+                    
+                        if ( ! empty( $attributes['vimeomuted'] ) ) {
+                            $vimeoQueryParams[] = 'muted=1';
+                        }
+                    
+                        if ( ! empty( $attributes['vimeoloop'] ) ) {
+                            $vimeoQueryParams[] = 'loop=1';
+                        }
+                    
+                        if ( isset( $attributes['vimeocontrols'] ) && $attributes['vimeocontrols'] === false ) {
+                            $vimeoQueryParams[] = 'controls=0';
+                        }
+                    
+                        if ( ! empty( $attributes['vimeobackground'] ) ) {
+                            $vimeoQueryParams[] = 'background=1';
+                        }
+                    
+                        $queryString = implode( '&', $vimeoQueryParams );
+                    
+                        $vimeoSrc = 'https://player.vimeo.com/video/' . $attributes['vimeourl'];
+                        if ( ! empty( $queryString ) ) {
+                            $vimeoSrc .= '?' . $queryString;
+                        }
+
+                        $image_html .= '<iframe
+                            width="' . $videoSize . '" 
+                            height = "' . $videoHeight .'"
+                            class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                            src="' . esc_url($vimeoSrc) . '"
+                            title="YouTube video player"
+                            frameborder="0"
+                            allow="autoplay; encrypted-media; web-share; picture-in-picture"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            ' . (!empty($attributes['vimeofullscreen']) ? 'allowfullscreen' : '') . '>
+                        </iframe>';
+                    }
+
+                $image_html .= '</div>';
+
+                    $image_html .= $this->overlay();
         
-        $image_html .= '</div>';
+            $image_html .= '</div>';
         $image_html .= '</div>';
 
-        // Check if the 'caption' attribute is not empty
-        if (!empty($attributes['caption'])) {
-            // Append HTML for the caption
-            $image_html .= '<div class="vayu_block_caption">';
-                $image_html .= '<p class="vayu_block_caption_text_para">';
-                    $image_html .= esc_html($attributes['captiontext']); // Use esc_html to properly escape HTML entities
-                $image_html .= '</p>';
-            $image_html .= '</div>';
+        $classes[] = 'vb-video-' . $uniqueId;
+
+        if ( ! empty( $classhover ) ) {
+            $classes[] = $classhover;
         }
-        
-        $classhover='';
-        if ($attributes['animationhover']) {
-            $classhover = 'vayu_blocks_hover_can_apply';
+
+        if ( ! empty( $animated ) ) {
+            $classes[] = $animated;
         }
-    
-        return '<div class="vayu-blocks-video-main-container' . $uniqueId . ' ' . $classhover .' vayu_blocks_image_image-container">' . $image_html . '</div>';
+
+        if ( ! empty( $screenfit ) ) {
+            $classes[] = $screenfit;
+        }
+
+        return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+            'class' => implode( ' ', $classes ),
+        ]) . '>' . $image_html . '</div>';
+
     }
     
     //overlay
     private function overlay() {
         $attributes = $this->attr; // Access attributes
         $overlay = '';
-        $imageHvrEffect = isset($attributes['imagehvreffect']) ? esc_attr($attributes['imagehvreffect']) : '';
-        $imageHvrAnimation = isset($attributes['imagehvranimation']) ? esc_attr($attributes['imagehvranimation']) : '';
+        $imageHvrEffect = isset($attributes['animationData']['hovereffect']['value']) ? esc_attr($attributes['animationData']['hovereffect']['value']) : '';
+        $imageHvrAnimation = isset($attributes['animationData']['imageAnimation']['animationValue']) ? esc_attr($attributes['animationData']['imageAnimation']['animationValue']) : '';
         $overlaywrapper = isset($attributes['overlaywrapper']) ? esc_attr($attributes['overlaywrapper']) : '';
 
         $animation_classname = '';
 
-        if ($attributes['animationsettings'] === 'without-hvr') {
-            $animation_classname = $attributes['imagehvranimation'];
-        } elseif ($attributes['animationsettings'] === 'with-hvr') {
-            $animation_classname = $attributes['imagehvranimation'] . 'hvr';
-        } elseif ($attributes['animationsettings'] === 'one-time') {
-            $animation_classname = $attributes['imagehvranimation'] . 'onetime';
+        $hover = isset($attributes['animationData']['imageAnimation']['hover']) ? $attributes['animationData']['imageAnimation']['hover'] : '';
+        $animationValue = isset($attributes['animationData']['imageAnimation']['animationValue']) ? $attributes['animationData']['imageAnimation']['animationValue'] : '';
+        
+        if ($hover === 'without-hvr') {
+            $animation_classname = $animationValue;
+        } elseif ($hover === 'with-hvr') {
+            $animation_classname = $animationValue . 'hvr';
+        } elseif ($hover === 'one-time') {
+            $animation_classname = $animationValue . 'onetime';
+        } else {
+            $animation_classname = ''; // Default case
         }
-
+        
+        // Wrapper animation fix
         $wrapperanimation = '';
-        if($attributes['wrapperanimation'] === 'vayu_block_styling-effect7'){
-            $wrapperanimation = 'vayu_block_styling-overlay-effect'; 
+        if (isset($attributes['animationData']['effect']['animationValue']) && $attributes['animationData']['effect']['animationValue'] === 'vayu_block_styling-effect7') {
+            $wrapperanimation = 'vayu_block_styling-overlay-effect';
         }
+        
 
-        $imagemaskshape = isset($attributes['maskshape']) && $attributes['maskshape'] !== 'none' ? 'maskshapeimage' : '';
+        $imagemaskshape = isset($attributes['animationData']['mask']['maskshape']) && $attributes['animationData']['mask']['maskshape'] !== 'none' ? 'maskshapeimage' : '';
 
-        $overlay .= '<div class="vayu_blocks_overlay_main_wrapper_image '. $wrapperanimation .' ' . $overlaywrapper .' ' . $imageHvrEffect . ' ' . $animation_classname . ' ' . $imagemaskshape . '">';
+        $overlay .= '<div class="vb-video-overlay-wrapper' 
+        . (!empty($wrapperanimation) && $wrapperanimation !== 'none' ? ' ' . $wrapperanimation : '') 
+        . (!empty($overlaywrapper) && $overlaywrapper !== 'none' ? ' ' . $overlaywrapper : '') 
+        . (!empty($imageHvrEffect) && $imageHvrEffect !== 'none' ? ' ' . $imageHvrEffect : '') 
+        . (!empty($animation_classname) && $animation_classname !== 'none' ? ' ' . $animation_classname : '') 
+        . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') 
+        . '">';
+    
             if(!empty($attributes['overlayshow'])){
-                $overlay .= '<div class="vayu_blocks_inner_content">';
-                    $overlay .= $this->content;
-                $overlay .= '</div>';  
+                $overlay .= $this->content;
             }
 
         $overlay .= '</div>';
     
         return $overlay;
+    }
+
+    // Inside the same class
+    private function safe_attr($array, $keyPath, $default = '') {
+        $value = $array;
+        foreach (explode('.', $keyPath) as $key) {
+            if (!isset($value[$key])) return $default;
+            $value = $value[$key];
+        }
+        return esc_attr($value);
     }
 
     //device type
@@ -228,24 +362,74 @@ class Vayu_blocks_video {
         }
     }
 
+    private function hexToRGBArray($color) {
+        if (strpos($color, '#') === 0) {
+            $r = hexdec(substr($color, 1, 2)) / 255;
+            $g = hexdec(substr($color, 3, 2)) / 255;
+            $b = hexdec(substr($color, 5, 2)) / 255;
+        
+            return [
+                number_format($r, 2, '.', ''),
+                number_format($g, 2, '.', ''),
+                number_format($b, 2, '.', '')
+            ];
+        } elseif (strpos($color, 'rgb') === 0) {
+            preg_match_all('/\d+/', $color, $matches);
+            $rgb = array_map(function ($val) {
+                return number_format(intval($val) / 255, 2);
+            }, array_slice($matches[0], 0, 3)); // only first 3 values (r,g,b)
+
+            return $rgb;
+        }
+
+        return ['0.00', '0.00', '0.00']; // fallback
+    }
+
+    private function DuotoneFilters() {
+        $attributes = $this->attr; 
+        $duotone = isset($attributes['duotone']) ? $attributes['duotone'] : array();
+    
+        if (!is_array($duotone) || count($duotone) !== 2) {
+            return null;
+        }
+
+        list($r1, $g1, $b1) = $this->hexToRGBArray($duotone[0]);
+        list($r2, $g2, $b2) = $this->hexToRGBArray($duotone[1]);
+    
+        return <<<SVG
+            <div class="vayu-blocks-duotone">
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    "<filter id="duotone-filter-{$attributes['uniqueId']}">"
+                        <feColorMatrix
+                            type="matrix"
+                            values="0.33 0.33 0.33 0 0
+                                    0.33 0.33 0.33 0 0
+                                    0.33 0.33 0.33 0 0
+                                    0 0 0 1 0"
+                        />
+                        <feComponentTransfer colorInterpolationFilters="sRGB">
+                            <feFuncR type="table" tableValues="{$r1} {$r2}" />
+                            <feFuncG type="table" tableValues="{$g1} {$g2}" />
+                            <feFuncB type="table" tableValues="{$b1} {$b2}" />
+                            <feFuncA type="table" tableValues="0 1" />
+                        </feComponentTransfer>
+                    </filter>
+                </svg>
+            </div>
+        SVG;
+    }
+
 }
 
 // Render callback for the block
 function vayu_block_video_render($attr,$content) {
-    // Include default attributes
+
     $default_attributes = include('defaultattributes.php');
 
-    // Merge default attributes with provided attributes
     $attr = array_merge($default_attributes, $attr);
 
-    // Initialize the image with the merged attributes
     $image = new Vayu_blocks_video($attr,$content);
     
-    // Ensure className is sanitized and applied correctly
-    $className = isset($attr['classNamemain']) ? esc_attr($attr['classNamemain']) : '';
+    return $image->render();
 
-    $animated = isset($attr['className']) ? esc_attr($attr['className']) : ''; // animation
-
-    // Render and return the image output inside a div with the dynamic class name
-    return '<div class="' . trim($className) . ' wp_block_vayu-blocks-video-main  ' . trim($animated) . '">' . $image->render() . '</div>';
 } 

@@ -14,9 +14,14 @@ function vayu_block_blurb_render($attributes, $content, $block) {
         }
     }
 
+    $wrapper_attributes = '';
     // Get block wrapper attributes
-    $wrapper_attributes = get_block_wrapper_attributes(['class' => trim($classnames)]);
-
+    $wrapper_attributes .= get_block_wrapper_attributes(['class' => trim($classnames)]);
+    
+    if ( isset( $attributes['uniqueId'] ) ) {
+    $uid = esc_attr( $attributes['uniqueId'] );
+    $wrapper_attributes .= ' id="' . $uid . '"';
+    }
     // Check for link URL and link target
     $link_enable = isset($attributes['linkEnable']) ? esc_url($attributes['linkEnable']) : false;
     $link_url = isset($attributes['linkUrl']) ? esc_url($attributes['linkUrl']) : '';

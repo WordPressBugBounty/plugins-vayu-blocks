@@ -19,6 +19,35 @@ function generate_inline_slider_styles($attr) {
     //Main div
     $css .= "$wrapper {";
 
+        $arrowMap = [
+            'type-1'  => ['left' => '←', 'right' => '→'],
+            'type-2'  => ['left' => '⇦', 'right' => '⇨'],
+            'type-3'  => ['left' => '⇐', 'right' => '⇒'],
+            'type-4'  => ['left' => '⟵', 'right' => '⟶'],
+            'type-5'  => ['left' => '🡐', 'right' => '🡒'],
+            'type-6'  => ['left' => '🡄', 'right' => '🡆'],
+            'type-7' => ['left' => '⇜', 'right' => '⇝'],
+            'type-8' => ['left' => '⇠', 'right' => '⇢'],
+            'type-9' => ['left' => '➤', 'right' => '➥'],
+            'type-10' => ['left' => '🡸', 'right' => '🡺'],
+            'type-11' => ['left' => '⏴', 'right' => '⏵'],
+            'type-12' => ['left' => '⮜', 'right' => '⮞'],
+            'type-13' => ['left' => '↚', 'right' => '↛'],
+            'type-14' => ['left' => '⇷', 'right' => '⇸'],
+            'type-15' => ['left' => '🢐', 'right' => '🢒'],
+            'type-16' => ['left' => '🢔', 'right' => '🢖'],
+            'type-17' => ['left' => '🢘', 'right' => '🢚'],
+            'type-18' => ['left' => '⇚', 'right' => '⇛'],
+        ];
+
+        $selectedType = isset($attr['selectedFoldIcon']) ? $attr['selectedFoldIcon'] : 'none';
+
+        $leftArrow = $arrowMap[$selectedType]['left'] ?? 'prev';
+        $rightArrow = $arrowMap[$selectedType]['right'] ?? 'next';
+
+        $css .= "--vb-arrow-type-left: '{$leftArrow}';";
+        $css .= "--vb-arrow-type-right: '{$rightArrow}';";
+
         $css .= "--swiper-navigation-sizeTablet: " . esc_attr($attr['navigationsizeTablet']) . "px !important;";
         $css .= "--swiper-navigation-sizeMobile: " . esc_attr($attr['navigationsizeMobile']) . "px !important;";
         $css .= "--swiper-navigation-navigationtopTablet: " . esc_attr($attr['navigationtopTablet']) . "% !important;";
@@ -42,100 +71,10 @@ function generate_inline_slider_styles($attr) {
         $css .= "--swiper-pagination-bullet-width: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-pagination-bullet-height: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-navigation-size: " . esc_attr($attr['navigationsize']) . "px !important;";
-
-        $css .= $OBJ_STYLE->dimensions('buttonpadding','padding','Desktop');	
-        $css .= $OBJ_STYLE->dimensions('buttonmargin','margin','Desktop');
-        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Desktop');
-
-       // Background
-       if (isset($attr['backgroundType'])) {
-           if ($attr['backgroundType'] === 'color' && isset($attr['backgroundColor'])) {
-               $css .= "background: " . esc_attr($attr['backgroundColor']) . ";";
-           } elseif ($attr['backgroundType'] === 'gradient' && isset($attr['backgroundGradient'])) {
-               $css .= "background: " . esc_attr($attr['backgroundGradient']) . ";";
-           } elseif (isset($attr['backgroundImage']) && isset($attr['backgroundImage']['url'])) {
-               $css .= "background: url(" . esc_url($attr['backgroundImage']['url']) . ");";
-           } else {
-               $css .= "background: none;";
-           }
-       } elseif(isset($attr['backgroundColor'])) { 
-           $css .= "background: " . esc_attr($attr['backgroundColor']) . ";";
-       }
-
-       $css .= "width: 100%;";
-
-       // Background properties
-       $css .= isset($attr['backgroundPosition']) ? "background-position: " . esc_attr($attr['backgroundPosition']['x']) . ',' . esc_attr($attr['backgroundPosition']['y']) . ";" : 'background-position: 50%, 50%;';
-       $css .= isset($attr['backgroundAttachment']) ? "background-attachment: " . esc_attr($attr['backgroundAttachment']) . ";" : '';
-       $css .= isset($attr['backgroundRepeat']) ? "background-repeat: " . esc_attr($attr['backgroundRepeat']) . ";" : '';
-       $css .= isset($attr['backgroundSize']) ? "background-size: " . esc_attr($attr['backgroundSize']) . ";" : '';
-
-       // Transition
-       $css .= "transition-duration: " . (isset($attr['transitionAll']) ? esc_attr($attr['transitionAll']) : '0') . "s;";
-
-    $css .= "}";
-   
-    // Add media query for tablet screens
-    $css .= "@media (max-width: 1024px) {";
-        $css .= "$wrapper {";
-            $css .= "width: " . esc_attr($attr['customWidthTablet']) . esc_attr($attr['customWidthUnit']) . ";";
-            $css .= $OBJ_STYLE ->dimensions('buttonpadding','padding',  'Tablet');	
-            $css .= $OBJ_STYLE ->dimensions('buttonmargin', 'margin', 'Tablet');
-            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Tablet');
-        $css .= "}";
-
-        $css .= "$wrapper:hover {";
-            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Tablet');
-        $css .= "}";
-
+        $css .= "width: 100%;";
     $css .= "}";
 
-    // Add media query for Mobile screens
-    $css .= "@media (max-width: 300px) {";
-        $css .= "$wrapper {";
-            $css .= "width: " . esc_attr($attr['customWidthMobile']) . esc_attr($attr['customWidthUnit']) . ";";
-            $css .= $OBJ_STYLE ->dimensions('buttonpadding','padding',  'Mobile');	
-            $css .= $OBJ_STYLE ->dimensions('buttonmargin','margin',  'Mobile');
-            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborder', 'advanceborderradius','advancedropshadow', 'Mobile');
-        $css .= "}";
-
-        $css .= "$wrapper:hover {";
-            $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Mobile');
-        $css .= "}";
-
-    $css .= "}";
-
-    //Hover 
-    $css .= "$wrapper:hover {";
-
-
-        $css .= $OBJ_STYLE->borderRadiusShadow('advanceborderhvr', 'advanceborderradiushvr','advancedropshadowhvr', 'Desktop');
-
-        // Background
-        if (isset($attr['backgroundTypeHvr'])) {
-            if ($attr['backgroundTypeHvr'] === 'color' && isset($attr['backgroundColorHvr'])) {
-                $css .= "background: " . esc_attr($attr['backgroundColorHvr']) . ";";
-            } elseif ($attr['backgroundTypeHvr'] === 'gradient' && isset($attr['backgroundGradientHvr'])) {
-                $css .= "background: " . esc_attr($attr['backgroundGradientHvr']) . ";";
-            } elseif (isset($attr['backgroundImageHvr']) && isset($attr['backgroundImageHvr']['url'])) {
-                $css .= "background: url(" . esc_url($attr['backgroundImageHvr']['url']) . ");";
-            } else {
-                $css .= "background: none;";
-            }
-        } elseif(isset($attr['backgroundColorHvr'])) { 
-            $css .= "background: " . esc_attr($attr['backgroundColorHvr']) . ";";
-        }
-
-        // Background position, attachment, repeat, size
-        $css .= isset($attr['backgroundPositionHvr']) ? "background-position: " . esc_attr($attr['backgroundPositionHvr']['x'] . ',' . $attr['backgroundPositionHvr']['y']) . ";" : '';
-        $css .= isset($attr['backgroundAttachmentHvr']) ? "background-attachment: " . esc_attr($attr['backgroundAttachmentHvr']) . ";" : '';
-        $css .= isset($attr['backgroundRepeatHvr']) ? "background-repeat: " . esc_attr($attr['backgroundRepeatHvr']) . ";" : '';
-        $css .= isset($attr['backgroundSizeHvr']) ? "background-size: " . esc_attr($attr['backgroundSizeHvr']) . ";" : '';
-
-        // Transition
-        $css .= "transition: all 0.3s ease-in-out;";
-            
-    $css .= "}";
+    $css .= $OBJ_STYLE->advanceStyle($wrapper);
 
     //scrollbar
     $css .= ".wp-block-vayu-blocks-advance-slider .swiper-scrollbar-drag {";
@@ -214,7 +153,7 @@ function generate_inline_slider_styles($attr) {
     $css .= "}";
 
     // Mobile Navigation
-    $css .= "@media (max-width: 768px) {";
+    $css .= "@media (max-width: 400px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
             $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Mobile');
             $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Mobile');	
@@ -310,19 +249,6 @@ function generate_inline_slider_styles($attr) {
     $css .= ".swiper-pagination-fraction {";
         $css .= "font-size: " . esc_attr($attr['bulletsize']) . "px !important;"; // Fixed interpolation
     $css .= "}";
-
-    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
-        $css .= "@media only screen and (min-width: 1024px) {.wp-block-vayu-blocks-advance-slider  {display:none;}}";
-    }
-    //hide on Tablet
-    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
-        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-vayu-blocks-advance-slider  {display:none;}}";
-    }
-    //hide on Mobile
-    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
-        $css .= "@media only screen and (max-width: 767px) {.wp-block-vayu-blocks-advance-slider  {display:none;}}";
-    }
-
 
     return $css;
 }

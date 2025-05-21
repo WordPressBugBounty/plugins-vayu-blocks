@@ -12,10 +12,6 @@
   "supports": {
     "reusable": false,
     "html": false,
-    "align": [
-      "wide",
-      "full"
-    ],
     "layout": false,
     "lock": true
   },
@@ -35,7 +31,7 @@
     "id": {
       "type": "string"
     },
-    "uniqueID": {
+    "uniqueId": {
       "type": "string"
     },
     "layoutType": {

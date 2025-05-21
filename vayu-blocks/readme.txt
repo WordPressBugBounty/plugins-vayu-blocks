@@ -2,9 +2,9 @@
 Contributors: ThemeHunk, satyendra61
 Tags: block, blocks editor, gutenberg, page builder, gutenberg templates
 Requires at least: 6.2
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.3.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -109,9 +109,15 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+=1.3.0 =
+* Update: All blocks have been optimized and the old code has been removed.
+* New : video blocks added.
+* Fix : Slider block issue fixed.
+* Fix : Image block improve.
+* Fix : css code issue fixed.
 
 =1.2.3 =
-* Fix : mega menu block remove.
+* Remove : mega menu block remove.
 
 =1.2.2 =
 * Fix : slider block issue fixed.

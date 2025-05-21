@@ -28,7 +28,6 @@ class Vayu_blocks_image_flip {
         $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
         $innerclass = '';
 
-        // Correcting the conditional checks
 
         if(isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'flip') {
             if (isset($attributes['flipside']) && $attributes['flipside'] === 'right') {
@@ -82,13 +81,24 @@ class Vayu_blocks_image_flip {
             $innerclass .= '-dbox'; // Append '-dbox' if conditions are met
         }
 
-        $image_html .= '<div class="vayu_blocks_image_flip_wrapper-for-front" id='. $uniqueId .'>';
-            $image_html .= '<div class="vayu_blocks_flip-box-inner-for-front ' . $innerclass . '" >';            
+        $image_html .= '<div class="vb-flip-box-wrapper" id='. $uniqueId .'>';
+            $image_html .= '<div class="vb-flip-box-front-inner ' . $innerclass . '" >';            
                 $image_html .= $this->content;
             $image_html .= '</div>';
         $image_html .= '</div>';
-    
-        return '<div class="vayu-blocks-image-flip-main-container-for-front' . $uniqueId . ' ' . $animated . '">' . $image_html . '</div>';
+
+       $classes = [];
+
+        if ( ! empty( $attributes['advAnimation']['className'] ) ) {
+            $classes[] = $attributes['advAnimation']['className'];
+        }
+
+        $classes[] = 'vb-flip-' . $uniqueId;
+
+        return '<div ' . get_block_wrapper_attributes([
+            'class' => implode( ' ', $classes ),
+        ]) . '>' . $image_html . '</div>';
+
     }
     
 }
@@ -104,10 +114,7 @@ function vayu_blocks_flip_box_render($attr,$content) {
     // Initialize the image with the merged attributes
     $image = new Vayu_blocks_image_flip($attr,$content);
     
-    // Ensure className is sanitized and applied correctly
-    $className = isset($attr['classNamemain']) ? esc_attr($attr['classNamemain']) : '';
-
-    // Render and return the image output inside a div with the dynamic class name
-    return '<div class="wp_block_vayu-blocks-image-flip-main ' . $className . '">' . $image->render() . '</div>';
+    return $image->render();
+           
 }
 

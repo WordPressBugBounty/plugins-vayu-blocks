@@ -24,12 +24,23 @@
       "wide",
       "full"
     ],
-    "className": true
+    "className": true,
+    "interactivity": true
   },
   "example": {
     "attributes": {
       "title": "Hello Marquee Block"
     }
+  },
+  "providesContext": {
+    "swipeslideWidth": "swipeslideWidth",
+    "swipeslideWidthTablet": "swipeslideWidthTablet",
+    "swipeslideWidthMobile": "swipeslideWidthMobile",
+    "swipeslideWidthUnit": "swipeslideWidthUnit",
+    "swipeslideGap": "swipeslideGap",
+    "swipeslideGapTablet": "swipeslideGapTablet",
+    "swipeslideGapMobile": "swipeslideGapMobile",
+    "swipeslideGapUnit": "swipeslideGapUnit"
   },
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",

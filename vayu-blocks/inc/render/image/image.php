@@ -1,12 +1,12 @@
 <?php
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+    exit;
 }
-     
+  
 class Vayu_blocks_image {
 
-    private $attr; //attributes
-    private $content; // Declare $content property
+    private $attr;
+    private $content;
 
     public function __construct($attr,$content) {
         $this->attr = $attr;
@@ -15,298 +15,235 @@ class Vayu_blocks_image {
 
     //Render
     public function render() {
-        ob_start(); // Start output buffering
+        ob_start();
 
-        // Output the SVG with duotone filters
-        echo $this->render_svg_filters();
-        echo $this->render_image();
-    
-        return ob_get_clean(); // Return the buffered output
-    }
-
-    //main container containing image and overlay
-    private function render_image() {
-        $attributes = $this->attr; // Access attributes
-        $image_html = '';
-        $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
-        $imageSrc = !empty($attributes['image']) ? esc_url($attributes['image']) :  plugins_url('../../assets/img/no-image.png', __FILE__);
-
-        $imageAlt = isset($attributes['imagealttext']) ? esc_attr($attributes['imagealttext']) : 'Image ' . rand(1, 100);
-        $imageHvrEffect = isset($attributes['imagehvreffect']) ? esc_attr($attributes['imagehvreffect']) : '';
-        $imageHvrAnimation = isset($attributes['imagehvranimation']) ? esc_attr($attributes['imagehvranimation']) : '';
-        $imageHvrFilter = isset($attributes['imagehvrfilter']) ? esc_attr($attributes['imagehvrfilter']) : '';
-        $imagemaskshape = isset($attributes['maskshape']) && $attributes['maskshape'] !== 'none' ? 'maskshapeimage' : '';
-        $wrapperanimation = isset($attributes['wrapperanimation']) ? esc_attr($attributes['wrapperanimation']) : '';
-        $animation_classname = '';
-
-      
-
-        if ($attributes['animationsettings'] === 'without-hvr') {
-            $animation_classname = $attributes['imagehvranimation'];
-        } elseif ($attributes['animationsettings'] === 'with-hvr') {
-            $animation_classname = $attributes['imagehvranimation'] . 'hvr';
-        } elseif ($attributes['animationsettings'] === 'one-time') {
-            $animation_classname = $attributes['imagehvranimation'] . 'onetime';
+        if ( ! empty( $this->attr['duotone'] ) && count( $this->attr['duotone'] ) > 1 ) {
+            echo $this->DuotoneFilters();
         }
 
-        $image_html .= '<div class="vayu_blocks_main_image_container_image_image">';
-            $image_html .= '<div class="vayu_blocks_image__wrapper ' . $wrapperanimation . ' " id='. $uniqueId .'>';
-                $image_html .= '<div class="vayu_blocks_rotating_div">';
-                $image_html .= '<div class="vayu_blocks_image_image_wrapping_container ' . $imageHvrFilter . ' ' . $imageHvrEffect . ' ' . $animation_classname . '" >';   
-                
-                
-                if ($attributes['typeimage'] === 'image') {
+        echo $this->render_image();
+    
+        return ob_get_clean();
+    }
 
-                    $image_html .= '<img 
-                        src="' . $imageSrc . '" 
-                        alt="' . $imageAlt . '" 
-                        class="vayu_blocks__image_image ' . $imageHvrEffect . ' ' . $imageHvrFilter . ' '. $imagemaskshape .'" 
-                    />';
-                }
+    private function render_image() {
+        $attributes = $this->attr;
 
+        $uniqueId = $this->safe_attr($attributes, 'uniqueId');
+        $animated = $this->safe_attr($attributes, 'className');
+        $imageSrc = !empty($attributes['image']) ? esc_url($attributes['image']) : plugins_url('../../assets/img/no-image.png', __FILE__);
+        $imageAlt = $this->safe_attr($attributes, 'imagealttext', 'Image ' . rand(1, 100));
+        $imageHvrEffect  = $this->safe_attr($attributes, 'animationData.hovereffect.value');
+        $imageHvrAnimation = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
+        $imageHvrFilter  = $this->safe_attr($attributes, 'imagehvrfilter');
+        $imagemaskshape  = ($this->safe_attr($attributes, 'animationData.mask.maskshape') !== 'none' && !empty($this->safe_attr($attributes, 'animationData.mask.maskshape'))) ? 'maskshapeimage' : '';
+        $wrapperanimation = $this->safe_attr($attributes, 'animationData.effect.animationValue');
+        $hover_type  = $this->safe_attr($attributes, 'animationData.imageAnimation.hover', 'without-hvr');
+        $animation_value  = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
+        
+        $animation_classname = match ($hover_type) {
+            'with-hvr'    => $animation_value . 'hvr',
+            'one-time'    => $animation_value . 'onetime',
+            'without-hvr' => $animation_value,
+            default       => '',
+        };
+
+        $wrapperclasses = array_filter([
+            'vb-image-wrapper',
+            $imageHvrFilter,
+            $imageHvrEffect,
+            $animation_classname
+        ], function($class) {
+            return !empty($class) && $class !== 'none';
+        });
+
+        $image_html= '';
+        
+        $image_html .= '<div class="vb-image-main-container vb-image-rotating-div">';
+
+            if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
+                $link_url     = esc_url($attributes['link']['url']);
+                $link_id      = esc_attr(!empty($attributes['link']['id']) ? $attributes['link']['id'] : 'default-id');
+                $link_title   = esc_attr(!empty($attributes['link']['title']) ? $attributes['link']['title'] : 'Default Title');
+                $link_target  = !empty($attributes['link']['opensInNewTab']) ? '_blank' : '_self';
+                $link_rel     = !empty($attributes['link']['opensInNewTab']) ? 'noopener noreferrer' : '';
             
-                // Append the overlay HTML
+                $image_html .= '<a href="' . $link_url . '" id="' . $link_id . '" title="' . $link_title . '" target="' . $link_target . '" rel="' . $link_rel . '">';
+            }
 
-                // Conditionally append overlay HTML
-                if (!empty($attributes['overlayshow']) || !empty($attributes['frameshow'])) {
-                    $image_html .= $this->overlay(); // Ensure this method returns valid HTML
-                }
+            $image_html .= '<div class="vb-image-container ' . $wrapperanimation . ' ' . ( !empty($attributes['contentani']) ? 'vb-start-cont-ani' : '' ) . ' " id='. $uniqueId .'>';
+            
+                $image_html .= '<div class="' . esc_attr(implode(' ', $wrapperclasses)) . '">';
+                
+                    if ($attributes['typeimage'] === 'image') {
+
+                        $image_html .= '<img 
+                            src="' . $imageSrc . '" 
+                            alt="' . $imageAlt . '" 
+                            class="vb-image-tag ' . $imageHvrEffect . ' ' . $imageHvrFilter . ' '. $imagemaskshape .'" 
+                        />';
+                    }
+
+                    if (!empty($attributes['overlayshow']) || !empty($attributes['frameshow'])) {
+                        $image_html .= $this->overlay();
+                    }
 
                 $image_html .= '</div>';
+
+                if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
+                    $image_html .= '</a>';
+                }
+
             $image_html .= '</div>';
         $image_html .= '</div>';
-        $image_html .= '</div>';
 
-        // Check if the 'caption' attribute is not empty
         if (!empty($attributes['caption'])) {
-            // Append HTML for the caption
-            $image_html .= '<div class="vayu_block_caption">';
-                $image_html .= '<p class="vayu_block_caption_text_para">';
-                    $image_html .= esc_html($attributes['captiontext']); // Use esc_html to properly escape HTML entities
+            $image_html .= '<div class="vb-image-caption">';
+                $image_html .= '<p class="vb-image-caption-text">';
+                    $image_html .= esc_html($attributes['captiontext']); 
                 $image_html .= '</p>';
             $image_html .= '</div>';
         }
         
         $classhover='';
-        if ($attributes['animationhover']) {
-            $classhover = 'vayu_blocks_hover_can_apply';
+        if (isset($attributes['animationData']['effect']['effectHover']) && $attributes['animationData']['effect']['effectHover']) {
+            $classhover = 'vayu-blocks-image-hover';
         }
-    
-        return '<div class="vayu-blocks-image-main-container' . $uniqueId . ' ' . $classhover .' vayu_blocks_image_image-container vayu-blocks-image-block">' . $image_html . '</div>';
+        
+        $classes = [ 'vayu-blocks-image-main-container' . $uniqueId ];
+
+        if (!empty($classhover)) {
+            $classes[] = $classhover;
+        }
+        
+        if (!empty($animated) && $animated !== 'none') {
+            $classes[] = $animated;
+        }
+
+        if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
+            $classes[] = $attributes['advAnimation']['className'];
+        }
+                
+        $finalClass = implode(' ', $classes);
+        
+        return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+            'class' => $finalClass
+        ]) . '>' . $image_html . '</div>';
+        
     }
     
-    //overlay
     private function overlay() {
-        $attributes = $this->attr; // Access attributes
+        $attributes = $this->attr;
         $overlay = '';
-        $imageHvrEffect = isset($attributes['imagehvreffect']) ? esc_attr($attributes['imagehvreffect']) : '';
-        $imageHvrAnimation = isset($attributes['imagehvranimation']) ? esc_attr($attributes['imagehvranimation']) : '';
-        $overlaywrapper = isset($attributes['overlaywrapper']) ? esc_attr($attributes['overlaywrapper']) : '';
+        $imageHvrEffect     = $this->safe_attr($attributes, 'animationData.hovereffect.value');
+        $imageHvrAnimation  = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
+        $overlaywrapper     = $this->safe_attr($attributes, 'overlaywrapper');
+        $hover              = $this->safe_attr($attributes, 'animationData.imageAnimation.hover');
+        $animationValue     = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
 
-        $animation_classname = '';
-
-        if ($attributes['animationsettings'] === 'without-hvr') {
-            $animation_classname = $attributes['imagehvranimation'];
-        } elseif ($attributes['animationsettings'] === 'with-hvr') {
-            $animation_classname = $attributes['imagehvranimation'] . 'hvr';
-        } elseif ($attributes['animationsettings'] === 'one-time') {
-            $animation_classname = $attributes['imagehvranimation'] . 'onetime';
-        }
-
+        $animation_classname = match ($hover) {
+            'with-hvr'  => $animationValue . 'hvr',
+            'one-time'  => $animationValue . 'onetime',
+            'without-hvr' => $animationValue,
+            default     => ''
+        };
+        
         $wrapperanimation = '';
-        if($attributes['wrapperanimation'] === 'vayu_block_styling-effect7'){
-            $wrapperanimation = 'vayu_block_styling-overlay-effect'; 
+        if (isset($attributes['animationData']['effect']['animationValue']) && $attributes['animationData']['effect']['animationValue'] === 'vayu_block_styling-effect7') {
+            $wrapperanimation = 'vayu_block_styling-overlay-effect';
         }
+        
+        $imagemaskshape = isset($attributes['animationData']['mask']['maskshape']) && $attributes['animationData']['mask']['maskshape'] !== 'none' ? 'maskshapeimage' : '';
 
-        $imagemaskshape = isset($attributes['maskshape']) && $attributes['maskshape'] !== 'none' ? 'maskshapeimage' : '';
+        $classes = array_filter([
+            'vb-image-overlay-wrapper',
+            $wrapperanimation,
+            $overlaywrapper,
+            $imageHvrEffect,
+            $imagemaskshape
+        ], function($class) {
+            return !empty($class) && $class !== 'none';
+        });
+        
+        $overlay .= '<div class="' . esc_attr(implode(' ', $classes)) . '">';
 
-
-        $overlay .= '<div class="vayu_blocks_overlay_main_wrapper_image '. $wrapperanimation .' ' . $overlaywrapper .' ' . $imageHvrEffect . ' ' . $animation_classname . ' ' . $imagemaskshape . ' ">';
             if(!empty($attributes['overlayshow'])){
-                $overlay .= '<div class="vayu_blocks_inner_content">';
-                    $overlay .= $this->content;
-                $overlay .= '</div>';  
+                $overlay .= $this->content;
             }
 
         $overlay .= '</div>';
     
         return $overlay;
     }
-    
-    // Svg filters for duotone
-    private function render_svg_filters() {
-        return '<div class="vayu_blocks_image_flip-duotone-filters">
-        <svg  xmlns="http://www.w3.org/2000/svg">
-                            {/* Orange and Red */}
-                            <filter id="duotone-orange-red">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.8 1"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.5 0.7"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.3 0.5"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
 
-                            {/* Red and Green */}
-                            <filter id="duotone-red-green">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.7 1"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.3 0.8"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.3 0.7"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Black and White */}
-                            <filter id="duotone-black-white">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.5 1"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.5 1"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.5 1"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Blue and Red */}
-                            <filter id="duotone-blue-red">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.6 0.9"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.2 0.3"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.5 0.8"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Purple and Yellow */}
-                            <filter id="duotone-purple-yellow">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.5 0.8"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.2 0.7"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.5 0.3"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Orange and Teal */}
-                            <filter id="duotone-orange-teal">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.8 0.5"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.5 0.7"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.4 0.5"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Pink and Blue */}
-                            <filter id="duotone-pink-blue">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.7 0.4"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.3 0.5"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.6 0.7"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Cyan and Magenta */}
-                            <filter id="duotone-cyan-magenta">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.0 0.7"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.7 0.2"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.9 0.6"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Yellow and Black */}
-                            <filter id="duotone-yellow-black">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="1 0.3"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.7 0.3"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.1 0.1"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Light Blue and Light Green */}
-                            <filter id="duotone-lightblue-lightgreen">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.6 0.6"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.8 0.9"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.8 0.6"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                            {/* Gray and Yellow */}
-                            <filter id="duotone-gray-yellow">
-                                <feColorMatrix type="matrix" result="gray"
-                                    values="1 0 0 0 0
-                                            1 0 0 0 0
-                                            1 0 0 0 0
-                                            0 0 0 1 0" />
-                                <feComponentTransfer color-interpolation-filters="sRGB" result="duotone">
-                                    <feFuncR type="table" tableValues="0.6 1"></feFuncR>
-                                    <feFuncG type="table" tableValues="0.6 1"></feFuncG>
-                                    <feFuncB type="table" tableValues="0.6 0.3"></feFuncB>
-                                    <feFuncA type="table" tableValues="0 1"></feFuncA>
-                                </feComponentTransfer>
-                            </filter>
-
-                        </svg> </div>';
+    private function safe_attr($array, $keyPath, $default = '') {
+        $value = $array;
+        foreach (explode('.', $keyPath) as $key) {
+            if (!isset($value[$key])) return $default;
+            $value = $value[$key];
+        }
+        return esc_attr($value);
     }
+
+    private function hexToRGBArray($color) {
+        if (strpos($color, '#') === 0) {
+            $r = hexdec(substr($color, 1, 2)) / 255;
+            $g = hexdec(substr($color, 3, 2)) / 255;
+            $b = hexdec(substr($color, 5, 2)) / 255;
+        
+            return [
+                number_format($r, 2, '.', ''),
+                number_format($g, 2, '.', ''),
+                number_format($b, 2, '.', '')
+            ];
+        } elseif (strpos($color, 'rgb') === 0) {
+            preg_match_all('/\d+/', $color, $matches);
+            $rgb = array_map(function ($val) {
+                return number_format(intval($val) / 255, 2);
+            }, array_slice($matches[0], 0, 3)); // only first 3 values (r,g,b)
+
+            return $rgb;
+        }
+
+        return ['0.00', '0.00', '0.00']; // fallback
+    }
+    
+    private function DuotoneFilters() {
+        $attributes = $this->attr; 
+        $duotone = isset($attributes['duotone']) ? $attributes['duotone'] : array();
+    
+        if (!is_array($duotone) || count($duotone) !== 2) {
+            return null;
+        }
+
+        list($r1, $g1, $b1) = $this->hexToRGBArray($duotone[0]);
+        list($r2, $g2, $b2) = $this->hexToRGBArray($duotone[1]);
+    
+        return <<<SVG
+            <div class="vayu-blocks-duotone">
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    "<filter id="duotone-filter-{$attributes['uniqueId']}">"
+                        <feColorMatrix
+                            type="matrix"
+                            values="0.33 0.33 0.33 0 0
+                                    0.33 0.33 0.33 0 0
+                                    0.33 0.33 0.33 0 0
+                                    0 0 0 1 0"
+                        />
+                        <feComponentTransfer colorInterpolationFilters="sRGB">
+                            <feFuncR type="table" tableValues="{$r1} {$r2}" />
+                            <feFuncG type="table" tableValues="{$g1} {$g2}" />
+                            <feFuncB type="table" tableValues="{$b1} {$b2}" />
+                            <feFuncA type="table" tableValues="0 1" />
+                        </feComponentTransfer>
+                    </filter>
+                </svg>
+            </div>
+        SVG;
+    }
+
 }
 
-// Render callback for the block
 function vayu_block_image_render($attr,$content) {
     // Include default attributes
     $default_attributes = include('defaultattributes.php');
@@ -316,14 +253,7 @@ function vayu_block_image_render($attr,$content) {
 
     // Initialize the image with the merged attributes
     $image = new Vayu_blocks_image($attr,$content);
+
+    return $image->render();
     
-    // Ensure className is sanitized and applied correctly
-    $className = isset($attr['classNamemain']) ? esc_attr($attr['classNamemain']) : '';
-
-    $animated = isset($attr['className']) ? esc_attr($attr['className']) : ''; // animation
-
-    $uniqueId = isset($attr['uniqueId']) ? esc_attr($attr['uniqueId']) : '';
-
-    // Render and return the image output inside a div with the dynamic class name
-    return '<div id=' . $uniqueId . ' class="wp_block_vayu-blocks-image-main ' . $className . ' ' . $animated . '">' . $image->render() . '</div>';
 } 

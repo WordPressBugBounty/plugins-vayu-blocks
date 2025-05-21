@@ -1,395 +1,152 @@
 <?php
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+    exit;
 }
      
 class Vayu_blocks_timeline_child {
 
-    private $attr; //attributes
+    private $attr;
 
     public function __construct($attr,$content) {
         $this->attr = $attr;
         $this->content = $content;
     }
 
-    //Render
     public function render() {
-        ob_start(); // Start output buffering
+        ob_start(); 
         echo $this->render_timeline_child();
-        return ob_get_clean(); // Return the buffered output
+        return ob_get_clean();
     }
 
     private function render_timeline_child() {
-        $attributes = $this->attr; // Access attributes
-        $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
-        $layout = isset($attributes['layout_child']) ? $attributes['layout_child'] : '';
-        $showdate = isset($attributes['showdate_child']) ? $attributes['showdate_child'] : false;
-        $date = isset($attributes['date']) ? esc_html($attributes['date']) : '';
-        $blockIndex = isset($attributes['blockIndex_child']) ? (int) esc_html($attributes['blockIndex_child']) : 0; // Get block index
-        $printedIcon = isset($attributes['printedIcon_child']) ? htmlspecialchars_decode($attributes['printedIcon_child']) : '';
-        // Check if blockIndex is even or odd
-        $isEvenIndex = $blockIndex % 2 === 0;
-        $isOddIndex = !$isEvenIndex;
-
+        $attr = $this->attr;
         $content = $this->content;
-    
-        $timeline_child_html = '';
 
+        $get_attr = function($key, $default = '') use ($attr) {
+            return isset($attr[$key]) ? $attr[$key] : $default;
+        };
 
-        // Layout 1
-        if ($layout === 'layout-1') {
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field">';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">' . $content . '</div>';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-1"></div>';
-                $timeline_child_html .= '</div>';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent"><div class="vayu_blocks-timeline__marker">';
+        $uniqueId     = esc_attr($get_attr('uniqueId'));
+        $layout       = $get_attr('layout_child');
+        $blockIndex   = (int) esc_html($get_attr('blockIndex_child', 0));
+        $printedIcon  = htmlspecialchars_decode($get_attr('printedIcon_child', ''));
 
-                $timeline_child_html .= $printedIcon;
+        if($attr['iconglobal']){
+            $printedIcon= htmlspecialchars_decode($get_attr('printedIcon', ''));;
+        }
 
-                $timeline_child_html .= '</div></div>';
+        $connector    = $get_attr('connector', false);
+        $isLastBlock  = $get_attr('isLastBlock', false);
+        $animated     = $get_attr('animated', '');
 
-                if ($showdate) {
-                    $timeline_child_html .= '<div class="vayu_blocks__date-new-parent"><h1 class="vayu_blocks__date-new">' . $date . '</h1></div>';
+        $isEvenIndex = $blockIndex % 2 === 0;
+
+        $classes = [ 'vb-timeline-child' . $uniqueId ];
+        if (!empty($animated) && $animated !== 'none') {
+            $classes[] = esc_attr($animated);
+        }
+        $finalClass = implode(' ', $classes);
+
+        $layoutClassData = $this->get_layout_classes($layout, $isEvenIndex);
+        $html  = '';
+
+        if (preg_match('/^layout-([1-6])$/', $layout)) {
+            $html .= '<div class="vb-relative-child">';
+        }
+        // Content and icon rendering
+        $html  .= '<article class="' . esc_attr($layoutClassData['layoutClass']) . '">';
+            $html .= '<div class="' . esc_attr($layoutClassData['innerLayoutClass']) . '">';
+                $html .= $content;
+            $html .= '</div>';
+
+            $html .= '<div class="vb-timeline-icon vayu_blocks-timeline__parent">';
+                $html .= '<div class="vb-timeline-icon-marker vayu_blocks-timeline__marker">';
+                $html .= $printedIcon;
+            $html .= '</div></div></article>';
+            // Connector
+            if (!$isLastBlock && $connector) {
+                $connectorClass = $this->get_connector_class($layout);
+                if ($connectorClass) {
+                    $html .= '<div class="vb-connetor-child ' . esc_attr($connectorClass) . '"></div>';
                 }
-            $timeline_child_html .= '</article>';
-        }
-    
-        // Layout 2
-        if ($layout === 'layout-2') {
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field vayu-blocks-flex-direction-row-reverse">';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">' . $content . '</div>';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-2"></div>';
-                $timeline_child_html .= '</div>';
-
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent"><div class="vayu_blocks-timeline__marker">' . $printedIcon . '</div></div>';
-
-                if ($showdate) {
-                    $timeline_child_html .= '<div class="vayu_blocks__date-new-parent"><h1 class="vayu_blocks__date-new">' . $date . '</h1></div>';
-                }
-
-            $timeline_child_html .= '</article>';
-        }
-    
-        // Layout 3
-        if ($layout === 'layout-3') {
-            // Determine the classes based on even or odd index
-            $arrowClass = $isEvenIndex ? 'vayu_blocks-timeline__arrow-border-layout-2' : 'vayu_blocks-timeline__arrow-border-layout-1';
-            $directionClass = $isEvenIndex ? 'vayu-blocks-turn-right vayu-blocks-flex-direction-row-reverse' : '';
-            
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field ' . $directionClass . '">';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">' . $content . '</div>';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow ' . $arrowClass . '"></div>';
-                $timeline_child_html .= '</div>';
-
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent"><div class="vayu_blocks-timeline__marker">' . $printedIcon . '</div></div>';
-
-                $timeline_child_html .= '<div class="vayu_blocks__date-new-parent"><h1 style="display:' . ($showdate ? 'block' : 'none') . '" class="vayu_blocks__date-new">' . $date . '</h1></div>';
-
-            $timeline_child_html .= '</article>';
-        }
-    
-        // Layout 4
-        if ($layout === 'layout-4') {
-
-            $arrowClass = $isOddIndex ? 'vayu_blocks-timeline__arrow-border-layout-2' : 'vayu_blocks-timeline__arrow-border-layout-1';
-            $directionClass = $isOddIndex ? 'vayu-blocks-turn-right vayu-blocks-flex-direction-row-reverse' : '';
-            
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field ' . $directionClass . '">';
-
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">' . $content . '</div>';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow ' . $arrowClass . '"></div>';
-                $timeline_child_html .= '</div>';
-
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent"><div class="vayu_blocks-timeline__marker">' . $printedIcon . '</div></div>';
-
-                $timeline_child_html .= '<div class="vayu_blocks__date-new-parent"><h1 style="display:' . ($showdate ? 'block' : 'none') . '" class="vayu_blocks__date-new">' . $date . '</h1></div>';
-
-            $timeline_child_html .= '</article>';
-        }
-    
-        // Layout 5
-        if ($layout === 'layout-5') {
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field vayu-blocks-flex-direction-row-reverse">';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child-layout-5-6 vayu-blocks-styling-timeine-artile-div">';
-                    if ($showdate) {
-                        $timeline_child_html .= '<div class="vayu_blocks__date-new-parent"><h1 class="vayu_blocks__date-new">' . $date . '</h1></div>';
-                    }
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">' . $content . '</div>';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-2"></div>';
-                $timeline_child_html .= '</div>';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent"><div class="vayu_blocks-timeline__marker">' . $printedIcon . '</div></div>';
-
-            $timeline_child_html .= '</article>';
-        }
-    
-        // Layout 6
-        if ($layout === 'layout-6') {
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field">';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child-layout-5-6 vayu-blocks-styling-timeine-artile-div">';
-                    if ($showdate) {
-                        $timeline_child_html .= '<div class="vayu_blocks__date-new-parent"><h1 class="vayu_blocks__date-new">' . $date . '</h1></div>';
-                    }
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">' . $content . '</div>';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-1"></div>';
-                $timeline_child_html .= '</div>';
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent"><div class="vayu_blocks-timeline__marker">' . $printedIcon . '</div></div>';
-            $timeline_child_html .= '</article>';
+            }
+        if (preg_match('/^layout-([1-6])$/', $layout)) {
+            $html .= '</div>';
         }
 
-        // Layout 7
-        if ($layout === 'layout-7') {
+        return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+            'class' => $finalClass,
+        ]) . '>' . $html . '</div>';
+    }
 
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field vayu-blocks-laytout-7-reverse vayu-blockls-layout-horizontal-width">';
-    
-                // Events inner content
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">';
+    private function get_layout_classes($layout, $isEvenIndex) {
+        $layoutClass = '';
+        $innerLayoutClass = '';
 
-                        // Add inner blocks template or any dynamic content if required.
-                        $timeline_child_html .= $content;  // Replace $content with actual InnerBlocks equivalent
-
-                    $timeline_child_html .= '</div>'; 
-
-                    // Arrow specific to layout 7
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-7"></div>';
-                $timeline_child_html .= '</div>'; 
-
-
-                // Marker for the timeline
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__marker vayu_blocks-timeline__marker-layout">' . $printedIcon . '</div>';
-                $timeline_child_html .= '</div>';
-
-                // Show date if $showdate is true
-                if ($showdate) {
-                    $timeline_child_html .= '<div class="vayu_blocks__date-new-parent">';
-                        $timeline_child_html .= '<h1 class="vayu_blocks__date-new">' . $date . '</h1>';
-                    $timeline_child_html .= '</div>';
-                }
-
-            $timeline_child_html .= '</article>'; // Closing article
+        if (in_array($layout, ['layout-1', 'layout-2', 'layout-3', 'layout-4'], true)) {
+            $layoutClass = 'vb-timeline-icom-main-layout-1-4 vb-timeline-layout-main-1-4';
+            if ($layout === 'layout-2' || ($layout === 'layout-3' && $isEvenIndex) || ($layout === 'layout-4' && !$isEvenIndex)) {
+                $layoutClass .= ' vb-direction-layout-2';
+            }
+            $innerLayoutClass = 'vb-timeine-layout-1-4';
+        } elseif (in_array($layout, ['layout-5', 'layout-6'], true)) {
+            $layoutClass = 'vb-timeline-icom-main-layout-5-6';
+            if ($layout === 'layout-5') {
+                $layoutClass .= ' vb-direction-layout-5';
+            }
+            $innerLayoutClass = 'vb-timeine-layout-5-6';
+        } elseif (in_array($layout, ['layout-7', 'layout-8'], true)) {
+            $layoutClass = 'vb-timeline-icom-main-layout-7-8';
+            if ($layout === 'layout-8') {
+                $layoutClass .= ' vb-timeline-layout-8-main';
+            }
+            $innerLayoutClass = 'vb-timeine-layout-7-8';
+        } elseif (in_array($layout, ['layout-11', 'layout-12'], true)) {
+            $layoutClass = 'vb-timeline-icom-main-layout-11-12';
+            if ($layout === 'layout-12') {
+                $layoutClass .= ' vb-timeline-layout-12-main';
+            }
+            $innerLayoutClass = 'vb-timeine-layout-11-12';
         }
 
-        // Layout 8
-        if ($layout === 'layout-8') {
-            $timeline_child_html .= '<article class="vayu-blocks-timeline__field vayu-blocks-laytout-8-reverse vayu-blockls-layout-horizontal-width">';
-    
-                // Events inner content
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">';
-                        
-                        // Assuming InnerBlocks content is handled elsewhere in PHP
-                        // Add inner blocks template or any dynamic content if required.
-                        $timeline_child_html .= $content;  // Replace $content with actual InnerBlocks equivalent
+        return [
+            'layoutClass' => $layoutClass,
+            'innerLayoutClass' => $innerLayoutClass,
+        ];
+    }
 
-                    $timeline_child_html .= '</div>'; // Closing events-inner--content div
-    
-                    // Arrow specific to layout 8
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-8"></div>';
-                $timeline_child_html .= '</div>'; // Closing events-inner-new div
-    
-                // Marker for the timeline
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__marker vayu_blocks-timeline__marker-layout">' . $printedIcon . '</div>';
-                $timeline_child_html .= '</div>'; // Closing parent div
-    
-                // Show date if $showdate is true
-                if ($showdate) {
-                    $timeline_child_html .= '<div class="vayu_blocks__date-new-parent">';
-                        $timeline_child_html .= '<h1 class="vayu_blocks__date-new">' . $date . '</h1>';
-                    $timeline_child_html .= '</div>';
-                }
+    private function get_connector_class($layout) {
+        $map = [
+            'vb-connetor-7-11'   => ['layout-7', 'layout-9', 'layout-10','layout-8'],
+            'vb-connetor-7-11 vb-connetor-11' => ['layout-11'],
+            'vb-connetor-8-12'   => [ 'layout-12'],
+            'vb-connetor-1-3-4'  => ['layout-1', 'layout-3', 'layout-4'],
+            'vb-connetor-2'      => ['layout-2'],
+            'vb-connetor-5'      => ['layout-5'],
+            'vb-connetor-5-6'    => ['layout-6'],
+        ];
 
-            $timeline_child_html .= '</article>'; // Closing article
+        foreach ($map as $class => $layouts) {
+            if (in_array($layout, $layouts, true)) {
+                return $class;
+            }
         }
 
-        // Layout 9
-        if ($layout === 'layout-9') {
-            // Check if it's an even index
-            $is_even_index = $isEvenIndex ? 'vayu-blocks-turn-right-layout-9' : '';
-            $is_even_index_arrow = $isEvenIndex ? 'vayu_blocks-timeline__arrow-border-layout-8' : 'vayu_blocks-timeline__arrow-border-layout-7';
-
-
-            $timeline_child_html .= '<article class="vayu-blockls-layout-horizontal-width vayu-blocks-timeline__field vayu-blocks-laytout-7-reverse ' . $is_even_index . '">';
-    
-                // Events inner content
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">';
-    
-                        // Assuming InnerBlocks content is handled elsewhere in PHP
-                        // Add inner blocks template or any dynamic content if required.
-                        $timeline_child_html .= $content;  // Replace $content with actual InnerBlocks equivalent
-
-                    $timeline_child_html .= '</div>'; // Closing events-inner--content div
-    
-                    // Arrow specific to layout 7 (same as layout-7)
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow ' . $is_even_index_arrow . '"></div>';
-                $timeline_child_html .= '</div>'; // Closing events-inner-new div
-    
-                // Marker for the timeline
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__marker vayu_blocks-timeline__marker-layout">' . $printedIcon . '</div>';
-                $timeline_child_html .= '</div>'; // Closing parent div
-    
-                if($showdate){
-                    // Date section with dynamic padding based on even index
-                    $padding_bottom = $isEvenIndex ? ($attributes['contentHeight'] - $attributes['dateHeight']) . 'px' : '0px';
-                    $padding_top = $isEvenIndex ? '0px' : ($attributes['contentHeight'] - $attributes['dateHeight']) . 'px';
-                }else{
-                    // Date section with dynamic padding based on even index
-                    $padding_bottom = $isEvenIndex ? ($attributes['contentHeight']) . 'px' : '0px';
-                    $padding_top = $isEvenIndex ? '0px' : ($attributes['contentHeight']) . 'px';
-                }
-               
-                $timeline_child_html .= '<div class="vayu_blocks__date-new-parent" style="padding-bottom: ' . $padding_bottom . '; padding-top: ' . $padding_top . ';">';
-                    $timeline_child_html .= '<h1 class="vayu_blocks__date-new">' . $attributes['date'] . '</h1>';
-                $timeline_child_html .= '</div>';
-
-            $timeline_child_html .= '</article>'; // Closing article
-        }
-
-        // Layout 10
-        if ($layout === 'layout-10') {
-            // Check if it's an even index
-            $is_even_index = $isEvenIndex ? 'vayu-blocks-turn-right-layout-10' : '';
-
-            $is_even_index_arrow = $isEvenIndex ? 'vayu_blocks-timeline__arrow-border-layout-7' : 'vayu_blocks-timeline__arrow-border-layout-8';
-
-            $timeline_child_html .= '<article class="vayu-blockls-layout-horizontal-width vayu-blocks-timeline__field vayu-blocks-laytout-8-reverse ' . $is_even_index . '">';
-            
-                // Events inner content
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">';
-            
-                        // Assuming InnerBlocks content is handled elsewhere in PHP
-                        // Add inner blocks template or any dynamic content if required.
-                        $timeline_child_html .= $content;  // Replace $content with actual InnerBlocks equivalent
-
-                    $timeline_child_html .= '</div>'; // Closing events-inner--content div
-            
-                    // Arrow specific to layout 7 (same as layout-7)
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow ' . $is_even_index_arrow . '"></div>';
-                $timeline_child_html .= '</div>'; // Closing events-inner-new div
-            
-                // Marker for the timeline
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__marker vayu_blocks-timeline__marker-layout">' . $printedIcon . '</div>';
-                $timeline_child_html .= '</div>'; // Closing parent div
-            
-                if($showdate){
-                    // Date section with dynamic padding based on even index
-                    $padding_bottom = $isEvenIndex ? ($attributes['contentHeight'] - $attributes['dateHeight']) . 'px' : '0px';
-                    $padding_top = $isEvenIndex ? '0px' : ($attributes['contentHeight'] - $attributes['dateHeight']) . 'px';
-                }else{
-                    // Date section with dynamic padding based on even index
-                    $padding_bottom = $isEvenIndex ? ($attributes['contentHeight']) . 'px' : '0px';
-                    $padding_top = $isEvenIndex ? '0px' : ($attributes['contentHeight']) . 'px';
-                }
-
-                $timeline_child_html .= '<div class="vayu_blocks__date-new-parent" style="padding-top: ' . $padding_bottom . '; padding-bottom: ' . $padding_top . ';">';
-                    $timeline_child_html .= '<h1 class="vayu_blocks__date-new">' . $attributes['date'] . '</h1>';
-                $timeline_child_html .= '</div>';
-
-            $timeline_child_html .= '</article>'; // Closing article
-        }
-
-        // Layout 11
-        if ($layout === 'layout-11') {
-            // Add the class for layout-7-reverse
-            $timeline_child_html .= '<article class="vayu-blockls-layout-horizontal-width vayu-blocks-timeline__field vayu-blocks-laytout-7-reverse">';
-            
-                // Events inner content
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">';
-
-                        // Conditionally show the date
-                        if ($showdate) {
-                            $timeline_child_html .= '<div class="vayu_blocks__date-new-parent">';
-                                $timeline_child_html .= '<h1 class="vayu_blocks__date-new">' . $attributes['date'] . '</h1>';
-                            $timeline_child_html .= '</div>'; // Closing date-new-parent div
-                        }
-
-                        // Assuming InnerBlocks content is handled elsewhere in PHP
-                        // Add inner blocks template or dynamic content
-                        $timeline_child_html .= $content; // Replace $content with actual InnerBlocks equivalent
-
-                    $timeline_child_html .= '</div>'; // Closing events-inner--content div
-
-                    // Arrow specific to layout 7
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-7"></div>';
-                $timeline_child_html .= '</div>'; // Closing events-inner-new div
-            
-                // Marker for the timeline
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__marker vayu_blocks-timeline__marker-layout">' . $printedIcon . '</div>';
-                $timeline_child_html .= '</div>'; // Closing parent div
-            
-            $timeline_child_html .= '</article>'; // Closing article
-        }
-
-        // Layout 12
-        if ($layout === 'layout-12') {
-            // Add the class for layout-8-reverse
-            $timeline_child_html .= '<article class="vayu-blockls-layout-horizontal-width vayu-blocks-timeline__field vayu-blocks-laytout-8-reverse">';
-            
-                // Events inner content
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner-new vayu-blocks-flex-properties-timeline-child vayu-blocks-styling-timeine-artile-div">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__events-inner--content">';
-
-                        // Conditionally show the date
-                        if ($showdate) {
-                            $timeline_child_html .= '<div class="vayu_blocks__date-new-parent">';
-                            $timeline_child_html .= '<h1 class="vayu_blocks__date-new">' . $attributes['date'] . '</h1>';
-                            $timeline_child_html .= '</div>'; // Closing date-new-parent div
-                        }
-
-                        // Assuming InnerBlocks content is handled elsewhere in PHP
-                        // Add inner blocks template or dynamic content
-                        $timeline_child_html .= $content; // Replace $content with actual InnerBlocks equivalent
-
-                    $timeline_child_html .= '</div>'; // Closing events-inner--content div
-
-                    // Arrow specific to layout 8
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__arrow vayu_blocks-timeline__arrow-border-layout-8"></div>';
-                $timeline_child_html .= '</div>'; // Closing events-inner-new div
-            
-                // Marker for the timeline
-                $timeline_child_html .= '<div class="vayu_blocks-timeline__parent">';
-                    $timeline_child_html .= '<div class="vayu_blocks-timeline__marker vayu_blocks-timeline__marker-layout">' . $printedIcon . '</div>';
-                $timeline_child_html .= '</div>'; // Closing parent div
-            
-            $timeline_child_html .= '</article>'; // Closing article
-        }
-    
-        // Generate the div with dynamic class
-        $timeline_child_html .= '<div class="vayu-blocks-connector-timeline-child">';
-        $timeline_child_html .= '</div>';
-        
-        return '<div class="vayu-blocks-timeline-child-main-container' . $uniqueId . ' ">' . $timeline_child_html . '</div>';
+        return '';
     }
          
 }
 
 // Render callback for the block
 function vayu_block_timeline_child_render($attr,$content) {
-    // Include default attributes
+
     $default_attributes = include('defaultattributes.php');
-
-    // Merge default attributes with provided attributes
     $attr = array_merge($default_attributes, $attr);
-
-    // Initialize the image with the merged attributes
     $timeline_child = new Vayu_blocks_timeline_child($attr,$content);
     
-    // Ensure className is sanitized and applied correctly
     $className = isset($attr['classNamemain']) ? esc_attr($attr['classNamemain']) : '';
 
-    $animated = isset($attr['className']) ? esc_attr($attr['className']) : ''; // animation
+    $animated = isset($attr['className']) ? esc_attr($attr['className']) : '';
 
-    // Render and return the icon output inside a div with the dynamic class name
-    return '<div class="wp_block_vayu-blocks-timeline-child-main ' . $className . ' ' . $animated . '">' . $timeline_child->render() . '</div>';
+    return $timeline_child->render();
 }

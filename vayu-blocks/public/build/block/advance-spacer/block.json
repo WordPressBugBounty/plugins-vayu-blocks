@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "title": "Advance Spacer",
   "category": "vayu-blocks",
+  "keywords": [
+    " spacer",
+    "advance spacer"
+  ],
   "description": "A block to add customizable space between other blocks.",
   "supports": {
     "html": false

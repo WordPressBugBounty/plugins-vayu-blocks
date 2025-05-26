@@ -48,7 +48,7 @@ function generate_inline_flip_wrapper_styles($attr) {
     // Tablet Styles
 $tabletFrame = $OBJ_STYLE->borderFrame('frameData', 'Tablet');
 if (!empty(trim($tabletFrame))) {
-    $css .= "@media (max-width: 1024px) {";
+    $css .= "@media (min-width: 768px) and (max-width: 1024px) {";
         $css .= "$wrapper {";
             $css .= $tabletFrame;
         $css .= "}";
@@ -58,7 +58,7 @@ if (!empty(trim($tabletFrame))) {
 // Mobile Styles
 $mobileFrame = $OBJ_STYLE->borderFrame('frameData', 'Mobile');
 if (!empty(trim($mobileFrame))) {
-    $css .= "@media (max-width: 400px) {";
+    $css .= "@media (max-width: 767px) {";
         $css .= "$wrapper {";
             $css .= $mobileFrame;
         $css .= "}";

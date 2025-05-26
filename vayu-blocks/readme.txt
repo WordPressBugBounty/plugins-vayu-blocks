@@ -4,7 +4,7 @@ Tags: block, blocks editor, gutenberg, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -109,6 +109,12 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+=1.3.1 =
+* Update: Container block improve.
+* Update: Button block animation add.
+* Update: Image block improve.
+* Update: Video Block improve.
+
 =1.3.0 =
 * Update: All blocks have been optimized and the old code has been removed.
 * New : video blocks added.

@@ -79,160 +79,285 @@ class Vayu_blocks_video {
         
         $videoSize = 'auto';
         $videoHeight = 'auto';
+                $imageSize = '100%';
+        $imageHeight = '100%';
 
-        if (!empty($attributes['screenfit']) && $attributes['screenfit'] === 'custom') {
-            if (!empty($attributes['videowidth'][$this->device_type])) {
-                $videoSize = $attributes['videowidth'][$this->device_type];
+        if (!empty($attributes['screenfit']) && $attributes['screenfit'] === 'auto') {
+            if(!$attributes['youtubeshorts'] && $attributes['blockValue'] === 'you-tube'){
+                $videoSize =  560;
             }
-
-            if (!empty($attributes['videoheight'][$this->device_type])) {
-                $videoHeight = $attributes['videoheight'][$this->device_type];
-            }
+            if(!$attributes['youtubeshorts'] && $attributes['blockValue'] === 'you-tube'){
+            $imageSize =  560;
         }
+    }
+        
 
-      
-        if(!$attributes['youtubeshorts'] && $attributes['blockValue'] === 'you-tube'){
-            $videoSize =  560;
-        }
+        $lightbox = isset( $attributes['lightbox'] ) && $attributes['lightbox'] ? 'true' : 'false';
+        $noimagelong = !empty($attributes['image']) ? esc_url($attributes['image']) : plugins_url('../../assets/img/no-image.png', __FILE__);
 
         $image_html .= '<div class="vb-video-container' . 
         (!empty($wrapperanimation) && $wrapperanimation !== 'none' ? ' ' . esc_attr($wrapperanimation) : '') . 
         ' ' . ( !empty($attributes['contentani']) ? 'vb-start-cont-ani' : '' ) . '" id="' . esc_attr($uniqueId) . '">';
     
-            $image_html .= '<div class="vb-video-rotation">';
-                $image_html .= '<div class="' . 
+            $image_html .= '<div class="vb-video-rotation" data-lightbox="' . esc_attr( $lightbox ) . '" >';
+                $image_html .= '<div class="vb-frame-data-video ' . 
                 trim(
                     ($imageHvrFilter && $imageHvrFilter !== 'none' ? esc_attr($imageHvrFilter) . ' ' : '') .
                     ($imageHvrEffect && $imageHvrEffect !== 'none' ? esc_attr($imageHvrEffect) . ' ' : '') .
                     ($animation_classname && $animation_classname !== 'none' ? esc_attr($animation_classname) : '')
                 ) .
                 '">';
-                    if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
+                        $image_html .= '<div class="vb-video-wrapper-relative">';
+                            $image_html .= '<div class="vb-video-poster">';
+                                $image_html .= '<img  src="' . ( !empty( $attributes['poimage'] ) ? $attributes['poimage'] : $noimagelong ) . '" class="vb-video-tag-image" />';
+                            $image_html .= '</div>';
 
-                        $image_html .= '<video 
-                            ' .(isset($attributes['pipfront']) && $attributes['pipfront'] ? 'id="videoElement"' : '') .' 
-                            width="' . $videoSize . '" 
-                            height = "' . $videoHeight .'"
-                            class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
-                            ' . $autoplay . ' 
-                            ' . $loop . ' 
-                            ' . $controls . ' 
-                            ' . $muted . ' 
-                            poster="' . $poster . '"
-                            controlsList="' . 
-                                ($nofullscreen ? 'nofullscreen ' : '') .
-                                ($nodownload ? 'nodownload ' : '') . 
-                                ($noremoteplayback ? 'noremoteplayback ' : '') . 
-                                ($noplaybackrate ? 'noplaybackrate ' : '') .'">
-                            <source src="' . $videoUrl . '" type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>';
-                    }
-
-                    else if($attributes['blockValue'] === 'you-tube' && !empty($attributes['youvideoUrl'])) {
-
-                        $query_params = [];
-
-                        if (!empty($attributes['youautoplay'])) {
-                            $query_params[] = 'autoplay=1';
-                            $query_params[] = 'mute=1';
-                        } else {
-                            $query_params[] = 'autoplay=0';
-                            $query_params[] = !empty($attributes['youtubemuted']) ? 'mute=1' : 'mute=0';
-                        }
-                
-                        if (!empty($attributes['youcontrols'])) {
-                            $query_params[] = 'controls=0';
-                        }
-
-                        if (!empty($attributes['youloop'])) {
-                            $query_params[] = 'loop=1';
-                            $query_params[] = 'playlist=' . esc_attr($attributes['youvideoUrl']);
-                        }
-                
-                        if (!empty($attributes['startTime'])) {
-                            $query_params[] = 'start=' . intval($attributes['startTime']);
-                        }
-                
-                        if (!empty($attributes['endTime'])) {
-                            $query_params[] = 'end=' . intval($attributes['endTime']);
-                        }
-                
-                        if (isset($attributes['rel'])) {
-                            $query_params[] = $attributes['rel'] ? 'rel=1' : 'rel=0';
-                        }
-
-                        $query_string = implode('&', $query_params);
-
-                        $iframe_src = 'https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . $query_string;
-
-                        $image_html .= '<iframe
-                            width="' . $videoSize . '" 
-                            height = "' . $videoHeight .'"
-                            class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
-                            src="' . esc_url($iframe_src) . '"
-                            title="YouTube video player"
-                            frameborder="0"
-                            allow="autoplay; encrypted-media; web-share; picture-in-picture"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            ' . (!empty($attributes['youtubefullscreen']) ? 'allowfullscreen' : '') . '>
-                        </iframe>';
-
-                    }
-
-                    else if($attributes['blockValue'] === 'vimeo' && !empty($attributes['vimeourl'])){
-
-                        $vimeoQueryParams = [];
-
-                        if ( ! empty( $attributes['vimeoautoplay'] ) ) {
-                            $vimeoQueryParams[] = 'autoplay=1';
-                            $vimeoQueryParams[] ='muted=1';
-                        }
+                            $image_html .= '<div  class="vb-video-icon">';
+                                $image_html .= $this->content;
+                            $image_html .= '</div>';
+                        $image_html .= '</div>';
                     
-                        if ( ! empty( $attributes['vimeomuted'] ) ) {
-                            $vimeoQueryParams[] = 'muted=1';
-                        }
-                    
-                        if ( ! empty( $attributes['vimeoloop'] ) ) {
-                            $vimeoQueryParams[] = 'loop=1';
-                        }
-                    
-                        if ( isset( $attributes['vimeocontrols'] ) && $attributes['vimeocontrols'] === false ) {
-                            $vimeoQueryParams[] = 'controls=0';
-                        }
-                    
-                        if ( ! empty( $attributes['vimeobackground'] ) ) {
-                            $vimeoQueryParams[] = 'background=1';
-                        }
-                    
-                        $queryString = implode( '&', $vimeoQueryParams );
-                    
-                        $vimeoSrc = 'https://player.vimeo.com/video/' . $attributes['vimeourl'];
-                        if ( ! empty( $queryString ) ) {
-                            $vimeoSrc .= '?' . $queryString;
+
+                        if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
+
+                            $image_html .= '<video 
+                                width="' . $videoSize . '" 
+                                height = "' . $videoHeight .'"
+                                class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                                ' . $autoplay . ' 
+                                ' . $loop . ' 
+                                ' . $controls . ' 
+                                ' . $muted . ' 
+                                poster="' . $poster . '"
+                                controlsList="' . 
+                                    ($nofullscreen ? 'nofullscreen ' : '') .
+                                    ($nodownload ? 'nodownload ' : '') . 
+                                    ($noremoteplayback ? 'noremoteplayback ' : '') . 
+                                    ($noplaybackrate ? 'noplaybackrate ' : '') .'">
+                                <source src="' . $videoUrl . '" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>';
                         }
 
-                        $image_html .= '<iframe
-                            width="' . $videoSize . '" 
-                            height = "' . $videoHeight .'"
-                            class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
-                            src="' . esc_url($vimeoSrc) . '"
-                            title="YouTube video player"
-                            frameborder="0"
-                            allow="autoplay; encrypted-media; web-share; picture-in-picture"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            ' . (!empty($attributes['vimeofullscreen']) ? 'allowfullscreen' : '') . '>
-                        </iframe>';
-                    }
+                        else if($attributes['blockValue'] === 'you-tube' && !empty($attributes['youvideoUrl'])) {
+
+                            $query_params = [];
+
+                            if (!empty($attributes['youautoplay'])) {
+                                $query_params[] = 'autoplay=1';
+                                $query_params[] = 'mute=1';
+                            } else {
+                                $query_params[] = 'autoplay=0';
+                                $query_params[] = !empty($attributes['youtubemuted']) ? 'mute=1' : 'mute=0';
+                            }
+                    
+                            if (!empty($attributes['youcontrols'])) {
+                                $query_params[] = 'controls=0';
+                            }
+
+                            if (!empty($attributes['youloop'])) {
+                                $query_params[] = 'loop=1';
+                                $query_params[] = 'playlist=' . esc_attr($attributes['youvideoUrl']);
+                            }
+                    
+                            if (!empty($attributes['startTime'])) {
+                                $query_params[] = 'start=' . intval($attributes['startTime']);
+                            }
+                    
+                            if (!empty($attributes['endTime'])) {
+                                $query_params[] = 'end=' . intval($attributes['endTime']);
+                            }
+                    
+                            if (isset($attributes['rel'])) {
+                                $query_params[] = $attributes['rel'] ? 'rel=1' : 'rel=0';
+                            }
+
+                            $query_string = implode('&', $query_params);
+
+                            $iframe_src = 'https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . $query_string;
+
+                            $image_html .= '<iframe
+                                width="' . $videoSize . '" 
+                                height = "' . $videoHeight .'"
+                                class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                                src="' . esc_url($iframe_src) . '"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="autoplay; encrypted-media; web-share; picture-in-picture"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                ' . (!empty($attributes['youtubefullscreen']) ? 'allowfullscreen' : '') . '>
+                            </iframe>';
+
+                        }
+
+                        else if($attributes['blockValue'] === 'vimeo' && !empty($attributes['vimeourl'])){
+
+                            $vimeoQueryParams = [];
+
+                            if ( ! empty( $attributes['vimeoautoplay'] ) ) {
+                                $vimeoQueryParams[] = 'autoplay=1';
+                                $vimeoQueryParams[] ='muted=1';
+                            }
+                        
+                            if ( ! empty( $attributes['vimeomuted'] ) ) {
+                                $vimeoQueryParams[] = 'muted=1';
+                            }
+                        
+                            if ( ! empty( $attributes['vimeoloop'] ) ) {
+                                $vimeoQueryParams[] = 'loop=1';
+                            }
+                        
+                            if ( isset( $attributes['vimeocontrols'] ) && $attributes['vimeocontrols'] === false ) {
+                                $vimeoQueryParams[] = 'controls=0';
+                            }
+                        
+                            if ( ! empty( $attributes['vimeobackground'] ) ) {
+                                $vimeoQueryParams[] = 'background=1';
+                            }
+                        
+                            $queryString = implode( '&', $vimeoQueryParams );
+                        
+                            $vimeoSrc = 'https://player.vimeo.com/video/' . $attributes['vimeourl'];
+                            if ( ! empty( $queryString ) ) {
+                                $vimeoSrc .= '?' . $queryString;
+                            }
+
+                            $image_html .= '<iframe
+                                width="' . $videoSize . '" 
+                                height = "' . $videoHeight .'"
+                                class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                                src="' . esc_url($vimeoSrc) . '"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="autoplay; encrypted-media; web-share; picture-in-picture"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                ' . (!empty($attributes['vimeofullscreen']) ? 'allowfullscreen' : '') . '>
+                            </iframe>';
+                        }
 
                 $image_html .= '</div>';
-
-                    $image_html .= $this->overlay();
         
             $image_html .= '</div>';
         $image_html .= '</div>';
 
-        $classes[] = 'vb-video-' . $uniqueId;
+        //Modal
+        $unique_modal_id = wp_unique_id( 'vayu-modal-' . ( $attributes['uniqueId'] ?? '' ) );
+
+        $image_html .= '<div id="' . esc_attr($unique_modal_id) . '" class="vb-vayu-modal">';
+            $image_html .= '<div class="vb-vayu-modal-content">';
+                $image_html .= '<button class="vb-vayu-modal-close" aria-label="' . esc_attr__('Close modal', 'vayu-blocks') . '"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-hidden="true" focusable="false"><path d="M 6.225 4.811 L 4.811 6.225 L 10.586 12 L 4.811 17.775 L 6.225 19.189 L 12 13.414 L 17.775 19.189 L 19.189 17.775 L 13.414 12 L 19.189 6.225 L 17.775 4.811 L 12 10.586 Z"></path></svg></button>';
+                $image_html .= '<div class="vb-vayu-modal-body">';
+
+                        if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
+
+                            $image_html .= '<video 
+                                class="vb-video-iframe"
+                                    autoplay
+                                ' . $loop . ' 
+                                ' . $controls . ' 
+                                ' . $muted . ' 
+                                poster="' . $poster . '"
+                                controlsList="' . 
+                                    ($nofullscreen ? 'nofullscreen ' : '') .
+                                    ($nodownload ? 'nodownload ' : '') . 
+                                    ($noremoteplayback ? 'noremoteplayback ' : '') . 
+                                    ($noplaybackrate ? 'noplaybackrate ' : '') .'">
+                                <source src="' . $videoUrl . '" type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>';
+                        }
+
+                        else if($attributes['blockValue'] === 'you-tube' && !empty($attributes['youvideoUrl'])) {
+
+                            $query_params = [];
+
+                      
+                            $query_params[] = 'autoplay=1';
+                            $query_params[] = 'mute=1';
+                    
+                            if (!empty($attributes['youcontrols'])) {
+                                $query_params[] = 'controls=0';
+                            }
+
+                            if (!empty($attributes['youloop'])) {
+                                $query_params[] = 'loop=1';
+                                $query_params[] = 'playlist=' . esc_attr($attributes['youvideoUrl']);
+                            }
+                    
+                            if (!empty($attributes['startTime'])) {
+                                $query_params[] = 'start=' . intval($attributes['startTime']);
+                            }
+                    
+                            if (!empty($attributes['endTime'])) {
+                                $query_params[] = 'end=' . intval($attributes['endTime']);
+                            }
+                    
+                            if (isset($attributes['rel'])) {
+                                $query_params[] = $attributes['rel'] ? 'rel=1' : 'rel=0';
+                            }
+
+                            $query_string = implode('&', $query_params);
+
+                            $iframe_src = 'https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . $query_string;
+
+                            $image_html .= '<iframe
+                                class="vb-video-iframe"
+                                src="' . esc_url($iframe_src) . '"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="autoplay; encrypted-media; web-share; picture-in-picture"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                ' . (!empty($attributes['youtubefullscreen']) ? 'allowfullscreen' : '') . '>
+                            </iframe>';
+                        }
+
+                        else if($attributes['blockValue'] === 'vimeo' && !empty($attributes['vimeourl'])){
+
+                            $vimeoQueryParams = [];
+
+                        
+                            $vimeoQueryParams[] = 'autoplay=1';
+                            $vimeoQueryParams[] ='muted=1';
+                        
+                            if ( ! empty( $attributes['vimeomuted'] ) ) {
+                                $vimeoQueryParams[] = 'muted=1';
+                            }
+                        
+                            if ( ! empty( $attributes['vimeoloop'] ) ) {
+                                $vimeoQueryParams[] = 'loop=1';
+                            }
+                        
+                            if ( isset( $attributes['vimeocontrols'] ) && $attributes['vimeocontrols'] === false ) {
+                                $vimeoQueryParams[] = 'controls=0';
+                            }
+                        
+                            if ( ! empty( $attributes['vimeobackground'] ) ) {
+                                $vimeoQueryParams[] = 'background=1';
+                            }
+                        
+                            $queryString = implode( '&', $vimeoQueryParams );
+                        
+                            $vimeoSrc = 'https://player.vimeo.com/video/' . $attributes['vimeourl'];
+                            if ( ! empty( $queryString ) ) {
+                                $vimeoSrc .= '?' . $queryString;
+                            }
+
+                            $image_html .= '<iframe
+                                class="vb-video-iframe"
+                                src="' . esc_url($vimeoSrc) . '"
+                                title="YouTube video player"
+                                frameborder="0"
+                                allow="autoplay; encrypted-media; web-share; picture-in-picture"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                ' . (!empty($attributes['vimeofullscreen']) ? 'allowfullscreen' : '') . '>
+                            </iframe>';
+                        }
+
+                $image_html .= '</div>';
+            $image_html .= '</div>';
+        $image_html .= '</div>';
+
+        $classes[] = 'vb-vide-view vb-video-' . $uniqueId;
 
         if ( ! empty( $classhover ) ) {
             $classes[] = $classhover;
@@ -252,56 +377,7 @@ class Vayu_blocks_video {
 
     }
     
-    //overlay
-    private function overlay() {
-        $attributes = $this->attr; // Access attributes
-        $overlay = '';
-        $imageHvrEffect = isset($attributes['animationData']['hovereffect']['value']) ? esc_attr($attributes['animationData']['hovereffect']['value']) : '';
-        $imageHvrAnimation = isset($attributes['animationData']['imageAnimation']['animationValue']) ? esc_attr($attributes['animationData']['imageAnimation']['animationValue']) : '';
-        $overlaywrapper = isset($attributes['overlaywrapper']) ? esc_attr($attributes['overlaywrapper']) : '';
 
-        $animation_classname = '';
-
-        $hover = isset($attributes['animationData']['imageAnimation']['hover']) ? $attributes['animationData']['imageAnimation']['hover'] : '';
-        $animationValue = isset($attributes['animationData']['imageAnimation']['animationValue']) ? $attributes['animationData']['imageAnimation']['animationValue'] : '';
-        
-        if ($hover === 'without-hvr') {
-            $animation_classname = $animationValue;
-        } elseif ($hover === 'with-hvr') {
-            $animation_classname = $animationValue . 'hvr';
-        } elseif ($hover === 'one-time') {
-            $animation_classname = $animationValue . 'onetime';
-        } else {
-            $animation_classname = ''; // Default case
-        }
-        
-        // Wrapper animation fix
-        $wrapperanimation = '';
-        if (isset($attributes['animationData']['effect']['animationValue']) && $attributes['animationData']['effect']['animationValue'] === 'vayu_block_styling-effect7') {
-            $wrapperanimation = 'vayu_block_styling-overlay-effect';
-        }
-        
-
-        $imagemaskshape = isset($attributes['animationData']['mask']['maskshape']) && $attributes['animationData']['mask']['maskshape'] !== 'none' ? 'maskshapeimage' : '';
-
-        $overlay .= '<div class="vb-video-overlay-wrapper' 
-        . (!empty($wrapperanimation) && $wrapperanimation !== 'none' ? ' ' . $wrapperanimation : '') 
-        . (!empty($overlaywrapper) && $overlaywrapper !== 'none' ? ' ' . $overlaywrapper : '') 
-        . (!empty($imageHvrEffect) && $imageHvrEffect !== 'none' ? ' ' . $imageHvrEffect : '') 
-        . (!empty($animation_classname) && $animation_classname !== 'none' ? ' ' . $animation_classname : '') 
-        . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') 
-        . '">';
-    
-            if(!empty($attributes['overlayshow'])){
-                $overlay .= $this->content;
-            }
-
-        $overlay .= '</div>';
-    
-        return $overlay;
-    }
-
-    // Inside the same class
     private function safe_attr($array, $keyPath, $default = '') {
         $value = $array;
         foreach (explode('.', $keyPath) as $key) {

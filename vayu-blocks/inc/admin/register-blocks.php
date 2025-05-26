@@ -12,7 +12,7 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
         // Define the block-specific render callbacks in an associative array
         $blocks_with_render_callbacks = array(
             'advance-heading' => array(
-                'isActive'        => 1,
+                'isActive'        => isset($options['heading']['isActive']) ? $options['heading']['isActive'] : 1,
                 'render_callback' => 'vayu_blocks_advance_heading_render',
             ),
             'advance-button'=> array(
@@ -48,7 +48,7 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'render_callback' => 'vayu_blocks_flip_wrapper_render',
             ),
             'advance-query-loop'       => array(
-                'isActive'        => 1, 
+                'isActive'        => isset($options['advanceQueryLoop']['isActive']) ? $options['advanceQueryLoop']['isActive'] : 1,
                 'render_callback' => 'vayu_block_loop_render',
             ),
             'wrapper'       => array(
@@ -83,11 +83,11 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'render_callback' => 'vayu_block_advance_timeline_render',
             ),
             'post-pagination'  => array(
-                'isActive'        => 1,
+                'isActive'        => isset($options['postPagination']['isActive']) ? $options['postPagination']['isActive'] : 1,
                 'render_callback' => 'vayu_block_post_pagination_render',
             ),
             'swipe-slider'       => array(
-                'isActive'        => 1,
+                'isActive'        => isset($options['advanceSlider']['isActive']) ? $options['advanceSlider']['isActive'] : 1,
                 'render_callback' => 'vayu_block_swipe_slider_render',
                 
             ),
@@ -101,7 +101,7 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
         // Check if WooCommerce is active before adding the advance-product block
         if (class_exists('WooCommerce')) {
             $blocks_with_render_callbacks['advance-product'] = array(
-                'isActive'        => 1,
+                'isActive'        => isset($options['product']['isActive']) ? $options['product']['isActive'] : 1,
                 'render_callback' => array( new Vayu_Advance_Product_Tab(), 'render_callback' ),
             );
         }

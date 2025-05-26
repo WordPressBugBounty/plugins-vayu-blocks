@@ -127,8 +127,6 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         return $style;
     }
 
-    
-
     function _depricateborderRadiusShadow($border,$radius,$shadow,$device='Desktop',$hover='',$pre='Hover'){   
 
         $style = ''; 
@@ -451,19 +449,6 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
                 $offsetKey = 'offset' . $verti;
                 $offset = isset($position[$offsetKey][$device]) ? $position[$offsetKey][$device] : '0px';
 
-                // Apply additional offset if it's 'top'
-                if ($verti === 'top' && is_user_logged_in()) {
-                    if (is_string($offset)) {
-                        if (strpos($offset, 'px') !== false) {
-                            $numeric = floatval($offset);
-                            $offset = ($numeric + 32) . 'px';
-                        } elseif (strpos($offset, '%') !== false) {
-                            $numeric = floatval($offset);
-                            $offset = ($numeric + 6) . '%';
-                        }
-                    }
-                }
-
                 $style .= "{$verti}: {$offset};";
             }
 
@@ -569,9 +554,7 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
 
         $style = [];
 
-        if ($widthtype === 'fullwidth') {
-            $style[] = 'width:100%;';
-        } elseif ($widthtype === 'inlinewidth') {
+       if ($widthtype === 'inlinewidth') {
             $style[] = 'display:inline-flex;';
             $style[] = 'max-width:fit-content;';
         } elseif ($widthtype === 'customwidth') {
@@ -631,7 +614,12 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         // Margin
         if (!empty($attr['advMargin'])) {
             $mainStyles .= $this->dimensions('advMargin', 'margin', 'Desktop');
+        } else {
+            if (isset($attr['advWidth']['value']) && $attr['advWidth']['value'] === 'customwidth') {
+                $mainStyles .= "margin:0 !important;";
+            }
         }
+
     
         // Transition
         if (!empty($attr['advTransition'])) {
@@ -661,7 +649,7 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         // Responsive Media Queries
         $mediaQueries = [
             '1024px' => 'Tablet',
-            '400px' => 'Mobile'
+            '767px' => 'Mobile'
         ];
     
         foreach ($mediaQueries as $maxWidth => $device) {

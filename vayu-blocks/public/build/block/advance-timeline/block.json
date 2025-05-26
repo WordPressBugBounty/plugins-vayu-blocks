@@ -5,6 +5,10 @@
   "version": "0.2.0",
   "title": "Timeline",
   "category": "vayu-blocks",
+  "keywords": [
+    "timeline",
+    "advance timeline"
+  ],
   "description": "A block to showcase events or milestones in chronological order.",
   "supports": {
     "html": false,

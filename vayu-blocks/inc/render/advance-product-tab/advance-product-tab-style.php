@@ -17,9 +17,8 @@ function vayu_advance_product_tab_style($attr){
 
         $css .= $OBJ_STYLE->advanceStyle($wrapper);
         // Advanced setting end
-
-
-        if (isset($attr['productCol'])) {
+        
+        if (isset($attr['productCol']['Desktop'])) {
 
         $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-item-wrap{";
             
@@ -27,6 +26,12 @@ function vayu_advance_product_tab_style($attr){
 
         $css .= "}";
 
+        }else{
+        $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-item-wrap{";
+            
+        $css .= "grid-template-columns:repeat(3,minmax(0, 1fr))";
+
+        $css .= "}";
         }
 
         //tab style
@@ -144,47 +149,12 @@ function vayu_advance_product_tab_style($attr){
         $css .= isset( $attr['buttonTxtClr'] ) ? "color:{$attr['buttonTxtClr'] };" : 'color:#fff;';
         $css .= isset( $attr['buttonBgClr'] ) ? "background:{$attr['buttonBgClr'] };" : '';
 
-        if (isset($attr['buttonTopBorder'])) {
-        $borderType = $attr['buttonTopborderType'] ?? 'solid';
-        $css .= "border-top: {$attr['buttonTopBorder']} {$borderType} {$attr['buttonTopBorderColor']}; ";
-        }
-        if (isset($attr['buttonBottomBorder'])) {
-            $borderType = $attr['buttonBottomborderType'] ?? 'solid';
-            $css .= "border-bottom: {$attr['buttonBottomBorder']} {$borderType} {$attr['buttonBottomBorderColor']}; ";
-        }
-        if (isset($attr['buttonRightBorder'])) {
-            $borderType = $attr['buttonRightborderType'] ?? 'solid';
-            $css .= "border-right: {$attr['buttonRightBorder']} {$borderType} {$attr['buttonRightBorderColor']}; ";
-        }
-        if (isset($attr['buttonLeftBorder'])) {
-            $borderType = $attr['buttonLeftborderType'] ?? 'solid';
-            $css .= "border-left: {$attr['buttonLeftBorder']} {$borderType} {$attr['buttonLeftBorderColor']}; ";
-        }
-
-        //Border-radius
-		if (isset($attr['buttonRadius']) && is_array($attr['buttonRadius'])) {
-            // Check for null explicitly and only default empty or missing values
-            $buttonRadiusTop = (isset($attr['buttonRadius']['top']) && $attr['buttonRadius']['top'] !== null) ? $attr['buttonRadius']['top'] : '0px';
-            $buttonRadiusRight = (isset($attr['buttonRadius']['right']) && $attr['buttonRadius']['right'] !== null) ? $attr['buttonRadius']['right'] : '0px';
-            $buttonRadiusBottom = (isset($attr['buttonRadius']['bottom']) && $attr['buttonRadius']['bottom'] !== null) ? $attr['buttonRadius']['bottom'] : '0px';
-            $buttonRadiusLeft = (isset($attr['buttonRadius']['left']) && $attr['buttonRadius']['left'] !== null) ? $attr['buttonRadius']['left'] : '0px';
-            $css .= "border-radius: {$buttonRadiusTop} {$buttonRadiusRight} {$buttonRadiusLeft} {$buttonRadiusBottom}; ";
-        }
+        $css .= $OBJ_STYLE->borderRadiusShadow('buttonBorder', 'buttonRadius', 'buttonShadow', 'Desktop');
         //buttonSpacing
-        if (isset($attr['buttonSpacePadding']) && is_array($attr['buttonSpacePadding'])) {
-            // Check for null explicitly and only default empty or missing values
-            $paddingTop = (isset($attr['buttonSpacePadding']['top']) && $attr['buttonSpacePadding']['top'] !== null) ? $attr['buttonSpacePadding']['top'] : '0px';
-            $paddingRight = (isset($attr['buttonSpacePadding']['right']) && $attr['buttonSpacePadding']['right'] !== null) ? $attr['buttonSpacePadding']['right'] : '0px';
-            $paddingBottom = (isset($attr['buttonSpacePadding']['bottom']) && $attr['buttonSpacePadding']['bottom'] !== null) ? $attr['buttonSpacePadding']['bottom'] : '0px';
-            $paddingLeft = (isset($attr['buttonSpacePadding']['left']) && $attr['buttonSpacePadding']['left'] !== null) ? $attr['buttonSpacePadding']['left'] : '0px';
-            // Append the padding to the CSS string
-            $css .= "padding: {$paddingTop} {$paddingRight} {$paddingBottom} {$paddingLeft};\n";
+        if (isset($attr['buttonSpacing']) && is_array($attr['buttonSpacing'])) {
+             $css .= $OBJ_STYLE->dimensions('buttonSpacing', 'padding', 'Desktop');
         }
-        
-        
         $css .= "}";
-
-        
         $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-add-btn a:hover{";
         $css .= isset( $attr['buttonTxtClrHvr'] ) ? "color:{$attr['buttonTxtClrHvr'] };" : '';
         $css .= isset( $attr['buttonBgClrHvr'] ) ? "background:{$attr['buttonBgClrHvr'] };" : '';
@@ -335,6 +305,15 @@ function vayu_advance_product_tab_style($attr){
             $css .= "}";
 		}
 
+        //button
+        $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-add-btn a{";
+        $css .= $OBJ_STYLE->borderRadiusShadow('buttonBorder', 'buttonRadius', 'buttonShadow', 'Tablet');
+        //buttonSpacing
+        if (isset($attr['buttonSpacing']) && is_array($attr['buttonSpacing'])) {
+             $css .= $OBJ_STYLE->dimensions('buttonSpacing', 'padding', 'Tablet');
+        }
+        $css .= "}";
+
         $css .= "}"; 
         
         // start tablet view
@@ -352,7 +331,7 @@ function vayu_advance_product_tab_style($attr){
 
             if($showTab):
 
-                 $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-cat-filter ul.category-tabs{";
+                $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-cat-filter ul.category-tabs{";
                 $css .= isset( $attr['tabAlign'] ) ? "justify-content:{$attr['tabAlign']['Mobile'] };" : 'justify-content:center;';
                 $css .= "}";
                 
@@ -398,6 +377,15 @@ function vayu_advance_product_tab_style($attr){
             $css .= "grid-column-gap:{$attr['elementGap']['Mobile']};";
             $css .= "}";
 		}
+
+        //button
+        $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-add-btn a{";
+        $css .= $OBJ_STYLE->borderRadiusShadow('buttonBorder', 'buttonRadius', 'buttonShadow', 'Mobile');
+        //buttonSpacing
+        if (isset($attr['buttonSpacing']) && is_array($attr['buttonSpacing'])) {
+             $css .= $OBJ_STYLE->dimensions('buttonSpacing', 'padding', 'Mobile');
+        }
+        $css .= "}";
 
         $css .= "}"; 
         

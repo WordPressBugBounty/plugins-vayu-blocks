@@ -27,7 +27,7 @@ function vayu_blocks_advance_heading_render( $attributes, $content, $block ) {
 
     $source_field = isset( $attributes['selectedSourceField'] ) ? $attributes['selectedSourceField'] : 'none';
 	$selectedPost = isset( $attributes['selectedPost'] ) ? $attributes['selectedPost'] : 'none';
-    
+    $animationCls   = !empty($attributes['advAnimation']['className']) ? esc_attr($attributes['advAnimation']['className']) : '';
   
     // Fetch the postId
     $post_id = ($selectedPost !== 'none') ? $selectedPost : $post->ID;
@@ -119,6 +119,8 @@ function vayu_blocks_advance_heading_render( $attributes, $content, $block ) {
 	if(isset( $attributes['headinganimation'] )){
 		$classes[] = 'vayu_blocks_heading_image_animation-heading';
 	}
+
+	$classes[] = $animationCls;
 
     $wrapper_attributes .= get_block_wrapper_attributes( array( 'class' => implode( ' ', $classes ) ) );
 

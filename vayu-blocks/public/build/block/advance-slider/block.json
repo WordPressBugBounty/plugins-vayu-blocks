@@ -7,7 +7,9 @@
   "category": "vayu-blocks",
   "keywords": [
     "carousel",
-    "slideshow"
+    "slideshow",
+    "slider",
+    "advance slider"
   ],
   "description": " A block to showcase images or content in a sliding carousel.",
   "supports": {

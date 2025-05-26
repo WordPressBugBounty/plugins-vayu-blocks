@@ -10,7 +10,8 @@
     "youtube",
     "media",
     "embed",
-    "advance video"
+    "advance video",
+    "vimeo"
   ],
   "description": "A block to embed and display videos from various sources, like Media, and YouTube, directly on your website.",
   "supports": {

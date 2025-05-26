@@ -5,6 +5,10 @@
   "version": "0.2.0",
   "title": "Flip Box",
   "category": "vayu-blocks",
+  "keywords": [
+    "flipbox",
+    "advance flipbox"
+  ],
   "description": "A block to display content that flips on hover for an engaging effect.",
   "supports": {
     "html": false,

@@ -36,7 +36,7 @@ function vayu_unfold_style($attr){
         $css .= "$wrapper .unfold-content:not(.unfolded){max-height: 100px; }";
     }
 
-   if (isset($attr['contentGradient']) && isset($attr['contentGradientbo'])) {
+    if (isset($attr['contentGradient']) && isset($attr['contentGradientbo'])) {
         $gradient   = !empty($attr['contentGradient']) ? esc_attr($attr['contentGradient']) : 'transparent';
         $gradientbo = !empty($attr['contentGradientbo']) ? esc_attr($attr['contentGradientbo']) : 'transparent';
 

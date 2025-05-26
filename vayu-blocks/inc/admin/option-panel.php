@@ -26,7 +26,7 @@ class VAYU_BLOCKS_OPTION_PANEL {
             'advanceTimeline' =>  array( 'isActive' => true,'type'=>'free'),
             'blurb' =>  array( 'isActive' => true,'type'=>'free'),
             'unfold' =>  array( 'isActive' => true,'type'=>'free'),
-            'post-pagination' =>  array( 'isActive' => true,'type'=>'free'),
+            'postPagination' =>  array( 'isActive' => true,'type'=>'free'),
         );
 
         }

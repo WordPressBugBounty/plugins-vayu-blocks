@@ -118,7 +118,7 @@ function generate_inline_slider_styles($attr) {
     $css .= "}";
    
     // Tablet Navigation
-    $css .= "@media (max-width: 1024px) {";
+    $css .= "@media (min-width: 768px) and (max-width: 1024px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
             $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Tablet');
             $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Tablet');	
@@ -153,7 +153,7 @@ function generate_inline_slider_styles($attr) {
     $css .= "}";
 
     // Mobile Navigation
-    $css .= "@media (max-width: 400px) {";
+    $css .= "@media (max-width: 767px) {";
         $css .= ".swiper-button-next, .swiper-button-prev {";
             $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Mobile');
             $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Mobile');	

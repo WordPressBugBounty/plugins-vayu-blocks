@@ -183,7 +183,7 @@ function generate_inline_timeline_child_styles($attr) {
     $css .= "}";
      
     // Tablet styles
-    $css .= "@media screen and (max-width: 1024px) {";
+    $css .= "@media  (min-width: 768px) and (max-width: 1024px) {";
         $css .= "$wrapper {";
             $css .= $OBJ_STYLE->borderRadiusShadow('layoutborder', 'layoutradius', 'layoutShadow', 'Tablet');
             $css .= $OBJ_STYLE->dimensions('layoutmargin', 'margin', 'Tablet');

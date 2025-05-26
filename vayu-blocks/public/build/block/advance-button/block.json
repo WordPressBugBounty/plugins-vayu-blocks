@@ -5,6 +5,10 @@
   "version": "0.1.0",
   "title": "Advance Button",
   "category": "vayu-blocks",
+  "keywords": [
+    "button",
+    "advance button"
+  ],
   "description": "A block to create interactive and visually appealing call-to-action buttons.",
   "textdomain": "vayu-blocks",
   "editorScript": "file:./index.js",
@@ -241,12 +245,6 @@
         }
       }
     },
-    "newButtonalignment": {
-      "type": "object",
-      "Desktop": "",
-      "Tablet": "",
-      "Mobile": ""
-    },
     "iconSpacing": {
       "type": "string",
       "default": "12px"
@@ -265,6 +263,10 @@
         "infinite": {},
         "background": {}
       }
+    },
+    "selectedEffect": {
+      "type": "string",
+      "default": "none"
     }
   },
   "supports": {

@@ -11,7 +11,7 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
     $tag_name       = !empty($attributes['containerHTMLTag']) ? esc_attr($attributes['containerHTMLTag']) : 'div';
     $className      = !empty($attributes['className']) ? esc_attr($attributes['className']) : '';
 	$content_width  = !empty($attributes['contentWidthType']) ? esc_attr($attributes['contentWidthType']) : 'boxed';
-
+    $animationCls   = !empty($attributes['advAnimation']['className']) ? esc_attr($attributes['advAnimation']['className']) : '';
 	// Detect if current block is nested inside another vayu container block
 	global $post;
 	if ($post && $unique_id) {
@@ -43,6 +43,8 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
 			$classes[] = 'alignwide-content';
 			break;
 	}
+
+    $classes[] = $animationCls;
 
     // Handle $className as a comma-separated string
     if (!empty($className)) {

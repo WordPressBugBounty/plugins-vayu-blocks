@@ -13,14 +13,18 @@ return array(
         'imagehvrfilter' => 'none',
         'imageoverlayouteffect' => 'none',
         'overlayhvrcolor' => '',
-        'overlaycolor' => 'transparent',
+        
         'focalPoint' => array(
             'x' => 0.5,
             'y' => 0.5,
         ),
         'imageborderradiuscircle' => 'square',
         'imagecover' => 'cover',
-        'imageaspectratio' => array(),
+        'imageaspectratio' => array(
+            'Desktop' => '16/9',
+            'Tablet' =>'16/9',
+            'Mobile' =>'16/9'
+        ),
         'duotone' => '',
         'showPreview' => false,
         'overlayalignment' => 'center center',
@@ -123,7 +127,6 @@ return array(
         'nodownload'=> false,
         'noremoteplayback'=> false,
         'noplaybackrate'=> false,
-        'pipfront'=> false,
         'blockValue'=>'',
         'youvideoUrl'=>'',
         'heightvideosize'=>300,
@@ -152,5 +155,26 @@ return array(
             'Mobile'  => '560px'
         ),
         'youtubeshorts' => false,
+        
+        'posterOn'=>false,
+        'poimage'=>'',
+        'pofocalPoint'=> array(
+            'x'=> 0.5,
+            'y'=> 0.5,
+        ),
+        'lightbox'=>false,
+        'pooverlaycolor' => 'transparent',
+        'pooverlayopacity' => 0.5,
+        'lightboxcolor' => '',
+
+        'cancelcolor'=>'',
+        'cancelbg'=>'white',
+        'cancelcolorhover'=>'',
+        'cancelbghover'=> '',
+        'cancelSize' => array(
+            'Desktop' => '30px',
+            'Tablet' => '30px',
+            'Mobile' => '30px',
+        ),
 );
 ?>

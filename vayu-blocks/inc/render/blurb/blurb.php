@@ -14,6 +14,10 @@ function vayu_block_blurb_render($attributes, $content, $block) {
         }
     }
 
+    if (!empty($attributes['advAnimation']['className'])) {
+        $classnames .= ' ' . esc_attr(trim($attributes['advAnimation']['className']));
+    }
+
     $wrapper_attributes = '';
     // Get block wrapper attributes
     $wrapper_attributes .= get_block_wrapper_attributes(['class' => trim($classnames)]);

@@ -6,11 +6,12 @@
   "category": "vayu-blocks",
   "description": "A block to display posts with advanced filtering options.",
   "keywords": [
+    "query block",
+    "advance query block",
     "posts",
-    "list",
     "blog",
-    "blogs",
-    "custom post types"
+    "custom post",
+    "woocommerce product"
   ],
   "textdomain": "vayu-blocks",
   "attributes": {

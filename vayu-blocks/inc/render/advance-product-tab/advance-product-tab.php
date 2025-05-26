@@ -107,17 +107,17 @@ class Vayu_Advance_Product_Tab {
     //product per page
     $device_type = $this->device_check();
 
-    if ($device_type === 'tablet' && isset($attr['productShowTablet'])) {
+    if ($device_type === 'tablet' && isset($attr['productShow']['Tablet'])) {
 
-        $perpageproduct = $attr['productShowTablet'];
+        $perpageproduct = $attr['productShow']['Tablet'];
 
-    } elseif ($device_type === 'mobile' && isset($attr['productShowMobile'])) {
+    } elseif ($device_type === 'mobile' && isset($attr['productShow']['Mobile'])) {
 
-        $perpageproduct = $attr['productShowMobile'];
+        $perpageproduct = $attr['productShow']['Mobile'];
 
     } else {
 
-        $perpageproduct = isset($attr['productShow']) ? $attr['productShow'] : 4;
+        $perpageproduct = isset($attr['productShow']['Desktop']) ? $attr['productShow']['Desktop'] : 6;
 
     }
     
@@ -274,17 +274,16 @@ class Vayu_Advance_Product_Tab {
         "rating",
         "button"
     ];
-
     
     // Get the 'template' attribute from $attr or use the default template
     $template = isset($attr['template']) && is_array($attr['template']) ? $attr['template'] : $default_template;
-    
+    $animationCls   = !empty($attr['advAnimation']['className']) ? esc_attr($attr['advAnimation']['className']) : '';
     $product_content .= '<div class="th-product-block-product-item-wrap" total-page="'.esc_attr($total_pages).'">';
 
     foreach ($results->products as $product) {
 
         $product_content .= '
-            <div class="th-product-item" key="' . esc_attr($product->get_id()) . '">
+            <div class="th-product-item '.$animationCls.'" key="' . esc_attr($product->get_id()) . '">
                 <div class="th-product-block-content-wrap">';
 
         foreach ($template as $element) {
@@ -569,17 +568,17 @@ public function load_category_products(){
 
     $device_type = $this->device_check();
 
-    if ($device_type === 'tablet' && isset($attr['productShowTablet'])) {
+    if ($device_type === 'tablet' && isset($attr['productShow']['Tablet'])) {
 
-        $perpageproduct = $attr['productShowTablet'];
+        $perpageproduct = $attr['productShow']['Tablet'];
 
-    } elseif ($device_type === 'mobile' && isset($attr['productShowMobile'])) {
+    } elseif ($device_type === 'mobile' && isset($attr['productShow']['Mobile'])) {
 
-        $perpageproduct = $attr['productShowMobile'];
+        $perpageproduct = $attr['productShow']['Mobile'];
 
     } else {
 
-        $perpageproduct = isset($attr['productShow']) ? $attr['productShow'] : 4;
+        $perpageproduct = isset($attr['productShow']['Desktop']) ? $attr['productShow']['Desktop'] : 6;
 
     }
     
@@ -751,13 +750,13 @@ public function load_category_products(){
 
     // Get the 'template' attribute from $attr or use the default template
     $template = isset($attr['template']) && is_array($attr['template']) ? $attr['template'] : $default_template;
-   
+    $animationCls   = !empty($attr['advAnimation']['className']) ? esc_attr($attr['advAnimation']['className']) : '';
     $product_content .= '<div class="th-product-block-product-item-wrap" total-page="'.esc_attr($total_pages).'">';
 
     foreach ($results->products as $product) {
 
         $product_content .= '
-            <div class="th-product-item" key="' . esc_attr($product->get_id()) . '">
+            <div class="th-product-item '.$animationCls.'" key="' . esc_attr($product->get_id()) . '">
                 <div class="th-product-block-content-wrap">';
 
         foreach ($template as $element) {

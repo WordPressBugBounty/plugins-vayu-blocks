@@ -4,37 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
 
-// Function to generate responsive CSS
-function generateResponsiveCSS($OBJ_STYLE, $wrapper, $devices = ['Desktop', 'Tablet', 'Mobile']) {
-    $css = "";
-
-    foreach ($devices as $device) {
-        $mediaQuery = match ($device) {
-            'Tablet' => '@media (max-width: 1024px) {',
-            'Mobile' => '@media (max-width: 400px) {',
-            default => '',
-        };
-
-        $iconMainBlockStyles = $OBJ_STYLE->dimensions('iconmargin', 'margin', $device);
-        $iconBlockStyles = $OBJ_STYLE->borderRadiusShadow('iconsBorder', 'iconsRadius', 'iconsDropShadow', $device) .
-                           $OBJ_STYLE->dimensions('iconpadding', 'padding', $device);
-
-        if (!empty($iconMainBlockStyles) || !empty($iconBlockStyles)) {
-            $css .= $mediaQuery ? $mediaQuery : '';
-
-            if (!empty($iconMainBlockStyles)) {
-                $css .= "$wrapper .vayu_blcoks_icon_main_blocks_icon { $iconMainBlockStyles }";
-            }
-            if (!empty($iconBlockStyles)) {
-                $css .= "$wrapper .vb-icon-block-main-container { $iconBlockStyles }";
-            }
-
-            $css .= $mediaQuery ? " }" : '';
-        }
-    }
-
-    return $css;
-}
 
 function generate_inline_icon_styles($attr) {
     $css = '';
@@ -139,55 +108,51 @@ function generate_inline_icon_styles($attr) {
 
     $css .= "}";
 
-    $css .= "@media (min-width: 400px) and (max-width: 1024px)  {";
+    // For tablet
+    $css .= "@media (min-width: 768px) and (max-width: 1024px) {";
 
-        $css .="$wrapper .vb-icon-text text{";
+        $css .= "$wrapper .vb-icon-text text{";
             $css .= $OBJ_STYLE->typography('typography','Tablet');
         $css .= "}";
 
         $style = $OBJ_STYLE->dimensions('textpadding','padding', 'Tablet');
-
         if ( ! empty( $style ) ) {
             $css .= "$wrapper .vb-icon-text { $style }";
         }
 
-    $css .= "}";
-    
-    $css .=  "@media (max-width: 1024px) {".
-
         $borderStyle = $OBJ_STYLE->borderRadiusShadow('iconsBorder','iconsRadius','iconsDropShadow','Tablet');
         $paddingStyle = $OBJ_STYLE->dimensions('iconpadding','padding','Tablet');
-
         $style = $borderStyle . $paddingStyle;
 
         if ( ! empty( $style ) ) {
             $css .= $wrapper . " .vb-icon-block-main-container { $style }";
         }
 
-        $wrapper." .vb-icon-block-main-container:hover {".  
-            $OBJ_STYLE->borderRadiusShadow('iconsBorder', 'iconsRadius', 'iconsDropShadow','Tablet','Hover', 'Hover').
-        "}".
+        $css .= $wrapper." .vb-icon-block-main-container:hover {";
+            $css .= $OBJ_STYLE->borderRadiusShadow('iconsBorder', 'iconsRadius', 'iconsDropShadow','Tablet','Hover', 'Hover');
+        $css .= "}";
 
-        $wrapper." .vb-icon-animation {".
-            $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Tablet').
-        "}".
+        $css .= $wrapper." .vb-icon-animation {";
+            $css .= $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Tablet');
+        $css .= "}";
 
-        $wrapper.".vayu_blcoks_icon_main_blocks_icon:hover .vb-icon-animation{".
-            $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Tablet', 'Hover').
-        "}
+        $css .= $wrapper.".vayu_blcoks_icon_main_blocks_icon:hover .vb-icon-animation{";
+            $css .= $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Tablet', 'Hover');
+        $css .= "}";
 
-        $wrapper {
-            justify-content: " . (isset($attr['alignment']['Tablet']) ? esc_attr($attr['alignment']['Tablet']) : '') . ";
-        }
+        $css .= "$wrapper {";
+            $css .= "justify-content: " . (isset($attr['alignment']['Tablet']) ? esc_attr($attr['alignment']['Tablet']) : '') . ";";
+        $css .= "}";
 
-        $wrapper $inline {
-            width: " . (isset($attr['imagewidthtablet']) ? esc_attr($attr['imagewidthtablet']) : 'auto') . ";
-            height: " . (isset($attr['imageheighttablet']) ? esc_attr($attr['imageheighttablet']) : 'auto') . ";
-        }
-        }";
+        $css .= "$wrapper $inline {";
+            $css .= "width: " . (isset($attr['imagewidthtablet']) ? esc_attr($attr['imagewidthtablet']) : 'auto') . ";";
+            $css .= "height: " . (isset($attr['imageheighttablet']) ? esc_attr($attr['imageheighttablet']) : 'auto') . ";";
+        $css .= "}";
+
     $css .= "}";
 
-    $css .= "@media (max-width: 400px) {";
+    // For mobile
+    $css .= "@media (max-width: 767px) {";
 
         // Apply typography styles for .vb-icon-text
         $css .= "$wrapper .vb-icon-text {";
@@ -196,30 +161,21 @@ function generate_inline_icon_styles($attr) {
 
         // Apply padding styles for .vb-icon-text
         $style = $OBJ_STYLE->dimensions('textpadding','padding','Mobile');
-
         if ( ! empty( $style ) ) {
             $css .= "$wrapper .vb-icon-text { $style }";
         }
+        
+        $css .= "$wrapper {";
+            $css .= "justify-content: " . (isset($attr['alignment']['Mobile']) ? esc_attr($attr['alignment']['Mobile']) : '') . ";";
+        $css .= "}";
 
-    $css .= "}";  // Closing brace for @media query
-
-    $css .= "@media (max-width: 400px) {  
-   
-        $wrapper {
-            justify-content: " . (isset($attr['alignment']['Mobile']) ? esc_attr($attr['alignment']['Mobile']) : '') . ";
-        }
-
-        $wrapper $inline {
-            width: " . (isset($attr['imagewidthmobile']) ? esc_attr($attr['imagewidthmobile']) : 'auto') . ";
-            height: " . (isset($attr['imageheightmobile']) ? esc_attr($attr['imageheightmobile']) : 'auto') . ";
-        }
-    }";
- 
-    $css .= "@media (max-width: 400px) {"; 
+        $css .= "$wrapper $inline {";
+            $css .= "width: " . (isset($attr['imagewidthmobile']) ? esc_attr($attr['imagewidthmobile']) : 'auto') . ";";
+            $css .= "height: " . (isset($attr['imageheightmobile']) ? esc_attr($attr['imageheightmobile']) : 'auto') . ";";
+        $css .= "}";
 
         $borderStyle = $OBJ_STYLE->borderRadiusShadow('iconsBorder','iconsRadius','iconsDropShadow','Mobile');
         $paddingStyle = $OBJ_STYLE->dimensions('iconpadding','padding','Mobile');
-
         $style = $borderStyle . $paddingStyle;
 
         if ( ! empty( $style ) ) {
@@ -231,17 +187,17 @@ function generate_inline_icon_styles($attr) {
             $css .= "$wrapper .vb-icon-block-main-container:hover { $hoverStyle }";
         }
 
-        $iconAnimationStyle = $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Tablet');
+        $iconAnimationStyle = $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Mobile'); // Changed from Tablet to Mobile
         if ( ! empty( $iconAnimationStyle ) ) {
             $css .= "$wrapper .vb-icon-animation { $iconAnimationStyle }";
         }
 
-        $hoverIconAnimationStyle = $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Tablet', 'Hover');
+        $hoverIconAnimationStyle = $OBJ_STYLE->borderRadiusShadow('','iconsRadius','','Mobile', 'Hover'); // Changed from Tablet to Mobile
         if ( ! empty( $hoverIconAnimationStyle ) ) {
             $css .= "$wrapper .vayu_blcoks_icon_main_blocks_icon:hover .vb-icon-animation { $hoverIconAnimationStyle }";
         }
 
-    $css .= "}"; 
+    $css .= "}";
     
     return $css;
 }

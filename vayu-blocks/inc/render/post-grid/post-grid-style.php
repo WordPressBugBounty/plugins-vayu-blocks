@@ -288,16 +288,6 @@ function generate_inline_post_styles($attr) {
         $css .= "height:100%;";
         $alignment = isset($attr['pg_Paginationalignment']['Desktop']) ? $attr['pg_Paginationalignment']['Desktop'] : ''; // default value
         $css .= "justify-content: {$alignment};";
-
-        $css .= "@media (max-width: 1024px) {";
-            $alignment = isset($attr['pg_Paginationalignment']['Tablet']) ? $attr['pg_Paginationalignment']['Tablet'] : ''; 
-            $css .= "justify-content: {$alignment};";
-        $css .= "}";
-
-        $css .= "@media (max-width: 400px) {";
-            $alignment = isset($attr['pg_Paginationalignment']['Mobile']) ? $attr['pg_Paginationalignment']['Mobile'] : ''; 
-            $css .= "justify-content: {$alignment};";
-        $css .= "}";
     $css .= "}"; 
 
     $css .= ".page-numbers {";
@@ -313,25 +303,8 @@ function generate_inline_post_styles($attr) {
         $css .= $OBJ_STYLE->typography('typography','Desktop');
         $css .= $OBJ_STYLE->dimensions('pg_Paginationpadding', 'padding', 'Desktop');
 
-        $media1024 = '';
-        $media1024 .= $OBJ_STYLE->borderRadiusShadow('pg_paginationborder','pg_paginationradius','','Tablet');
-        $media1024 .= $OBJ_STYLE->typography('typography','Tablet');
-        $media1024 .= $OBJ_STYLE->dimensions('pg_Paginationpadding', 'padding', 'Tablet');
-
-        if (trim($media1024) !== '') {
-            $css .= "@media (max-width: 1024px) { $media1024 }";
-        }
-
-        $media400 = '';
-        $media400 .= $OBJ_STYLE->borderRadiusShadow('pg_paginationborder','pg_paginationradius','','Mobile');
-        $media400 .= $OBJ_STYLE->typography('typography','Mobile');
-        $media400 .= $OBJ_STYLE->dimensions('pg_Paginationpadding', 'padding', 'Mobile');
-
-        if (trim($media400) !== '') {
-            $css .= "@media (max-width: 400px) { $media400 }";
-        }
-
     $css .= "}"; 
+
 
     $css .= ".pagination a{";  
         $css .= "text-decoration: none;";
@@ -367,26 +340,22 @@ function generate_inline_post_styles($attr) {
         $css .= "color:" . $attr['pg_PaginationactiveColor'] . ";";
     $css .= "}";
 
-    $css .= "@media (max-width: 1024px) {";
+    // For tablet
+    $css .= "@media (min-width: 768px) and (max-width: 1024px) {";
 
         $css .= "$wrapper {";
             $gridGapUp = isset($attr['vergap']['Tablet']['top']) ? $OBJ_STYLE->handleValue($attr['vergap']['Tablet']['top']) : '';
             $gridGap = isset($attr['horigap']['Tablet']['left']) ? $OBJ_STYLE->handleValue($attr['horigap']['Tablet']['left']) : '';
-        
             $css .= "grid-gap: {$gridGapUp} {$gridGap};";
         $css .= "}";
 
         $css .= "$wrapper $post {";
-
             $css .= $OBJ_STYLE->borderRadiusShadow('layoutborder', 'layoutradius', 'layoutShadow', 'Tablet');
             $css .= isset($attr['spacing']['Tablet']) ? "gap: " . esc_attr($attr['spacing']['Tablet']) . "px;" : "";
-
-             $css .= $OBJ_STYLE->dimensions('layoutpadding', 'padding', 'Tablet');
+            $css .= $OBJ_STYLE->dimensions('layoutpadding', 'padding', 'Tablet');
             
-
             $alignment = isset($attr['pg_layoutalignment']['Tablet']) ? $attr['pg_layoutalignment']['Tablet'] : '';
             $alignItems = '';
-            
             if ($alignment === 'left') {
                 $alignItems = 'flex-start';
             } elseif ($alignment === 'center') {
@@ -394,27 +363,20 @@ function generate_inline_post_styles($attr) {
             } elseif ($alignment === 'right') {
                 $alignItems = 'flex-end'; 
             }
-            
             $css .= "align-items: " . $alignItems . ";";
-
+            $css .= "width: " . (isset($attr['layoutcustomWidthTablet']) ? esc_attr($attr['layoutcustomWidthTablet']) : '') . ";";
         $css .= "}";
 
         $css .= "$wrapper $post .post-grid-category-style-new{";
-
             $css .= $OBJ_STYLE->borderRadiusShadow('categoryborder', 'categoryradius', 'categoryShadow', 'Tablet');
             $css .= $OBJ_STYLE->typography('categorytypography','Tablet');
             $css .= $OBJ_STYLE->dimensions('categorypadding', 'padding', 'Tablet');
-            
         $css .= "}";
 
         $css .= "$wrapper $post .post-grid-excerpt-view{";
-
             $css .= $OBJ_STYLE->typography('contenttypography','Tablet');
-
             $alignment = isset($attr['pg_layoutalignment']['Tablet']) ? $attr['pg_layoutalignment']['Tablet'] : '';
-
             $css .= "text-align: $alignment;";
-       
         $css .= "}";
 
         $css .= "$wrapper $post {$attr['pg_blockTitleTag']}{";
@@ -445,33 +407,44 @@ function generate_inline_post_styles($attr) {
             $css .= $OBJ_STYLE->typography('excetypography', 'Tablet');
         $css .= "}";
 
+        $css .= "$container .pagination{"; 	
+            $alignment = isset($attr['pg_Paginationalignment']['Tablet']) ? $attr['pg_Paginationalignment']['Tablet'] : ''; 
+            $css .= "justify-content: {$alignment};";
+        $css .= "}";
+
+        $media1024 = '';
+        $media1024 .= $OBJ_STYLE->borderRadiusShadow('pg_paginationborder','pg_paginationradius','','Tablet');
+        $media1024 .= $OBJ_STYLE->typography('typography','Tablet');
+        $media1024 .= $OBJ_STYLE->dimensions('pg_Paginationpadding', 'padding', 'Tablet');
+
+        if (trim($media1024) !== '') {
+            $css .= ".page-numbers {";
+            $css .= "$media1024";
+            $css .= "}"; 
+        }
+
     $css .= "}"; 
 
-    $css .= "@media (max-width: 400px) {";
+    // For mobile
+    $css .= "@media (max-width: 767px) {";
         $css .= "$wrapper {";
-            $gridGapUp = isset($attr['vergap']['Tablet']['top']) ? $OBJ_STYLE->handleValue($attr['vergap']['Tablet']['top']) : '';
-            $gridGap = isset($attr['horigap']['Tablet']['left']) ? $OBJ_STYLE->handleValue($attr['horigap']['Tablet']['left']) : '';
+            $gridGapUp = isset($attr['vergap']['Mobile']['top']) ? $OBJ_STYLE->handleValue($attr['vergap']['Mobile']['top']) : '';
+            $gridGap = isset($attr['horigap']['Mobile']['left']) ? $OBJ_STYLE->handleValue($attr['horigap']['Mobile']['left']) : '';
             $css .= "grid-gap: {$gridGapUp} {$gridGap};";
         $css .= "}";
 
         $css .= "$wrapper $post .post-grid-excerpt-view{";
-
             $css .= $OBJ_STYLE->typography('contenttypography','Mobile'); 
-            
             $alignment = isset($attr['pg_layoutalignment']['Mobile']) ? $attr['pg_layoutalignment']['Mobile'] : '';
-
             $css .= "text-align: $alignment;";
         $css .= "}";
 
         $css .= "$wrapper $post {";
             $css .= $OBJ_STYLE->borderRadiusShadow('layoutborder', 'layoutradius', 'layoutShadow', 'Mobile');
-            
-
-                $css .= $OBJ_STYLE->dimensions('layoutpadding', 'padding', 'Mobile');
+            $css .= $OBJ_STYLE->dimensions('layoutpadding', 'padding', 'Mobile');
             
             $alignment = isset($attr['pg_layoutalignment']['Mobile']) ? $attr['pg_layoutalignment']['Mobile'] : '';
             $alignItems = '';
-            
             if ($alignment === 'left') {
                 $alignItems = 'flex-start';
             } elseif ($alignment === 'center') {
@@ -479,21 +452,15 @@ function generate_inline_post_styles($attr) {
             } elseif ($alignment === 'right') {
                 $alignItems = 'flex-end'; 
             }
-            
             $css .= "align-items: " . $alignItems . ";";
             $css .= isset($attr['spacing']['Mobile']) ? "gap: " . esc_attr($attr['spacing']['Mobile']) . "px;" : "";
+            $css .= "width: " . (isset($attr['layoutcustomWidthMobile']) ? esc_attr($attr['layoutcustomWidthMobile']) : '') . ";";
         $css .= "}";
 
         $css .= "$wrapper $post .post-grid-category-style-new{";
-
             $css .= $OBJ_STYLE->borderRadiusShadow('categoryborder', 'categoryradius', 'categoryShadow', 'Mobile');
-
             $css .= $OBJ_STYLE->typography('categorytypography','Mobile');
-
-        
-                $css .= $OBJ_STYLE->dimensions('categorypadding', 'padding', 'Mobile');
-            
-
+            $css .= $OBJ_STYLE->dimensions('categorypadding', 'padding', 'Mobile');
         $css .= "}";
 
         $css .= "$wrapper $post {$attr['pg_blockTitleTag']}{";
@@ -523,25 +490,23 @@ function generate_inline_post_styles($attr) {
         $css .= "$wrapper .vb-excerpt_selector{";
             $css .= $OBJ_STYLE->typography('excetypography', 'Mobile');
         $css .= "}";
-    $css .= "}"; 
- 
-    //for tablet
-    $css .= "@media (max-width: 1024px) {
 
-        $wrapper $post {
-            width: " . (isset($attr['layoutcustomWidthTablet']) ? esc_attr($attr['layoutcustomWidthTablet']) : '') . ";
-        }   
+        $css .= "$container .pagination{"; 	
+            $alignment = isset($attr['pg_Paginationalignment']['Mobile']) ? $attr['pg_Paginationalignment']['Mobile'] : ''; 
+            $css .= "justify-content: {$alignment};";
+        $css .= "}";
 
-    }";
+        $media400 = '';
+        $media400 .= $OBJ_STYLE->borderRadiusShadow('pg_paginationborder','pg_paginationradius','','Mobile');
+        $media400 .= $OBJ_STYLE->typography('typography','Mobile');
+        $media400 .= $OBJ_STYLE->dimensions('pg_Paginationpadding', 'padding', 'Mobile');
 
-    //for mobile
-    $css .= "@media (max-width: 400px) {
-    
-        $wrapper $post {
-            width: " . (isset($attr['layoutcustomWidthMobile']) ? esc_attr($attr['layoutcustomWidthMobile'])  : '') . ";
+        if (trim($media400) !== '') {
+            $css .= ".page-numbers {";
+            $css .= "$media400";
+            $css .= "}"; 
         }
-
-    }";
+    $css .= "}";
     
     return $css;
 }

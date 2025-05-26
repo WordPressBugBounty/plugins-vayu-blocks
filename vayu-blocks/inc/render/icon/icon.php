@@ -229,11 +229,15 @@ class Vayu_blocks_icon {
             $icon_html .= '</div>';
         }
 
-        $animated = isset($attr['className']) ? esc_attr($attr['className']) : '';
+        $animated = isset($attributes['className']) ? esc_attr($attributes['className']) : '';
         $classes = [];
 
         $classes[] = 'vayu-blocks-icon-main-container-' . $uniqueId;
         $classes[] = 'wp_block_vayu-blocks-icon-main';
+
+        if ( isset($attributes['advWidth']['value']) && in_array($attributes['advWidth']['value'], ['fullwidth', 'customwidth']) ) {
+            $classes[] = 'alignfull';
+        }
 
         $final_class = implode( ' ', $classes );
 

@@ -163,56 +163,52 @@ function generate_inline_flip_box_styles($attr) {
    $overlayalignmenttablet = explode(' ', $attr['overlayalignmenttablet']);
    $vertical = $overlayalignmenttablet[0];
    $horizontal = $overlayalignmenttablet[1];
-   
-   $css .= "@media (max-width: 1024px) {";
-        $css .= $wrapper . " {";
-            $css .= "height: " . $attr['advheight']['Tablet'] . ";";
-        $css .= "}";
-   
-        $css .= $wrapper . " .vb-flip-box-wrapper {";
-            $css .= "align-items: " . (
-                $vertical === 'center' ? 'center' :
-                ($vertical === 'top' ? 'self-start' :
-                ($vertical === 'bottom' ? 'self-end' : 'center'))
-            ) . ";";
-            $css .= "justify-content: " . (
-                $horizontal === 'center' ? 'center' :
-                ($horizontal === 'left' ? 'flex-start' :
-                ($horizontal === 'right' ? 'flex-end' : 'center'))
-            ) . ";";
-        $css .= "}";
-   $css .= "}";
-   
     
     $overlayalignmentmobile = explode(' ', $attr['overlayalignmentmobile']);
     $verticalmobile = $overlayalignmentmobile[0];
     $horizontalmobile = $overlayalignmentmobile[1];
 
-       
-   $css .= "@media (max-width: 400px) {";
-    $css .= $wrapper . " {";
-        $css .= "height: " . $attr['advheight']['Mobile'] . ";";
+    // For tablet
+    $css .= "@media (min-width: 768px) and (max-width: 1024px) {";
+
+        $css .= $wrapper . " {";
+            $css .= "height: " . (isset($attr['advheight']['Tablet']) ? esc_attr($attr['advheight']['Tablet']) : 'auto') . ";";
+        $css .= "}";
+        
+        $css .= $wrapper . " .vb-flip-box-wrapper {";
+            $css .= "align-items: " . (
+                (isset($vertical) && $vertical === 'center') ? 'center' :
+                ((isset($vertical) && $vertical === 'top') ? 'self-start' :
+                ((isset($vertical) && $vertical === 'bottom') ? 'self-end' : 'center'))
+            ) . ";";
+            $css .= "justify-content: " . (
+                (isset($horizontal) && $horizontal === 'center') ? 'center' :
+                ((isset($horizontal) && $horizontal === 'left') ? 'flex-start' :
+                ((isset($horizontal) && $horizontal === 'right') ? 'flex-end' : 'center'))
+            ) . ";";
+        $css .= "}";
+
     $css .= "}";
-   $css .= "}";
 
-    //for mobile
-    $css .= "@media (max-width: 400px) {
+    // For mobile
+    $css .= "@media (max-width: 767px) {";
 
-        $wrapper .vb-flip-box-wrapper{
-            align-items: " . (
-                $verticalmobile === 'center' ? 'center' :
-                ($verticalmobile === 'top' ? 'self-start' :
-                ($verticalmobile === 'bottom' ? 'self-end' : 'center'))
-            ) . ";
-
-            justify-content: " . (
-                $horizontalmobile === 'center' ? 'center' :
-                ($horizontalmobile === 'left' ? 'flex-start' :
-                ($horizontalmobile === 'right' ? 'flex-end' : 'center'))
-            ) . ";  
-        }
-
-    }";
+        $css .= $wrapper . " {";
+            $css .= "height: " . (isset($attr['advheight']['Mobile']) ? esc_attr($attr['advheight']['Mobile']) : 'auto') . ";";
+        $css .= "}";
+        
+        $css .= "$wrapper .vb-flip-box-wrapper{";
+            $css .= "align-items: " . (
+                (isset($verticalmobile) && $verticalmobile === 'center') ? 'center' :
+                ((isset($verticalmobile) && $verticalmobile === 'top') ? 'self-start' :
+                ((isset($verticalmobile) && $verticalmobile === 'bottom') ? 'self-end' : 'center'))
+            ) . ";";
+            $css .= "justify-content: " . (
+                (isset($horizontalmobile) && $horizontalmobile === 'center') ? 'center' :
+                ((isset($horizontalmobile) && $horizontalmobile === 'left') ? 'flex-start' :
+                ((isset($horizontalmobile) && $horizontalmobile === 'right') ? 'flex-end' : 'center'))
+            ) . ";";
+    $css .= "}";
 
     return $css;
 }

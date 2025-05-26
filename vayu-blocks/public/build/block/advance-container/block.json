@@ -6,6 +6,12 @@
   "title": "Advance Container",
   "category": "vayu-blocks",
   "description": "Example block scaffolded with Create Block tool.",
+  "keywords": [
+    "container",
+    "column",
+    "flex",
+    "advance container"
+  ],
   "textdomain": "vayu-blocks",
   "attributes": {
     "id": {

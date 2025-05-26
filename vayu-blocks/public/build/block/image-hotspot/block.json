@@ -4,6 +4,15 @@
   "name": "vayu-blocks/image-hotspot",
   "title": "Image Hotspot",
   "category": "vayu-blocks",
+  "keywords": [
+    "Image hotspot",
+    "image hotspot",
+    "image pin",
+    "pointer",
+    "pin image",
+    "hostspot",
+    "image pointer"
+  ],
   "description": "A block to highlight specific parts of an image using pins.",
   "supports": {
     "html": false,

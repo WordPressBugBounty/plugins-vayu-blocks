@@ -6,6 +6,10 @@
   "title": "Advance Product",
   "category": "vayu-blocks",
   "description": "Example block scaffolded with Create Block tool.",
+  "keywords": [
+    "product",
+    "advance product"
+  ],
   "textdomain": "vayu-blocks",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",

@@ -28,6 +28,7 @@ class Vayu_blocks_image {
 
     private function render_image() {
         $attributes = $this->attr;
+        $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
 
         $uniqueId = $this->safe_attr($attributes, 'uniqueId');
         $animated = $this->safe_attr($attributes, 'className');
@@ -58,6 +59,8 @@ class Vayu_blocks_image {
         });
 
         $image_html= '';
+        
+        $image_html = $OBJ_STYLE->renderVideo('advBackground');
         
         $image_html .= '<div class="vb-image-main-container vb-image-rotating-div">';
 

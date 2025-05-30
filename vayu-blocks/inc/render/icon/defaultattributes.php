@@ -23,9 +23,9 @@ return array(
         'backgroundcolor' => '',
         'backgroundhoverColor' => '',
         'alignment' =>  array(
-                            "Desktop" => "",
-                            "Tablet" => "",
-                            "Mobile" => ""
+                            "Desktop" => "center",
+                            "Tablet" => "center",
+                            "Mobile" => "center"
                          ),
         'iconpadding' => array(
             'top' => '0px',

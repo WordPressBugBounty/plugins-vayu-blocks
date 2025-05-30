@@ -101,7 +101,7 @@ class Vayu_blocks_icon {
 
         if (!function_exists('getAnimationClass')) {
             function getAnimationClass($effectType, $imageselectedAnimation, $isClicked = false) {
-
+                
                 switch ($effectType) {
                     case 'always':
                         switch ($imageselectedAnimation) {
@@ -193,12 +193,23 @@ class Vayu_blocks_icon {
             $hoverclasses = $attributes['advAnimation']['className'];
         }
 
+        $type = $attributes['animationData']['background']['type'] ?? '';
+        $value = $attributes['animationData']['background']['value'] ?? '';
+
+        $containclass = '';
+        if($value === 'two-wave'){
+
+            if($type === 'onhvr'){
+                $containclass = 'vayu_blocks-two-wave-con-hvr';
+            }else{
+                $containclass = 'vayu_blocks-two-wave-con';
+            }
+        }
+
         // If the icon is not empty and is a string
         if (!empty($icon)) {
             // Output the SVG string directly
-        $icon_html .= '<div class="vb-icon-block-main-container ' . esc_attr( $hoverclasses ) . '">';
-        $type = $attributes['animationData']['background']['type'] ?? '';
-        $value = $attributes['animationData']['background']['value'] ?? '';
+        $icon_html .= '<div class="vb-icon-block-main-container ' . esc_attr($containclass) . ' ' . esc_attr( $hoverclasses ) . '">';
 
         $icon_html .= '<div class="vb-icon-animation ' . getAnimationClass($type, $value) . '"></div>';
 

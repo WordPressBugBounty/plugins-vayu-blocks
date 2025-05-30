@@ -110,7 +110,7 @@ function vayu_blocks_editor_assets(){
 add_action( 'enqueue_block_editor_assets', 'vayu_blocks_editor_assets' );
 
 
-function vayu_admin_react_script() {
+function vayu_admin_react_script($hook) {
 
     $asset_file = require_once VAYU_BLOCKS_DIR_PATH .'public/build/adminDashboard.asset.php';
 
@@ -142,7 +142,9 @@ function vayu_admin_react_script() {
         $localizeItems
     );
 
-
+if( $hook !== 'toplevel_page_vayu-blocks' && $hook !== 'vayu-blocks_page_vayu-sites' ) {
+        return;
+}
     wp_enqueue_style(
         'adminDashboard-style',
         VAYU_BLOCKS_URL . 'public/build/adminDashboard-style.css',
@@ -225,112 +227,7 @@ function vayu_blocks_array_merge_recursive_distinct(array &$array1, array &$arra
 }
 
 
-
-
-
-add_action('wp_ajax_vayu_blocks_get_input_values', 'vayu_blocks_get_input_values_callback');
-
-function vayu_blocks_get_input_values_callback() {
-    // Retrieve the settings from the database
-    $settings = get_option('vayu_blocks_settings', array(
-        'container' => array(
-            'value' => 1,
-            'settings' => array(
-                'containerWidth' => 1250,
-                'containerGap' => 18,
-                'padding' => 20,
-            ),
-        ),
-        'button' => array(
-            'value' => 0,
-            'settings' => array(
-                'buttonColor' => '',
-            ),
-        ),
-        'heading' => array(
-            'value' => 0,
-            'settings' => array(
-               
-            ),
-        ),
-        'spacer' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'product' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'postgrid' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'flipBox' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'image' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'video' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'icon' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'advanceSlider' => array(
-            'value' => 0,
-            'settings' => array(
-            
-            ),
-        ),
-        'queryloop' => array(
-            'value' => 0,
-            'settings' => array(
-            
-            ),
-        ),
-        'imageHotspot' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'advanceTimeline' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-        'postPagination' => array(
-            'value' => 0,
-            'settings' => array(
-                
-            ),
-        ),
-    ));
-
-    // Ensure the response is in JSON format
-    wp_send_json_success($settings);
-}
-
+ 
 
 
 add_action('rest_api_init', function() {

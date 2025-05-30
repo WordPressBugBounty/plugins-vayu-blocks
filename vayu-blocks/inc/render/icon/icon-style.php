@@ -43,7 +43,12 @@ function generate_inline_icon_styles($attr) {
 
     //Main div
     $css .= "$wrapper {";
-        $css .= '--icon-box-shadow-glow-half: 0 0 15px 15px ' . esc_attr( $attr['backgroundcolor'] ) . ';';    
+
+        if ( ! empty( $attr['animationData']['background']['bg'] ) ) {
+            $bg = esc_attr( $attr['animationData']['background']['bg'] );
+            $css .= '--animation-box-icon: ' . $bg . ';';
+            $css .= '--icon-box-shadow-glow-half: 0 0 15px 15px ' . $bg . ';';
+        }
         $css .= '--icon-size-font: ' . $attr['iconSize']['Desktop'] . ';';    
         $css .= '--icon-size-font-tablet: ' . (isset($attr['iconSize']['Tablet']) ? esc_attr($attr['iconSize']['Tablet']) . '' : '') . ';';
         $css .= '--icon-size-font-mobile: ' . (isset($attr['iconSize']['Mobile']) ? esc_attr($attr['iconSize']['Mobile']) . '' : '') . ';';

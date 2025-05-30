@@ -141,8 +141,10 @@ function generate_inline_timeline_child_styles($attr) {
 
     $leftPosition = $containerLeft + ($widthDistance) + $attr['thickness'];
 
+    $leftPositionQA = $containerLeft + ($widthDistance/2) + $attr['thickness'];
+
     $css .= "$wrapper .vb-connetor-5-6 {";
-        $css .= "left: {$leftPosition}px;";
+        $css .= "left: {$leftPositionQA}px;";
         $css .= "transform: translateX(-50%);";
         $css .= "height: calc(" . $attr['containerHeight'] . "px / 2 + " . $attr['nextChildHeight'] . "px / 2 + " . $left . "px + " . $right . "px + " . $gapchild . " - 36px/2);";
         $css .= "width: {$attr['thickness']}px;";

@@ -74,10 +74,15 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
 
 	$shape_divider = vayu_th_shaper($attributes);
 
+    $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
+
+    $video_html = $OBJ_STYLE->renderVideo('advBackground');
+
     $id_attribute = $anchor_id ? sprintf( ' id="%s"', esc_attr( $anchor_id ) ) : '';
 
 	return sprintf(
 		'<%1$s %5$s class="%2$s">
+            %6$s
 			%3$s
 			%4$s
 		</%1$s>',
@@ -85,7 +90,8 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
 		$container_class,
 		$shape_divider,
 		$inside_content,
-        $id_attribute
+        $id_attribute,
+        $video_html
 	);
 }
 

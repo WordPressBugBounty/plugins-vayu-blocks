@@ -462,6 +462,7 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
     
         // Validate the attribute
         if (!isset(self::$attribute[$key]) || !is_array(self::$attribute[$key])) {
+            $style .= "flex: initial;";
             return $style;
         }
     
@@ -495,23 +496,27 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         if (!empty($flex['size'][$device])) {
             switch ($flex['size'][$device]) {
                 case 'none':
-                    $style .= "flex-grow: 1; flex-shrink: 1;";
+                    $style .= "--flex-grow: 1; --flex-shrink: 1;--flex-basis:auto;";
                     break;
                 case 'grow':
-                    $style .= "flex-grow: 1; flex-shrink: 0;";
+                    $style .= "--flex-grow: 1; --flex-shrink: 0;--flex-basis:auto;";
                     break;
                 case 'shrink':
-                    $style .= "flex-grow: 0; flex-shrink: 1;";
+                    $style .= "--flex-grow: 0; --flex-shrink: 1;--flex-basis:auto;";
                     break;
                 case 'custom':
                     $grow = isset($flex['flexgrow'][$device]) ? $flex['flexgrow'][$device] : 1;
                     $shrink = isset($flex['flexshrink'][$device]) ? $flex['flexshrink'][$device] : 1;
-                    $style .= "flex-grow: {$grow}; flex-shrink: {$shrink};";
+                    $style .= "--flex-grow : $grow; --flex-shrink:$shrink; --flex-basis:auto";
                     break;
                 default:
-                    $style .= "flex-grow: 0; flex-shrink: 0;";
+                    $style .= "--flex-grow: 0; --flex-shrink: 0; --flex-basis:auto;";
             }
+        }else{
+              $style .= "--flex-grow: initial; --flex-shrink: initial; --flex-basis:initial;";
         }
+
+        $style .= "flex: var(--flex-grow) var(--flex-shrink) var(--flex-basis);";
     
         return $style;
     }
@@ -619,11 +624,20 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
                 $mainStyles .= "margin:0 !important;";
             }
         }
-
     
         // Transition
         if (!empty($attr['advTransition'])) {
-            $mainStyles .= "transition-duration: " . esc_attr($attr['advTransition']) . "s;";
+            $mainStyles .= "transition: all " . esc_attr($attr['advTransition']) . "s ease !important;";
+            $mainStyles .= "animation-duration: " . esc_attr($attr['advTransition']) . "s !important;";
+        }
+
+        // Cursor
+        if (!empty($attr['advCursor'])) {
+            if (isset($attr['advCursor']['type']) && $attr['advCursor']['type'] === 'custom' && !empty($attr['advCursor']['customImage'])) {
+                $mainStyles .= "cursor: url(" . esc_url($attr['advCursor']['customImage']) . "), auto;";
+            } elseif (!empty($attr['advCursor']['aniName'])) {
+                $mainStyles .= "cursor: " . esc_attr($attr['advCursor']['aniName']) . ";";
+            }
         }
     
         if (!empty($mainStyles)) {
@@ -750,62 +764,108 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
     
     //     return $style;
     // }
+
     function ContFlex($key, $device = 'Desktop') {
-    $style = '';
+        $style = '';
 
-    // Validate the attribute
-    if (!isset(self::$attribute[$key]) || !is_array(self::$attribute[$key])) {
+        // Validate the attribute
+        if (!isset(self::$attribute[$key]) || !is_array(self::$attribute[$key])) {
+            return $style;
+        }
+
+        $contFlex = self::$attribute[$key];
+
+        // Collect flex properties
+        $flexStyles = [];
+
+        // flex-direction
+        if (!empty($contFlex['direction'][$device])) {
+            $flexStyles['flex-direction'] = "flex-direction: {$contFlex['direction'][$device]};";
+        }
+
+        // justify-content
+        if (!empty($contFlex['justifyContent'][$device])) {
+            $flexStyles['justify-content'] = "justify-content: {$contFlex['justifyContent'][$device]};";
+        }
+
+        // align-items
+        if (!empty($contFlex['alignItems'][$device])) {
+            $flexStyles['align-items'] = "align-items: {$contFlex['alignItems'][$device]};";
+        }
+
+        // flex-wrap
+        if (!empty($contFlex['wrap'][$device])) {
+            $flexStyles['flex-wrap'] = "flex-wrap: {$contFlex['wrap'][$device]};";
+        }
+
+        // row-gap (rwGap)
+        if (isset($contFlex['rwGap'][$device])) {
+            $rowGap = is_numeric($contFlex['rwGap'][$device]) ? $contFlex['rwGap'][$device] . 'px' : $contFlex['rwGap'][$device];
+            $flexStyles['row-gap'] = "row-gap: {$rowGap};";
+        }
+
+        // column-gap (colGap)
+        if (isset($contFlex['colGap'][$device])) {
+            $colGap = is_numeric($contFlex['colGap'][$device]) ? $contFlex['colGap'][$device] . 'px' : $contFlex['colGap'][$device];
+            $flexStyles['column-gap'] = "column-gap: {$colGap};";
+        }
+
+        // align-content
+        if (!empty($contFlex['alignContent'][$device]) && $contFlex['alignContent'][$device] !== 'default') {
+            $flexStyles['align-content'] = "align-content: {$contFlex['alignContent'][$device]};";
+        }
+
+        // Add display: flex; only if at least one flex property is defined
+        if (!empty($flexStyles)) {
+            $style .= "display: flex;";
+            $style .= implode('', $flexStyles); // Concatenate all defined flex styles
+        }
         return $style;
+    } 
+    
+    function renderVideo($key) {
+        if (
+            !isset(self::$attribute[$key]['type']) ||
+            self::$attribute[$key]['type'] !== 'video' ||
+            empty(self::$attribute[$key]['video']['url'])
+        ) {
+            return '';
+        }
+
+        $video = self::$attribute[$key]['video'];
+        $url = esc_url($video['url']);
+        $type = $video['type'] ?? '';
+        $html = '';
+
+        if ($type === 'mp4') {
+            $autoplay  = !empty($video['autoplay']) ? 'autoplay' : '';
+            $loop      = !empty($video['loop']) ? 'loop' : '';
+            $controls  = !empty($video['controls']) ? 'controls' : '';
+            $nofs      = empty($video['allowfs']) ? 'controlsList="nofullscreen"' : '';
+
+            $html .= '<video 
+                ' . $autoplay . ' 
+                ' . $loop . ' 
+                ' . $controls . ' 
+                muted 
+                ' . $nofs . '
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; aspect-ratio: 16 / 9; z-index: 0;">
+                <source src="' . $url . '" type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>';
+        } else {
+            $allowfs = !empty($video['allowfs']) ? ' allowfullscreen' : '';
+
+            $html .= '<iframe class="vb-elementor-background-video-embed"
+                frameborder="0"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"' . $allowfs . '
+                src="' . $url . '"
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; aspect-ratio: 16 / 9; z-index: 0;">
+            </iframe>';
+        }
+
+        return $html;
     }
 
-    $contFlex = self::$attribute[$key];
-
-    // Collect flex properties
-    $flexStyles = [];
-
-    // flex-direction
-    if (!empty($contFlex['direction'][$device])) {
-        $flexStyles['flex-direction'] = "flex-direction: {$contFlex['direction'][$device]};";
-    }
-
-    // justify-content
-    if (!empty($contFlex['justifyContent'][$device])) {
-        $flexStyles['justify-content'] = "justify-content: {$contFlex['justifyContent'][$device]};";
-    }
-
-    // align-items
-    if (!empty($contFlex['alignItems'][$device])) {
-        $flexStyles['align-items'] = "align-items: {$contFlex['alignItems'][$device]};";
-    }
-
-    // flex-wrap
-    if (!empty($contFlex['wrap'][$device])) {
-        $flexStyles['flex-wrap'] = "flex-wrap: {$contFlex['wrap'][$device]};";
-    }
-
-    // row-gap (rwGap)
-    if (isset($contFlex['rwGap'][$device])) {
-        $rowGap = is_numeric($contFlex['rwGap'][$device]) ? $contFlex['rwGap'][$device] . 'px' : $contFlex['rwGap'][$device];
-        $flexStyles['row-gap'] = "row-gap: {$rowGap};";
-    }
-
-    // column-gap (colGap)
-    if (isset($contFlex['colGap'][$device])) {
-        $colGap = is_numeric($contFlex['colGap'][$device]) ? $contFlex['colGap'][$device] . 'px' : $contFlex['colGap'][$device];
-        $flexStyles['column-gap'] = "column-gap: {$colGap};";
-    }
-
-    // align-content
-    if (!empty($contFlex['alignContent'][$device]) && $contFlex['alignContent'][$device] !== 'default') {
-        $flexStyles['align-content'] = "align-content: {$contFlex['alignContent'][$device]};";
-    }
-
-    // Add display: flex; only if at least one flex property is defined
-    if (!empty($flexStyles)) {
-        $style .= "display: flex;";
-        $style .= implode('', $flexStyles); // Concatenate all defined flex styles
-    }
-    return $style;
-}
-     
 }     

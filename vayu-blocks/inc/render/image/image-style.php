@@ -18,7 +18,9 @@ function generate_inline_image_styles($attr) {
 
     $inline = '.vb-image-container';
 
-    $css .= $OBJ_STYLE->advanceStyle($wrapper);
+    if ( isset( $attr['parentBlock'] ) && $attr['parentBlock'] !== 'vayu-blocks/advance-slider' ) {
+        $css .= $OBJ_STYLE->advanceStyle( $wrapper );
+    }
 
     $css .= ".vayu_blocks_image_flip-duotone-filters {";
         $css .= "display: none;";
@@ -331,7 +333,7 @@ function generate_inline_image_styles($attr) {
 
     $css .= "$wrapper .vb-image-overlay-wrapper:before {";
         if($attr['overlayshow']){
-            $css .= "background-color: " . esc_attr($attr['overlaycolor']) . ";";
+            $css .= "background: " . esc_attr($attr['overlaycolor']) . ";";
             $css .= "opacity: " . esc_attr($attr['overlayopacity']) . " !important;";
         }
 
@@ -759,6 +761,6 @@ function generate_inline_image_styles($attr) {
         $css .= "}";
                 
     $css .= "}";
-    
+
     return $css;
 }

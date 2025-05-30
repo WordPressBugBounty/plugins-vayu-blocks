@@ -152,7 +152,7 @@ function generate_inline_flip_box_styles($attr) {
         $css .= "transform: unset !important;";
     $css .= "}";
 
-     $css .=".vb-flip-box-wrapper:hover .vayu_blocks_flip-box-inner_animation_div_push_animation-top ..vayu_blocks_front_image_wrapper-for-front .vayu_blocks_flip-box-front{";
+     $css .=".vb-flip-box-wrapper:hover .vayu_blocks_flip-box-inner_animation_div_push_animation-top .vayu_blocks_front_image_wrapper-for-front .vayu_blocks_flip-box-front{";
          $css .= "transform: unset !important;";
     $css .= "}";
 
@@ -208,7 +208,9 @@ function generate_inline_flip_box_styles($attr) {
                 ((isset($horizontalmobile) && $horizontalmobile === 'left') ? 'flex-start' :
                 ((isset($horizontalmobile) && $horizontalmobile === 'right') ? 'flex-end' : 'center'))
             ) . ";";
-    $css .= "}";
+        $css .= "}";
 
+    $css .= "}";
+    
     return $css;
 }

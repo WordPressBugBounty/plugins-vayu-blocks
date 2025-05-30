@@ -12,6 +12,7 @@ function vayu_advance_product_tab_style($attr){
 
     if(isset( $attr['uniqueId'] )){
 
+
         // Advanced setting start
         $wrapper = ".wp-block-th-advance-product-tag-{$attr['uniqueId']}";
 
@@ -79,6 +80,15 @@ function vayu_advance_product_tab_style($attr){
         $css .= $OBJ_STYLE->dimensions('productPadding', 'padding', 'Desktop');
         }
         $css .= $OBJ_STYLE->borderRadiusShadow('productboxBorder', 'productboxRadius', 'productboxShadow', 'Desktop');
+        //bg color
+        $css .= isset( $attr['productboxClr'] ) ? "background:{$attr['productboxClr'] };" : '';
+
+        $css .= "}";
+
+        // product-box-hover
+        $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-content .th-product-item:hover .th-product-block-content-wrap{";
+    
+        $css .= $OBJ_STYLE->borderRadiusShadow('productboxBorderHover', 'productboxRadiusHover', 'productboxShadowHover', 'Desktop');
         //bg color
         $css .= isset( $attr['productboxClr'] ) ? "background:{$attr['productboxClr'] };" : '';
 
@@ -254,7 +264,13 @@ function vayu_advance_product_tab_style($attr){
         
                 $css .= "}";
         
-                }   
+                }else{
+                $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-item-wrap{";
+                    
+                $css .= "grid-template-columns:repeat(3,minmax(0, 1fr))";
+
+                $css .= "}";
+                }
 
             if($showTab):
 
@@ -296,6 +312,13 @@ function vayu_advance_product_tab_style($attr){
         $css .= isset( $attr['productAlign'] ) ? "text-align:{$attr['productAlign']['Tablet'] };" : 'text-align:center;';
         $css .= "}";
 
+        // product-box-hover
+        $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-content .th-product-item:hover .th-product-block-content-wrap{";
+    
+        $css .= $OBJ_STYLE->borderRadiusShadow('productboxBorderHover', 'productboxRadiusHover', 'productboxShadowHover', 'Tablet');
+
+        $css .= "}";
+
                 //gap
         
         if (isset($attr['elementGap'])) {
@@ -327,7 +350,13 @@ function vayu_advance_product_tab_style($attr){
         
                 $css .= "}";
         
-            }   
+            }else{
+                $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-item-wrap{";
+                    
+                $css .= "grid-template-columns:repeat(1,minmax(0, 1fr))";
+
+                $css .= "}";
+                }
 
             if($showTab):
 
@@ -378,6 +407,13 @@ function vayu_advance_product_tab_style($attr){
             $css .= "}";
 		}
 
+        // product-box-hover
+        $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-content .th-product-item:hover .th-product-block-content-wrap{";
+    
+        $css .= $OBJ_STYLE->borderRadiusShadow('productboxBorderHover', 'productboxRadiusHover', 'productboxShadowHover', 'Mobile');
+
+        $css .= "}";
+
         //button
         $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-add-btn a{";
         $css .= $OBJ_STYLE->borderRadiusShadow('buttonBorder', 'buttonRadius', 'buttonShadow', 'Mobile');
@@ -389,8 +425,6 @@ function vayu_advance_product_tab_style($attr){
 
         $css .= "}"; 
         
-            
-
         if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
             $css .= "@media only screen and (min-width: 1024px) {.wp-block-th-advance-product-tag-{$attr['uniqueId']}{display:none;}}";
         }

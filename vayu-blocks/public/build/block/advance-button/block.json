@@ -260,13 +260,11 @@
     "animationData": {
       "type": "object",
       "default": {
-        "infinite": {},
-        "background": {}
+        "background": {
+          "value": "none",
+          "type": "onhvr"
+        }
       }
-    },
-    "selectedEffect": {
-      "type": "string",
-      "default": "none"
     }
   },
   "supports": {

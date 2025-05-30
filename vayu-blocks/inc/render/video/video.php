@@ -64,7 +64,7 @@ class Vayu_blocks_video {
         $animated = isset($attributes['className']) ? esc_attr($attributes['className']) : '';
 
         $screenfit = '';
-        if($attributes['screenfit']==='screenfit'){
+        if($attributes['screenfit']==='screenfit' || $attributes['screenfit']==='custom'){
             $screenfit = 'alignfull';
         }
 
@@ -76,20 +76,6 @@ class Vayu_blocks_video {
         } elseif ($hover_type === 'one-time') {
             $animation_classname = $animation_value . 'onetime';
         }
-        
-        $videoSize = 'auto';
-        $videoHeight = 'auto';
-                $imageSize = '100%';
-        $imageHeight = '100%';
-
-        if (!empty($attributes['screenfit']) && $attributes['screenfit'] === 'auto') {
-            if(!$attributes['youtubeshorts'] && $attributes['blockValue'] === 'you-tube'){
-                $videoSize =  560;
-            }
-            if(!$attributes['youtubeshorts'] && $attributes['blockValue'] === 'you-tube'){
-            $imageSize =  560;
-        }
-    }
         
 
         $lightbox = isset( $attributes['lightbox'] ) && $attributes['lightbox'] ? 'true' : 'false';
@@ -107,6 +93,8 @@ class Vayu_blocks_video {
                     ($animation_classname && $animation_classname !== 'none' ? esc_attr($animation_classname) : '')
                 ) .
                 '">';
+
+                    if($attributes['posterOn']){
                         $image_html .= '<div class="vb-video-wrapper-relative">';
                             $image_html .= '<div class="vb-video-poster">';
                                 $image_html .= '<img  src="' . ( !empty( $attributes['poimage'] ) ? $attributes['poimage'] : $noimagelong ) . '" class="vb-video-tag-image" />';
@@ -116,13 +104,11 @@ class Vayu_blocks_video {
                                 $image_html .= $this->content;
                             $image_html .= '</div>';
                         $image_html .= '</div>';
-                    
+                    }
 
                         if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
 
                             $image_html .= '<video 
-                                width="' . $videoSize . '" 
-                                height = "' . $videoHeight .'"
                                 class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
                                 ' . $autoplay . ' 
                                 ' . $loop . ' 
@@ -176,17 +162,15 @@ class Vayu_blocks_video {
 
                             $iframe_src = 'https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . $query_string;
 
-                            $image_html .= '<iframe
-                                width="' . $videoSize . '" 
-                                height = "' . $videoHeight .'"
-                                class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
+                            $image_html .= '<div class="vb-video-iframe-cont"><iframe
+                                class="vb-you-tube-iframe ' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
                                 src="' . esc_url($iframe_src) . '"
                                 title="YouTube video player"
                                 frameborder="0"
                                 allow="autoplay; encrypted-media; web-share; picture-in-picture"
                                 referrerpolicy="strict-origin-when-cross-origin"
                                 ' . (!empty($attributes['youtubefullscreen']) ? 'allowfullscreen' : '') . '>
-                            </iframe>';
+                            </iframe></div>';
 
                         }
 
@@ -223,8 +207,6 @@ class Vayu_blocks_video {
                             }
 
                             $image_html .= '<iframe
-                                width="' . $videoSize . '" 
-                                height = "' . $videoHeight .'"
                                 class="vb-video-iframe' . (!empty($imageHvrFilter) && $imageHvrFilter !== 'none' ? ' ' . $imageHvrFilter : '') . (!empty($imagemaskshape) && $imagemaskshape !== 'none' ? ' ' . $imagemaskshape : '') . '"
                                 src="' . esc_url($vimeoSrc) . '"
                                 title="YouTube video player"
@@ -251,7 +233,7 @@ class Vayu_blocks_video {
                         if ( $attributes['blockValue'] === 'mp4' && !empty($attributes['videoUrl'])) {
 
                             $image_html .= '<video 
-                                class="vb-video-iframe"
+                                class="vb-video-iframe-modal"
                                     autoplay
                                 ' . $loop . ' 
                                 ' . $controls . ' 
@@ -301,7 +283,7 @@ class Vayu_blocks_video {
                             $iframe_src = 'https://www.youtube.com/embed/' . esc_attr($attributes['youvideoUrl']) . '?' . $query_string;
 
                             $image_html .= '<iframe
-                                class="vb-video-iframe"
+                                class="vb-video-iframe-modal"
                                 src="' . esc_url($iframe_src) . '"
                                 title="YouTube video player"
                                 frameborder="0"
@@ -343,7 +325,7 @@ class Vayu_blocks_video {
                             }
 
                             $image_html .= '<iframe
-                                class="vb-video-iframe"
+                                class="vb-video-iframe-modal"
                                 src="' . esc_url($vimeoSrc) . '"
                                 title="YouTube video player"
                                 frameborder="0"

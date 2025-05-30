@@ -43,11 +43,28 @@ function generate_inline_video_styles($attr) {
         $css .= "background: " . $attr['lightboxcolor'] . ";";
     $css .= "}";
 
-    if ( ! empty( $attr['videoboxcolor'] ) ) {
-        $css .= "$wrapper .vb-vayu-modal .vb-vayu-modal-body{";
-        $css .= "background: " . esc_attr( $attr['videoboxcolor'] ) . ";";
+    $css .= ".vb-video-iframe-modal{";
+        if ( ! empty( $attr['videoboxcolor'] ) ) {
+            $css .= "background: " . esc_attr( $attr['videoboxcolor'] ) . ";";
+        }
+
+        $css .= "border: 0;
+        display: block;
+        height: 100%;
+        width: 100%;";
+    $css .= "}";
+     
+    $css .= "$wrapper .vb-vayu-modal .vb-vayu-modal-body{";
+        if ( ! empty( $attr['videoboxcolor'] ) ) {
+            $css .= "background: " . esc_attr( $attr['videoboxcolor'] ) . ";";
+        }
+        $css .= "aspect-ratio: 1.77778 / 1;
+            width: auto;
+            height: 540px;
+            max-width: 100%;
+            max-height: 100%;";
         $css .= "}";
-    }
+   
 
     $css .= "$wrapper .vb-video-poster{";
         if(!$attr['posterOn']) {
@@ -90,7 +107,7 @@ function generate_inline_video_styles($attr) {
     $css .= "$wrapper .vb-video-wrapper-relative{";
         if(!$attr['posterOn']) {
             $css .= "display:none;";
-         } 
+        } 
             $css .="position:relative;";
         if($attr['screenfit']==='screenfit'){
             $css .= "width: inherit !important;";
@@ -98,8 +115,9 @@ function generate_inline_video_styles($attr) {
         }
 
         if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
-            $aspectRatio = $attr['imageaspectratio']['Desktop'] ?? 'auto';
+            $aspectRatio = $attr['imageaspectratio']['Desktop'] ?? '16/9';
             $css .= "aspect-ratio: $aspectRatio;";
+            $css .= "width:650px;";
         } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'screenfit'){
             $css .="width:100vw;";
             $css .="height:100vh;";
@@ -145,7 +163,7 @@ function generate_inline_video_styles($attr) {
          }  
     $css .= "}";
 
-    $css .= "$wrapper .vb-video-container .vb-video-iframe{";
+    $css .= "$wrapper $inline .vb-video-iframe{";
         if($attr['posterOn']){
             $css .= "display:none;";
         }else if($attr['posterOn'] && $attr['lightbox']){
@@ -160,7 +178,7 @@ function generate_inline_video_styles($attr) {
         $css .= " opacity: " . $attr['pooverlayopacity'] . ";";
     $css .= "}";
 
-    $css .= ".vb-video-poster:hover:before {";
+    $css .= "$wrapper .vb-video-poster:hover:before {";
         $css .= " background: " . ( !empty($attr['pooverlayhvrcolor']) ? $attr['pooverlayhvrcolor'] : $attr['pooverlaycolor'] ) . ";";
     $css .= "}";
 
@@ -212,12 +230,57 @@ function generate_inline_video_styles($attr) {
             $css .= "--image-animation-spped: {$speed}s;";
         }
         $css .= "display: flex;";
-        $css .= "height: 100%;";
-        $css .= "width: 100%;";
+        $css .= "height: auto;";
+        $css .= "width: auto;";
         $css .= " position: relative;";
         $css .= " transition: transform 0.5s linear;";
         $css .= "perspective: 1000px;";
         $css .= "transform-style: preserve-3d;";
+
+       // Overlay Width
+        if (!empty($attr['overlaywidth'])) {
+            $css .= "--border-frame-width-dekstop: {$attr['overlaywidth']};";
+        }
+        if (!empty($attr['overlaywidthtablet'])) {
+            $css .= "--border-frame-width-tablet: {$attr['overlaywidthtablet']};";
+        }
+        if (!empty($attr['overlaywidthmobile'])) {
+            $css .= "--border-frame-width-mobile: {$attr['overlaywidthmobile']};";
+        }
+
+        // Overlay Height
+        if (!empty($attr['overlayheight'])) {
+            $css .= "--border-frame-height-dekstop: {$attr['overlayheight']};";
+        }
+        if (!empty($attr['overlayheighttablet'])) {
+            $css .= "--border-frame-height-tablet: {$attr['overlayheighttablet']};";
+        }
+        if (!empty($attr['overlayheightmobile'])) {
+            $css .= "--border-frame-height-mobile: {$attr['overlayheightmobile']};";
+        }
+
+        // Overlay Top
+        if (!empty($attr['overlaytop'])) {
+            $css .= "--border-frame-top-dekstop: {$attr['overlaytop']};";
+        }
+        if (!empty($attr['overlaytoptablet'])) {
+            $css .= "--border-frame-top-tablet: {$attr['overlaytoptablet']};";
+        }
+        if (!empty($attr['overlaytopmobile'])) {
+            $css .= "--border-frame-top-mobile: {$attr['overlaytopmobile']};";
+        }
+
+        // Overlay Left
+        if (!empty($attr['overlayleft'])) {
+            $css .= "--border-frame-left-dekstop: {$attr['overlayleft']};";
+        }
+        if (!empty($attr['overlaylefttablet'])) {
+            $css .= "--border-frame-left-tablet: {$attr['overlaylefttablet']};";
+        }
+        if (!empty($attr['overlayleftmobile'])) {
+            $css .= "--border-frame-left-mobile: {$attr['overlayleftmobile']};";
+        }
+
     $css .= "}";
 
     $css .= "$wrapper .vb-video-rotation{";
@@ -253,9 +316,11 @@ function generate_inline_video_styles($attr) {
         if (isset($attr['duotone']) && !empty($attr['duotone'])) {
             $css .= "    filter: url(#duotone-filter-{$attr['uniqueId']}) !important;";
         }   
+
         if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
-            $aspectRatio = $attr['imageaspectratio']['Desktop'] ?? 'auto';
+            $aspectRatio = $attr['imageaspectratio']['Desktop'] ?? '16/9';
             $css .= "aspect-ratio: $aspectRatio;";
+            $css .= "width:650px;";
         } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'screenfit'){
             $css .="width:100vw;";
             $css .="height:100vh;";
@@ -265,44 +330,101 @@ function generate_inline_video_styles($attr) {
         }
         
         if (!empty($attr['frameData']['radius'])) {
-            $radiusData = $attr['frameData']['radius']['Desktop'];
-            
+            $radiusData = !empty($attr['frameData']['radius']['Desktop']) 
+                ? $attr['frameData']['radius']['Desktop'] 
+                : '0px'; // or any safe default
+
             if (!empty($radiusData['width'])) {
                 // If a general width is set, apply it to all corners
                 $css .= "border-radius: " . $radiusData['width'] . ";";
             } else {
                 // Otherwise, check individual values and apply them
-                $topLeft     = !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                $topRight    = !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                $bottomRight = !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                $bottomLeft  = !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
+                $topLeft     = !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                $topRight    = !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                $bottomRight = !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                $bottomLeft  = !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
         
                 $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
             }
         }
+
         
         if (!empty($attr['imageboxShadow'])) {
             $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Desktop');
         }
         $css .= "display:inline-block;";
 
-        if( $attr['screenfit'] != 'custom'){
-            if (
-                ($attr['blockValue'] != 'you-tube') && 
-                !($attr['blockValue'] === 'you-tube' &&
-                    !empty($attr['youtubeshorts']) &&
-                    $attr['screenfit'] === 'custom'
-                )
-            ) {
-                $css .= "width:100%;";
-            }
-        }
+        // if( $attr['screenfit'] != 'custom'){
+        //     if (
+        //         ($attr['blockValue'] != 'you-tube') && 
+        //         !($attr['blockValue'] === 'you-tube' &&
+        //             !empty($attr['youtubeshorts']) &&
+        //             $attr['screenfit'] === 'custom'
+        //         )
+        //     ) {
+            
+        //     }
+        // }
 
         if($attr['blockValue'] === 'you-tube' && $attr['screenfit'] === 'auto' && $attr['youtubeshorts']){
             $css .= "width:100%;";
         }
       
+    $css .= "}";
 
+    $css .= "$wrapper .vb-you-tube-iframe{";
+       $css .= "
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100% !important;";
+
+    $css .= "}";
+
+    
+    $css .= "$wrapper .vb-video-iframe-cont{";
+
+        if ( $attr['posterOn'] ) {
+            $css .= "display: none;";
+        }
+
+        if (!empty($attr['imageboxShadow'])) {
+            $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Desktop');
+        }
+
+        if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
+            $aspectRatio = $attr['imageaspectratio']['Desktop'] ?? '16/9';
+            $css .= "aspect-ratio: $aspectRatio;";
+            $css .= "width:650px;";
+        } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'screenfit'){
+            $css .="width:100vw;";
+            $css .="height:100vh;";
+        } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
+            $css .= "width: " . $attr['videowidth']['Desktop'] . ";";
+            $css .= "height: " . $attr['videoheight']['Desktop'] . ";";
+        }
+
+        if (!empty($attr['frameData']['radius'])) {
+            $radiusData = !empty($attr['frameData']['radius']['Desktop']) 
+                ? $attr['frameData']['radius']['Desktop'] 
+                : '0px'; // or any safe default
+
+            
+            if (!empty($radiusData['width'])) {
+                // If a general width is set, apply it to all corners
+                $css .= "border-radius: " . $radiusData['width'] . ";";
+            } else {
+                // Otherwise, check individual values and apply them
+                $topLeft     = !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                $topRight    = !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                $bottomRight = !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                $bottomLeft  = !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
+        
+                $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
+            }
+        }
+        // $css .= "padding-bottom: 56% !important;";
     $css .= "}";
 
     // Append hover effect CSS rules
@@ -417,10 +539,6 @@ function generate_inline_video_styles($attr) {
         
         $css .= 'content: " ";
         position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
         z-index: 10;
         box-sizing: border-box;
         pointer-events:none;';
@@ -521,17 +639,19 @@ function generate_inline_video_styles($attr) {
         $css .= "transform: scale(1); ";
         $css .= "opacity: 1;";
         if (!empty($attr['frameData']['radius'])) {
-            $radiusData = $attr['frameData']['radius']['Desktop'];
+            $radiusData = !empty($attr['frameData']['radius']['Desktop']) 
+            ? $attr['frameData']['radius']['Desktop'] 
+            : '0px';
             
             if (!empty($radiusData['width'])) {
                 // If a general width is set, apply it to all corners
                 $css .= "border-radius: " . $radiusData['width'] . ";";
             } else {
                 // Otherwise, check individual values and apply them
-                $topLeft     = !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                $topRight    = !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                $bottomRight = !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                $bottomLeft  = !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
+                $topLeft     = !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                $topRight    = !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                $bottomRight = !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                $bottomLeft  = !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
         
                 $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
             }
@@ -688,6 +808,42 @@ function generate_inline_video_styles($attr) {
    // For tablet (max-width: 1024px)
     $css .= "@media (max-width: 1024px) {";
 
+        $css .= "$wrapper .vb-video-iframe-cont{";
+
+            if (!empty($attr['imageboxShadow'])) {
+                $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Tablet');
+            }
+
+            if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
+                $aspectRatio = $attr['imageaspectratio']['Tablet'] ?? '16/9';
+                $css .= "aspect-ratio: $aspectRatio;";
+                $css .= "width:600px;";
+            } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'screenfit'){
+                $css .="width:100vw;";
+                $css .="height:100vh;";
+            } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
+                $css .= "width: " . $attr['videowidth']['Tablet'] . ";";
+                $css .= "height: " . $attr['videoheight']['Tablet'] . ";";
+            }
+
+            if (!empty($attr['frameData']['radius'])) {
+                $radiusData = $attr['frameData']['radius']['Tablet'];
+                
+                if (!empty($radiusData['width'])) {
+                    // If a general width is set, apply it to all corners
+                    $css .= "border-radius: " . $radiusData['width'] . ";";
+                } else {
+                    // Otherwise, check individual values and apply them
+                    $topLeft     = !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                    $topRight    = !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                    $bottomRight = !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                    $bottomLeft  = !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
+            
+                    $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
+                }
+            }
+        $css .= "}";
+
         $css .= "$wrapper .vb-vayu-modal-close{";
             $css .= $OBJ_STYLE->dimensions('cancelpadding', 'padding', 'Tablet');
             $css .= $OBJ_STYLE->borderRadiusShadow('cancelBorder', 'cancelRadius', 'cancelDropShadow', 'Tablet');
@@ -706,6 +862,7 @@ function generate_inline_video_styles($attr) {
             if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
                 $aspectRatio = isset($attr['imageaspectratio']['Tablet']) ? esc_attr($attr['imageaspectratio']['Tablet']) : 'auto';
                 $css .= "aspect-ratio: $aspectRatio;";
+                $css .= "width:600px;";
             } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
                 $css .= "width: " . (isset($attr['videowidth']['Tablet']) ? esc_attr($attr['videowidth']['Tablet']) : 'auto') . ";";
                 $css .= "height: " . (isset($attr['videoheight']['Tablet']) ? esc_attr($attr['videoheight']['Tablet']) : 'auto') . ";";
@@ -777,10 +934,10 @@ function generate_inline_video_styles($attr) {
                 if (isset($radiusData['width']) && !empty($radiusData['width'])) {
                     $css .= "border-radius: " . $radiusData['width'] . ";";
                 } else {
-                    $topLeft     = isset($radiusData['top-left']) && !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                    $topRight    = isset($radiusData['top-right']) && !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                    $bottomRight = isset($radiusData['bottom-right']) && !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                    $bottomLeft  = isset($radiusData['bottom-left']) && !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
+                    $topLeft     = isset($radiusData['topLeft']) && !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                    $topRight    = isset($radiusData['topRight']) && !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                    $bottomRight = isset($radiusData['bottomRight']) && !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                    $bottomLeft  = isset($radiusData['bottomLeft']) && !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
                 
                     $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
                 }   
@@ -789,6 +946,7 @@ function generate_inline_video_styles($attr) {
             if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
                 $aspectRatio = isset($attr['imageaspectratio']['Tablet']) ? esc_attr($attr['imageaspectratio']['Tablet']) : 'auto';
                 $css .= "aspect-ratio: $aspectRatio;";
+                $css .= "width:600px;";
             } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
                 $css .= "width: " . (isset($attr['videowidth']['Tablet']) ? esc_attr($attr['videowidth']['Tablet']) : 'auto') . ";";
                 $css .= "height: " . (isset($attr['videoheight']['Tablet']) ? esc_attr($attr['videoheight']['Tablet']) : 'auto') . ";";
@@ -817,6 +975,42 @@ function generate_inline_video_styles($attr) {
     // For mobile (max-width: 767px, assuming 400px is part of this range)
     $css .= "@media (max-width: 767px) {";
 
+        $css .= "$wrapper .vb-video-iframe-cont{";
+
+            if (!empty($attr['imageboxShadow'])) {
+                $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Mobile');
+            }
+
+            if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
+                $aspectRatio = $attr['imageaspectratio']['Mobile'] ?? '16/9';
+                $css .= "aspect-ratio: $aspectRatio;";
+                $css .= "width:280px;";
+            } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'screenfit'){
+                $css .="width:100vw;";
+                $css .="height:100vh;";
+            } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
+                $css .= "width: " . $attr['videowidth']['Mobile'] . ";";
+                $css .= "height: " . $attr['videoheight']['Mobile'] . ";";
+            }
+
+            if (!empty($attr['frameData']['radius'])) {
+                $radiusData = $attr['frameData']['radius']['Mobile'];
+                
+                if (!empty($radiusData['width'])) {
+                    // If a general width is set, apply it to all corners
+                    $css .= "border-radius: " . $radiusData['width'] . ";";
+                } else {
+                    // Otherwise, check individual values and apply them
+                    $topLeft     = !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                    $topRight    = !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                    $bottomRight = !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                    $bottomLeft  = !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
+            
+                    $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
+                }
+            }
+        $css .= "}";
+
         $css .= "$wrapper .vb-vayu-modal-close{";
             $css .= $OBJ_STYLE->dimensions('cancelpadding', 'padding', 'Mobile');
             $css .= $OBJ_STYLE->borderRadiusShadow('cancelBorder', 'cancelRadius', 'cancelDropShadow', 'Mobile');
@@ -835,6 +1029,7 @@ function generate_inline_video_styles($attr) {
             if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
                 $aspectRatio = isset($attr['imageaspectratio']['Mobile']) ? esc_attr($attr['imageaspectratio']['Mobile']) : 'auto';
                 $css .= "aspect-ratio: $aspectRatio;";
+                $css .= "width:280px;";
             } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
                 $css .= "width: " . (isset($attr['videowidth']['Mobile']) ? esc_attr($attr['videowidth']['Mobile']) : 'auto') . ";";
                 $css .= "height: " . (isset($attr['videoheight']['Mobile']) ? esc_attr($attr['videoheight']['Mobile']) : 'auto') . ";";
@@ -897,6 +1092,7 @@ function generate_inline_video_styles($attr) {
             if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
                 $aspectRatio = isset($attr['imageaspectratio']['Mobile']) ? esc_attr($attr['imageaspectratio']['Mobile']) : 'auto';
                 $css .= "aspect-ratio: $aspectRatio;";
+                $css .= "width:280px;";
             } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'custom'){
                 $css .= "width: " . (isset($attr['videowidth']['Mobile']) ? esc_attr($attr['videowidth']['Mobile']) : 'auto') . ";";
                 $css .= "height: " . (isset($attr['videoheight']['Mobile']) ? esc_attr($attr['videoheight']['Mobile']) : 'auto') . ";";
@@ -908,10 +1104,10 @@ function generate_inline_video_styles($attr) {
                 if (isset($radiusData['width']) && !empty($radiusData['width'])) {
                     $css .= "border-radius: " . $radiusData['width'] . ";";
                 } else {
-                    $topLeft     = isset($radiusData['top-left']) && !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                    $topRight    = isset($radiusData['top-right']) && !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                    $bottomRight = isset($radiusData['bottom-right']) && !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                    $bottomLeft  = isset($radiusData['bottom-left']) && !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
+                    $topLeft     = isset($radiusData['topLeft']) && !empty($radiusData['topLeft']) ? $radiusData['topLeft'] : "0";
+                    $topRight    = isset($radiusData['topRight']) && !empty($radiusData['topRight']) ? $radiusData['topRight'] : "0";
+                    $bottomRight = isset($radiusData['bottomRight']) && !empty($radiusData['bottomRight']) ? $radiusData['bottomRight'] : "0";
+                    $bottomLeft  = isset($radiusData['bottomLeft']) && !empty($radiusData['bottomLeft']) ? $radiusData['bottomLeft'] : "0";
                 
                     $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
                 }   

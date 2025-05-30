@@ -15,11 +15,7 @@
   ],
   "description": "A block to embed and display videos from various sources, like Media, and YouTube, directly on your website.",
   "supports": {
-    "html": false,
-    "align": [
-      "wide",
-      "full"
-    ]
+    "html": false
   },
   "example": {
     "attributes": {

@@ -39,7 +39,7 @@ class Vayu_Blocks_Sites_Library_WXR_Importer {
 	private function __construct() {
 
 		if ( ! class_exists( 'WP_Importer' ) ) {
-			defined( 'WP_LOAD_IMPORTERS' ) || define( 'WP_LOAD_IMPORTERS', true );
+			//defined( 'WP_LOAD_IMPORTERS' ) || define( 'WP_LOAD_IMPORTERS', true );
 			require_once  ABSPATH . '/wp-admin/includes/class-wp-importer.php';
 		}
 

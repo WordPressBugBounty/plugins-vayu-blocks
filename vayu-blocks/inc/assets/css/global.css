@@ -108,7 +108,7 @@
     }
 
   @media only screen and (min-width: 1024px)  {
-	.th-hide-desktop:before {
+	.vb-th-hide-desktop:before {
 		content: "";
 		display: block;
 		position: absolute;
@@ -125,7 +125,7 @@
 
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
-	.th-hide-tablet:before {
+	.vb-th-hide-tablet:before {
 		content: "";
 		display: block;
 		position: absolute;
@@ -142,7 +142,7 @@
 
 @media only screen and (max-width: 767px) {
   
-	.th-hide-mobile:before {
+	.vb-th-hide-mobile:before {
 		content: "";
 		display: block;
 		position: absolute;
@@ -155,4 +155,11 @@
 		
 	}
 
+}
+
+/* Mobile devices: max-width 767px */
+@media (max-width: 767px) {
+  .vb-bg-no-play-on-mobile {
+    display: none !important;
+  }
 }

@@ -6,6 +6,10 @@
 
 function vayu_unfold_style($attr){
 
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
     $uniqueId = isset($attr['uniqueId']) ? $attr['uniqueId'] : '';
     $wrapper = '#' . esc_attr($uniqueId) . '.wp-block-vayu-blocks-unfold';
@@ -26,6 +30,9 @@ function vayu_unfold_style($attr){
         $foldTrans = !empty($attr['foldTrans']) ? $attr['foldTrans'] : 'ease';
         $css .= "--fold-transition-function: {$foldTrans};";
     }
+
+    $maxHeight = isset($attr['maxHeight']) && is_numeric($attr['maxHeight']) ? $attr['maxHeight'] : 1000;
+    $css .= "--unfolded-height: {$maxHeight}px;";
 
     $css .= "}";
 
@@ -238,6 +245,24 @@ function vayu_unfold_style($attr){
 
     
     $css .= "}";
+
+    if (isset($attr['advResponsive']['Desktop']) && $attr['advResponsive']['Desktop'] === true) {
+					$css .= "@media only screen and (min-width: 1024px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Tablet']) &&
+					$attr['advResponsive']['Tablet'] === true
+				) {
+					$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Mobile']) &&
+					$attr['advResponsive']['Mobile'] === true
+				) {
+					$css .= "@media only screen and (max-width: 767px) { .{$attr['uniqueId']} { display: none; } }";
+				}
 
     return $css;
 }

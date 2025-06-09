@@ -47,9 +47,8 @@ class Vayu_blocks_advance_timeline {
             $advance_timeline_html .= $content;
 
         $advance_timeline_html .= '</div>';
-
         
-        return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+        return '<div id="' . esc_attr($uniqueId) . '"  ' . get_block_wrapper_attributes([
             'class' => $finalClass
         ]) . '>' . $advance_timeline_html . '</div>';        
         
@@ -58,6 +57,9 @@ class Vayu_blocks_advance_timeline {
 }
 
 function vayu_block_advance_timeline_render($attr,$content) {
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
 
     $default_attributes = include('defaultattributes.php');
     $attr = array_merge($default_attributes, $attr);

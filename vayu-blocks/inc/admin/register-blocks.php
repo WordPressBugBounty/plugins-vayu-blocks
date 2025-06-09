@@ -17,7 +17,7 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
             ),
             'advance-button'=> array(
                 'isActive'        => isset($options['button']['isActive']) ? $options['button']['isActive'] : 1,
-                'render_callback' => '',
+                'render_callback' => 'vayu_blocks_advance_button_render',
             ),
             'flip-box'      => array(
                 'isActive'        => isset($options['flipBox']['isActive']) ? $options['flipBox']['isActive'] : 0,
@@ -87,7 +87,7 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'render_callback' => 'vayu_block_post_pagination_render',
             ),
             'swipe-slider'       => array(
-                'isActive'        => isset($options['advanceSlider']['isActive']) ? $options['advanceSlider']['isActive'] : 1,
+                'isActive'        => 1,
                 'render_callback' => 'vayu_block_swipe_slider_render',
                 
             ),

@@ -39,6 +39,10 @@ class Vayu_Advance_Product_Tab {
 
         public function render_callback( $attr ) {
 
+        if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return ;
+        }
+
         wp_enqueue_style( 'th-icon', VAYU_BLOCKS_URL . '/inc/th-icon/style.css', '', '1.0.0' );
         wp_enqueue_script( 'advance-product-tab-script', VAYU_BLOCKS_URL .'/inc/render/advance-product-tab/js/advance-product-tab.js', array( 'jquery' ), '', true );
         wp_localize_script(
@@ -53,8 +57,9 @@ class Vayu_Advance_Product_Tab {
 
         $block_content = '<div id="wp-block-th-advance-product-tag-' . esc_attr($attr['uniqueId']) . '"  data-attr= "' . esc_attr(json_encode($attr)) . '" class="wp-block-vayu-blocks-advance-product wp-block-th-advance-product-tag-' . esc_attr($attr['uniqueId']) . '  align' . (isset($attr['align']) ? esc_attr($attr['align']) : '') . '">
             <div class="th-product-block-wrapper">
+            
                 <div class="wp-block-th-blocks-overlay"></div>';
-                    $showTab = isset($attr['showTab']) ? $attr['showTab'] : true;
+                    $showTab = isset($attr['showTab']) ? $attr['showTab'] : '';
                     if($showTab):
                     $block_content .= '<div class="th-product-block-cat-filter">
                     <ul class="category-tabs">';

@@ -6,6 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function generate_inline_video_styles($attr) {
 
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+
     $css = '';
 
     $default_attributes = include('defaultattributes.php');
@@ -237,49 +241,28 @@ function generate_inline_video_styles($attr) {
         $css .= "perspective: 1000px;";
         $css .= "transform-style: preserve-3d;";
 
-       // Overlay Width
-        if (!empty($attr['overlaywidth'])) {
-            $css .= "--border-frame-width-dekstop: {$attr['overlaywidth']};";
-        }
-        if (!empty($attr['overlaywidthtablet'])) {
-            $css .= "--border-frame-width-tablet: {$attr['overlaywidthtablet']};";
-        }
-        if (!empty($attr['overlaywidthmobile'])) {
-            $css .= "--border-frame-width-mobile: {$attr['overlaywidthmobile']};";
-        }
+        $position = $attr['position'] ?? [];
+
+        // Overlay Width
+        $css .= isset($position['width']['Desktop']) ? "--border-frame-width-desktop: {$position['width']['Desktop']};" : '';
+        $css .= isset($position['width']['Tablet'])  ? "--border-frame-width-tablet: {$position['width']['Tablet']};" : '';
+        $css .= isset($position['width']['Mobile'])  ? "--border-frame-width-mobile: {$position['width']['Mobile']};" : '';
 
         // Overlay Height
-        if (!empty($attr['overlayheight'])) {
-            $css .= "--border-frame-height-dekstop: {$attr['overlayheight']};";
-        }
-        if (!empty($attr['overlayheighttablet'])) {
-            $css .= "--border-frame-height-tablet: {$attr['overlayheighttablet']};";
-        }
-        if (!empty($attr['overlayheightmobile'])) {
-            $css .= "--border-frame-height-mobile: {$attr['overlayheightmobile']};";
-        }
+        $css .= isset($position['height']['Desktop']) ? "--border-frame-height-desktop: {$position['height']['Desktop']};" : '';
+        $css .= isset($position['height']['Tablet'])  ? "--border-frame-height-tablet: {$position['height']['Tablet']};" : '';
+        $css .= isset($position['height']['Mobile'])  ? "--border-frame-height-mobile: {$position['height']['Mobile']};" : '';
 
         // Overlay Top
-        if (!empty($attr['overlaytop'])) {
-            $css .= "--border-frame-top-dekstop: {$attr['overlaytop']};";
-        }
-        if (!empty($attr['overlaytoptablet'])) {
-            $css .= "--border-frame-top-tablet: {$attr['overlaytoptablet']};";
-        }
-        if (!empty($attr['overlaytopmobile'])) {
-            $css .= "--border-frame-top-mobile: {$attr['overlaytopmobile']};";
-        }
+        $css .= isset($position['top']['Desktop']) ? "--border-frame-top-desktop: {$position['top']['Desktop']};" : '';
+        $css .= isset($position['top']['Tablet'])  ? "--border-frame-top-tablet: {$position['top']['Tablet']};" : '';
+        $css .= isset($position['top']['Mobile'])  ? "--border-frame-top-mobile: {$position['top']['Mobile']};" : '';
 
         // Overlay Left
-        if (!empty($attr['overlayleft'])) {
-            $css .= "--border-frame-left-dekstop: {$attr['overlayleft']};";
-        }
-        if (!empty($attr['overlaylefttablet'])) {
-            $css .= "--border-frame-left-tablet: {$attr['overlaylefttablet']};";
-        }
-        if (!empty($attr['overlayleftmobile'])) {
-            $css .= "--border-frame-left-mobile: {$attr['overlayleftmobile']};";
-        }
+        $css .= isset($position['left']['Desktop']) ? "--border-frame-left-desktop: {$position['left']['Desktop']};" : '';
+        $css .= isset($position['left']['Tablet'])  ? "--border-frame-left-tablet: {$position['left']['Tablet']};" : '';
+        $css .= isset($position['left']['Mobile'])  ? "--border-frame-left-mobile: {$position['left']['Mobile']};" : '';
+
 
     $css .= "}";
 

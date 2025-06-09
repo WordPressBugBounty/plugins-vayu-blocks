@@ -289,17 +289,23 @@ function vayu_advance_heading_style($attr){
 			$css .= "}}";
             // for mobile view hover
 
-			if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
-				$css .= "@media only screen and (min-width: 1024px){.{$attr['uniqueId']}{display:none;} }";
-			}
-			
-			if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
-				$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) {.{$attr['uniqueId']}{display:none;}}";
-			}
-			
-			if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
-				$css .= "@media only screen and (max-width: 767px) {.{$attr['uniqueId']}{display:none;}}";
-			}
+			if (isset($attr['advResponsive']['Desktop']) && $attr['advResponsive']['Desktop'] === true) {
+					$css .= "@media only screen and (min-width: 1024px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Tablet']) &&
+					$attr['advResponsive']['Tablet'] === true
+				) {
+					$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Mobile']) &&
+					$attr['advResponsive']['Mobile'] === true
+				) {
+					$css .= "@media only screen and (max-width: 767px) { .{$attr['uniqueId']} { display: none; } }";
+				}
 
     }
 

@@ -5,15 +5,17 @@ require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/function.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/functions-style.php';
 require_once VAYU_BLOCKS_DIR_PATH . 'inc/admin/admin-api.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/render-style.php';
-require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/update-style.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/enqueue-render-style.php';
 // render block include files
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/responsive-style.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/display-condition.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-animation/class-blocks-animation.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-heading/advance-heading.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-container/advance-container.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-container/advance-container-render.php';
 
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-spacer/advance-spacer.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-button/advance-button-content.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-button/advance-button.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-product-tab/advance-product-tab.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/advance-product-tab/advance-product-tab-style.php';

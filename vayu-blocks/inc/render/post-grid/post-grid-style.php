@@ -5,6 +5,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function generate_inline_post_styles($attr) {
+    
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+
     $css = '';
 
     if (isset($attr['pg_posts']) && is_array($attr['pg_posts']) 

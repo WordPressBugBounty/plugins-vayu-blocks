@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  } 
 
  function vayu_block_swipe_slider_render($attributes, $content, $block){
+
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attributes))->display()) {
+        return ;
+    }
     
     $navigation = '';
 

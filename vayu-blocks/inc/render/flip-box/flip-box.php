@@ -95,7 +95,7 @@ class Vayu_blocks_image_flip {
 
         $classes[] = 'vb-flip-' . $uniqueId;
 
-        return '<div ' . get_block_wrapper_attributes([
+        return '<div  ' . get_block_wrapper_attributes([
             'class' => implode( ' ', $classes ),
         ]) . '>' . $image_html . '</div>';
 
@@ -105,6 +105,11 @@ class Vayu_blocks_image_flip {
 
 // Render callback for the block
 function vayu_blocks_flip_box_render($attr,$content) {
+    
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+
     // Include default attributes
     $default_attributes = include('defaultattributes.php');
 

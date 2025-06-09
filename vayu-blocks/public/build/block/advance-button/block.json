@@ -33,9 +33,7 @@
     },
     "content": {
       "type": "string",
-      "source": "text",
-      "selector": "h1,h2,h3,h4,h5,h6,div,p,span",
-      "default": "Read"
+      "default": "Button"
     },
     "post": {
       "type": "object"
@@ -46,7 +44,7 @@
     },
     "iconPosition": {
       "type": "string",
-      "default": "before"
+      "default": "after"
     },
     "widthType": {
       "type": "string",
@@ -117,13 +115,17 @@
     "fontSizeMobile": {
       "type": "number"
     },
+    "iconCopy": {
+      "type": "string",
+      "default": ""
+    },
     "icon": {
       "type": "string",
       "default": ""
     },
     "iconName": {
       "type": "string",
-      "default": "wordpress-arrowLeft"
+      "default": "wordpress-arrowRight"
     },
     "iconToggle": {
       "type": "boolean",
@@ -157,7 +159,7 @@
       "type": "object",
       "default": {
         "type": "",
-        "color": "#ff6912",
+        "color": "#7325c6",
         "image": {
           "url": ""
         },
@@ -217,7 +219,7 @@
     },
     "hoverColor": {
       "type": "string",
-      "default": "#FFF"
+      "default": ""
     },
     "typography": {
       "type": "object"
@@ -226,23 +228,13 @@
       "type": "object",
       "default": {
         "Desktop": {
-          "top": "12px",
+          "top": "8px",
           "right": "18px",
-          "bottom": "12px",
+          "bottom": "8px",
           "left": "18px"
         },
-        "Tablet": {
-          "top": "12",
-          "right": "18",
-          "bottom": "12",
-          "left": "18"
-        },
-        "Mobile": {
-          "top": "12",
-          "right": "18",
-          "bottom": "12",
-          "left": "18"
-        }
+        "Tablet": {},
+        "Mobile": {}
       }
     },
     "iconSpacing": {

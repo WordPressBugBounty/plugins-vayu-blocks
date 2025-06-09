@@ -128,8 +128,10 @@ class Vayu_blocks_image {
         }
                 
         $finalClass = implode(' ', $classes);
-        
-        return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+
+        $dataAttributes = $OBJ_STYLE->follower();
+
+        return '<div id="' . esc_attr($uniqueId) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
             'class' => $finalClass
         ]) . '>' . $image_html . '</div>';
         
@@ -248,6 +250,11 @@ class Vayu_blocks_image {
 }
 
 function vayu_block_image_render($attr,$content) {
+
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return ;
+    }
+
     // Include default attributes
     $default_attributes = include('defaultattributes.php');
 

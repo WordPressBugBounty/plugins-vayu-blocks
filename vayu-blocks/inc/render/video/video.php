@@ -353,7 +353,16 @@ class Vayu_blocks_video {
             $classes[] = $screenfit;
         }
 
-        return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+        if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
+            $classes[] = $attributes['advAnimation']['className'];
+        }
+
+        $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
+        $dataAttributes = $OBJ_STYLE->follower();
+
+        $image_html .= $OBJ_STYLE->renderVideo('advBackground');
+
+        return '<div id="' . esc_attr($uniqueId) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
             'class' => implode( ' ', $classes ),
         ]) . '>' . $image_html . '</div>';
 
@@ -482,6 +491,10 @@ class Vayu_blocks_video {
 // Render callback for the block
 function vayu_block_video_render($attr,$content) {
 
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+
     $default_attributes = include('defaultattributes.php');
 
     $attr = array_merge($default_attributes, $attr);
@@ -490,4 +503,4 @@ function vayu_block_video_render($attr,$content) {
     
     return $image->render();
 
-} 
+}

@@ -6,6 +6,10 @@
 
 function vayu_blocks_advance_container_render($attributes, $content, $block) {
 
+     if ((new VAYUBLOCKS_DISPLAY_CONDITION($attributes))->display()) {
+        return ;
+    }
+
     $anchor_id      = !empty($attributes['anchor']) ? esc_attr($attributes['anchor']) : '';
 	$unique_id      = !empty($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
     $tag_name       = !empty($attributes['containerHTMLTag']) ? esc_attr($attributes['containerHTMLTag']) : 'div';
@@ -14,6 +18,7 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
     $animationCls   = !empty($attributes['advAnimation']['className']) ? esc_attr($attributes['advAnimation']['className']) : '';
 	// Detect if current block is nested inside another vayu container block
 	global $post;
+    $parent_block;
 	if ($post && $unique_id) {
 		$parsed_blocks = parse_blocks($post->post_content);
 		$parent_block = vayu_find_parent_block_by_unique_id($parsed_blocks, $unique_id);

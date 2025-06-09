@@ -6,6 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 
 function generate_inline_icon_styles($attr) {
+
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+    
     $css = '';
 
     //attributes-merge

@@ -96,13 +96,16 @@ class VayuBlocksPostGrid {
                 $classes[] = esc_attr($animated);
             }
 
-            if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
-                $classes[] = $attributes['advAnimation']['className'];
+            if ( ! empty( $this->attr['advAnimation'] ) && ! empty( $this->attr['advAnimation']['className'] ) ) {
+                $classes[] = $this->attr['advAnimation']['className'];
             }
             
             $finalClass = implode(' ', $classes);
+
+            $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($this->attr);
+            $dataAttributes = $OBJ_STYLE->follower();
             
-            $output .= ' <div ' . get_block_wrapper_attributes(['class' => $finalClass]) . '>';
+            $output .= ' <div id="' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes(['class' => $finalClass]) . '>';
             
                 $output .= '<div class="th-post-grid-wrapper-' . esc_attr($this->attr['pg_posts'][0]['uniqueID']) . '">';
 
@@ -412,6 +415,11 @@ class VayuBlocksPostGrid {
 }
 
 function post_grid_render($attr) {
+    
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+
     $default_attributes = include('defaultattributes.php'); //attributes Merged
     $attr = array_merge($default_attributes, $attr); 
     $renderer = new VayuBlocksPostGrid($attr);

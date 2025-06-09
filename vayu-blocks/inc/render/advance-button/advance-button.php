@@ -79,7 +79,7 @@ else{
       }
       else{ 
         $css .= isset( $attr['iconSpacing'] ) ? "margin:0 {$attr['iconSpacing'] } 0 0;" : '';
-        $css .= "order: 5; display: flex; align-items: center;";
+        $css .= "order: 5; display: inline-flex; align-items: center;";
       }
   
       $css .= "}";

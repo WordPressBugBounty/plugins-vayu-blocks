@@ -3,6 +3,11 @@
 	exit;
 } 
 function vayu_block_blurb_render($attributes, $content, $block) {
+
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attributes))->display()) {
+        return '';
+    }
+
     $classnames = 'vayu_blocks_blrub_wrap';
 
     // Add layout-specific classnames

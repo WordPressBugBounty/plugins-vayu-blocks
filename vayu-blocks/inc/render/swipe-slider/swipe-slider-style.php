@@ -6,6 +6,10 @@
 
 function vayu_swiper_slider_style($attr){
 
+	if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return ;
+    }
+
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
 
     $css = '';
@@ -103,20 +107,17 @@ function vayu_swiper_slider_style($attr){
 
 		if(isset($attr['swipeStartGap'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel{";
-			$swipeStartGapUnit = isset($attr['swipeStartGapUnit']) ? $attr['swipeStartGapUnit'] : 'px';
-			$css .= "padding-left: {$attr['swipeStartGap']}{$swipeStartGapUnit};";
+			$css .= "padding-left: {$attr['swipeStartGap']['Desktop']};";
 			$css .="}";
 		}
 		
 		if (isset($attr['swipeslideWidth']) || isset($attr['swipeslideGap'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
 			if (isset($attr['swipeslideWidth'])) {
-				$swipeslideWidthUnit = isset($attr['swipeslideWidthUnit']) ? $attr['swipeslideWidthUnit'] : 'px';
-				$css .= "width: {$attr['swipeslideWidth']}{$swipeslideWidthUnit};";
+				$css .= "width: {$attr['swipeslideWidth']['Desktop']};";
 			}
 			if (isset($attr['swipeslideGap'])) {
-				$swipeslideGapUnit = isset($attr['swipeslideGapUnit']) ? $attr['swipeslideGapUnit'] : 'px';
-				$css .= "margin-right: {$attr['swipeslideGap']}{$swipeslideGapUnit};";
+				$css .= "margin-right: {$attr['swipeslideGap']['Desktop']};";
 			}
 			$css .="}";
 	    }
@@ -127,21 +128,18 @@ function vayu_swiper_slider_style($attr){
 
 		if(isset($attr['swipeNavSize'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button span{";
-			$swipeNavSizeUnit = isset($attr['swipeNavSizeUnit']) ? $attr['swipeNavSizeUnit'] : 'px';
-			$css .= "height: {$attr['swipeNavSize']}{$swipeNavSizeUnit};
-			         width: {$attr['swipeNavSize']}{$swipeNavSizeUnit};
-					 font-size:{$attr['swipeNavSize']}{$swipeNavSizeUnit};";
+			$css .= "height: {$attr['swipeNavSize']['Desktop']}px;
+			         width: {$attr['swipeNavSize']['Desktop']}px;
+					 font-size:{$attr['swipeNavSize']['Desktop']}px;";
 			$css .="}";
 		}
 
 		if(isset($attr['swipeNavPostion'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button.left{";
-			$swipeNavPostionUnit = isset($attr['swipeNavPostionUnit']) ? $attr['swipeNavPostionUnit'] : 'px';
-			$css .= "left: {$attr['swipeNavPostion']}{$swipeNavPostionUnit};";
+			$css .= "left: {$attr['swipeNavPostion']['Desktop']}px;";
 			$css .="}";
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button.right{";
-			$swipeNavPostionUnit = isset($attr['swipeNavPostionUnit']) ? $attr['swipeNavPostionUnit'] : 'px';
-			$css .= "right: {$attr['swipeNavPostion']}{$swipeNavPostionUnit};";
+			$css .= "right: {$attr['swipeNavPostion']['Desktop']}px;";
 			$css .="}";
 		}
 
@@ -163,8 +161,7 @@ function vayu_swiper_slider_style($attr){
 		/***************************/ 
 		if(isset($attr['swipePagiSize'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .pagination-container .pagination-dot{";
-			$swipePagiSizeUnit = isset($attr['swipePagiSizeUnit']) ? $attr['swipePagiSizeUnit'] : 'px';
-			$css .= "width:{$attr['swipePagiSize']}{$swipePagiSizeUnit};height: {$attr['swipePagiSize']}{$swipePagiSizeUnit};";
+			$css .= "width:{$attr['swipePagiSize']['Desktop']}px;height: {$attr['swipePagiSize']['Desktop']}px;";
 			$css .="}";
 		}
 
@@ -201,47 +198,44 @@ function vayu_swiper_slider_style($attr){
         // slide option Tablet
 		/*******************/ 
 
-		if(isset($attr['swipeStartGapTablet'])){
+		if(isset($attr['swipeStartGap'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel{";
-			$swipeStartGapUnit = isset($attr['swipeStartGapUnit']) ? $attr['swipeStartGapUnit'] : 'px';
-			$css .= "padding-left: {$attr['swipeStartGapTablet']}{$swipeStartGapUnit};";
+			
+			$css .= "padding-left: {$attr['swipeStartGap']['Tablet']};";
 			$css .="}";
 		}
 		
-		if (isset($attr['swipeslideWidthTablet']) || isset($attr['swipeslideGapTablet'])){
+		if (isset($attr['swipeslideWidth']) || isset($attr['swipeslideGap'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
-			if (isset($attr['swipeslideWidthTablet'])) {
-				$swipeslideWidthUnit = isset($attr['swipeslideWidthUnit']) ? $attr['swipeslideWidthUnit'] : 'px';
-				$css .= "width: {$attr['swipeslideWidthTablet']}{$swipeslideWidthUnit};";
+			if (isset($attr['swipeslideWidth'])) {
+				$css .= "width: {$attr['swipeslideWidth']['Tablet']};";
 			}
-			if (isset($attr['swipeslideGapTablet'])) {
-				$swipeslideGapUnit = isset($attr['swipeslideGapUnit']) ? $attr['swipeslideGapUnit'] : 'px';
-				$css .= "margin-right: {$attr['swipeslideGapTablet']}{$swipeslideGapUnit};";
+			if (isset($attr['swipeslideGap'])) {
+				$css .= "margin-right: {$attr['swipeslideGap']['Tablet']};";
 			}
 			$css .="}";
 	    }
 
-       /**************************/ 
+       
+
+        /**************************/ 
         // slide navigation option
 		/***************************/ 
 
-		if(isset($attr['swipeNavSizeTablet'])){
+		if(isset($attr['swipeNavSize'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button span{";
-			$swipeNavSizeUnit = isset($attr['swipeNavSizeUnit']) ? $attr['swipeNavSizeUnit'] : 'px';
-			$css .= "height: {$attr['swipeNavSizeTablet']}{$swipeNavSizeUnit};
-			         width: {$attr['swipeNavSizeTablet']}{$swipeNavSizeUnit};
-					 font-size:{$attr['swipeNavSizeTablet']}{$swipeNavSizeUnit};";
+			$css .= "height: {$attr['swipeNavSize']['Tablet']}px;
+			         width: {$attr['swipeNavSize']['Tablet']}px;
+					 font-size:{$attr['swipeNavSize']['Tablet']}px;";
 			$css .="}";
 		}
 
-		if(isset($attr['swipeNavPostionTablet'])){
+		if(isset($attr['swipeNavPostion'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button.left{";
-			$swipeNavPostionUnit = isset($attr['swipeNavPostionUnit']) ? $attr['swipeNavPostionUnit'] : 'px';
-			$css .= "left: {$attr['swipeNavPostionTablet']}{$swipeNavPostionUnit};";
+			$css .= "left: {$attr['swipeNavPostion']['Tablet']}px;";
 			$css .="}";
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button.right{";
-			$swipeNavPostionUnit = isset($attr['swipeNavPostionUnit']) ? $attr['swipeNavPostionUnit'] : 'px';
-			$css .= "right: {$attr['swipeNavPostionTablet']}{$swipeNavPostionUnit};";
+			$css .= "right: {$attr['swipeNavPostion']['Tablet']}px;";
 			$css .="}";
 		}
 
@@ -252,10 +246,9 @@ function vayu_swiper_slider_style($attr){
 		/**************************/ 
         // slide pagination option
 		/***************************/ 
-		if(isset($attr['swipePagiSizeTablet'])){
+		if(isset($attr['swipePagiSize'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .pagination-container .pagination-dot{";
-			$swipePagiSizeUnit = isset($attr['swipePagiSizeUnit']) ? $attr['swipePagiSizeUnit'] : 'px';
-			$css .= "width:{$attr['swipePagiSizeTablet']}{$swipePagiSizeUnit};height: {$attr['swipePagiSizeTablet']}{$swipePagiSizeUnit};";
+			$css .= "width:{$attr['swipePagiSize']['Tablet']}px;height: {$attr['swipePagiSize']['Tablet']}px;";
 			$css .="}";
 		}
 
@@ -280,51 +273,49 @@ function vayu_swiper_slider_style($attr){
 	  $css .= $OBJ_STYLE->borderRadiusShadow('advBorder','advBorderRadius','advDropShadow','Mobile');
 	  $css .="}";
       
-	   /*******************/ 
-        // slide option Mobile
+	   
+	     /*******************/ 
+        // slide option Tablet
 		/*******************/ 
 
-		if(isset($attr['swipeStartGapMobile'])){
+		if(isset($attr['swipeStartGap'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel{";
-			$swipeStartGapUnit = isset($attr['swipeStartGapUnit']) ? $attr['swipeStartGapUnit'] : 'px';
-			$css .= "padding-left: {$attr['swipeStartGapMobile']}{$swipeStartGapUnit};";
+			
+			$css .= "padding-left: {$attr['swipeStartGap']['Mobile']};";
 			$css .="}";
 		}
 		
-		if (isset($attr['swipeslideWidthMobile']) || isset($attr['swipeslideGapMobile'])){
+		if (isset($attr['swipeslideWidth']) || isset($attr['swipeslideGap'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
-			if (isset($attr['swipeslideWidthMobile'])) {
-				$swipeslideWidthUnit = isset($attr['swipeslideWidthUnit']) ? $attr['swipeslideWidthUnit'] : 'px';
-				$css .= "width: {$attr['swipeslideWidthMobile']}{$swipeslideWidthUnit};";
+			if (isset($attr['swipeslideWidth'])) {
+				$css .= "width: {$attr['swipeslideWidth']['Mobile']};";
 			}
-			if (isset($attr['swipeslideGapMobile'])) {
-				$swipeslideGapUnit = isset($attr['swipeslideGapUnit']) ? $attr['swipeslideGapUnit'] : 'px';
-				$css .= "margin-right: {$attr['swipeslideGapMobile']}{$swipeslideGapUnit};";
+			if (isset($attr['swipeslideGap'])) {
+				$css .= "margin-right: {$attr['swipeslideGap']['Mobile']};";
 			}
 			$css .="}";
 	    }
 
-       /**************************/ 
+       
+
+        /**************************/ 
         // slide navigation option
 		/***************************/ 
 
-		if(isset($attr['swipeNavSizeMobile'])){
+		if(isset($attr['swipeNavSize'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button span{";
-			$swipeNavSizeUnit = isset($attr['swipeNavSizeUnit']) ? $attr['swipeNavSizeUnit'] : 'px';
-			$css .= "height: {$attr['swipeNavSizeMobile']}{$swipeNavSizeUnit};
-			         width: {$attr['swipeNavSizeMobile']}{$swipeNavSizeUnit};
-					 font-size:{$attr['swipeNavSizeMobile']}{$swipeNavSizeUnit};";
+			$css .= "height: {$attr['swipeNavSize']['Mobile']}px;
+			         width: {$attr['swipeNavSize']['Mobile']}px;
+					 font-size:{$attr['swipeNavSize']['Mobile']}px;";
 			$css .="}";
 		}
 
-		if(isset($attr['swipeNavPostionMobile'])){
+		if(isset($attr['swipeNavPostion'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button.left{";
-			$swipeNavPostionUnit = isset($attr['swipeNavPostionUnit']) ? $attr['swipeNavPostionUnit'] : 'px';
-			$css .= "left: {$attr['swipeNavPostionMobile']}{$swipeNavPostionUnit};";
+			$css .= "left: {$attr['swipeNavPostion']['Mobile']}px;";
 			$css .="}";
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .scroll-button.right{";
-			$swipeNavPostionUnit = isset($attr['swipeNavPostionUnit']) ? $attr['swipeNavPostionUnit'] : 'px';
-			$css .= "right: {$attr['swipeNavPostionMobile']}{$swipeNavPostionUnit};";
+			$css .= "right: {$attr['swipeNavPostion']['Mobile']}px;";
 			$css .="}";
 		}
 
@@ -335,13 +326,28 @@ function vayu_swiper_slider_style($attr){
 		/**************************/ 
         // slide pagination option
 		/***************************/ 
-		if(isset($attr['swipePagiSizeMobile'])){
+		if(isset($attr['swipePagiSize'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .pagination-container .pagination-dot{";
-			$swipePagiSizeUnit = isset($attr['swipePagiSizeUnit']) ? $attr['swipePagiSizeUnit'] : 'px';
-			$css .= "width:{$attr['swipePagiSizeMobile']}{$swipePagiSizeUnit};height: {$attr['swipePagiSizeMobile']}{$swipePagiSizeUnit};";
+			$css .= "width:{$attr['swipePagiSize']['Mobile']}px;height: {$attr['swipePagiSize']['Mobile']}px;";
 			$css .="}";
 		}
 	  $css .="}";
+
+	  if (isset($attr['advResponsive']['Desktop']) && $attr['advResponsive']['Desktop'] === true) {
+					$css .= "@media only screen and (min-width: 1024px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (isset($attr['advResponsive']['Tablet']) && $attr['advResponsive']['Tablet'] === true
+				) {
+					$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Mobile']) &&
+					$attr['advResponsive']['Mobile'] === true
+				) {
+					$css .= "@media only screen and (max-width: 767px) { .{$attr['uniqueId']} { display: none; } }";
+				}
 
 
     }

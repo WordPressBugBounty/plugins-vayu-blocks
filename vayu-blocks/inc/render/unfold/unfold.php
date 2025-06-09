@@ -5,10 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function vayu_block_unfold_render($attributes, $content, $block) {
 
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attributes))->display()) {
+        return '';
+    }
+
     $is_unfolded = !empty($attributes['isUnfolded']);
     $unfold_content_template = $content;
-    $fold_text = !empty($attributes['foldBtnTxt']) ? $attributes['foldBtnTxt'] : __('Fold', 'vayu-blocks');
-    $unfold_text = !empty($attributes['unfoldBtnTxt']) ? $attributes['unfoldBtnTxt'] : __('UnFold', 'vayu-blocks');
+    $fold_text = !empty($attributes['foldBtnTxt']) ? $attributes['foldBtnTxt'] : __('', 'vayu-blocks');
+    $unfold_text = !empty($attributes['unfoldBtnTxt']) ? $attributes['unfoldBtnTxt'] : __('', 'vayu-blocks');
+
+    $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
+    $dataAttributes = $OBJ_STYLE->follower();
+
+    $image_html = $OBJ_STYLE->renderVideo('advBackground');
 
     // Set the fold icon based on selectedFoldIcon attribute
     switch ($attributes['selectedFoldIcon'] ?? '') {
@@ -84,7 +93,9 @@ function vayu_block_unfold_render($attributes, $content, $block) {
 
     ob_start();
     ?>
-    <div id="<?php echo esc_attr($attributes['uniqueId']);?>" <?php echo get_block_wrapper_attributes(); ?>>
+    <div id="<?php echo esc_attr($attributes['uniqueId']);?>"  <?php echo $dataAttributes; ?>  <?php echo get_block_wrapper_attributes(); ?>>
+
+       <?= $image_html ?>
         <div class="unfold-inner"
             style="cursor: <?php echo isset($attributes['contentShowEvent']) && in_array($attributes['contentShowEvent'], ['contentclick', 'contenthover']) ? 'pointer' : 'auto'; ?>;"
             data-content-show-event="<?php echo esc_attr(isset($attributes['contentShowEvent']) ? $attributes['contentShowEvent'] : ''); ?>"

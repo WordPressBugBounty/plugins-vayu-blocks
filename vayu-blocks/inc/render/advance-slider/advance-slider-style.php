@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function generate_inline_slider_styles($attr) {
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
     $css = '';
 
     //attributes-merge
@@ -108,7 +111,7 @@ function generate_inline_slider_styles($attr) {
         $css .= "width:0 !important;";
         $css .= "height:0 !important;";
         $css .= "background: " . esc_attr($attr['navigationbackground']) . " !important;";
-        $css .= "color: " . esc_attr($attr['navigationcolor']) . ";";
+        $css .= "color: transparent;";
         $css .= "top: " . esc_attr($attr['navigationtop']) . "% !important;"; // Added space for proper CSS syntax
         $css .= "opacity: $displayopacity;"; // Ensuring displayopacity is escaped correctly
 
@@ -189,6 +192,7 @@ function generate_inline_slider_styles($attr) {
 
     $css .= ".swiper-button-next:after, .swiper-button-prev:after {";
         $css .= "font-size: " . esc_attr($attr['navigationsize']) . "px !important;";
+        $css .= "color: " . esc_attr($attr['navigationcolor']) . ";";
     $css .= "}";
     
     $css .= ".swiper-button-next {";

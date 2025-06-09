@@ -6,6 +6,10 @@
 
 function vayu_advance_product_tab_style($attr){ 
 
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return ;
+    }
+
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
 
 	$css = '';
@@ -425,18 +429,23 @@ function vayu_advance_product_tab_style($attr){
 
         $css .= "}"; 
         
-        if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
-            $css .= "@media only screen and (min-width: 1024px) {.wp-block-th-advance-product-tag-{$attr['uniqueId']}{display:none;}}";
-        }
-        //hide on Tablet
-        if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
-            $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .wp-block-th-advance-product-tag-{$attr['uniqueId']}{display:none;}}";
-        }
-        //hide on Mobile
-        if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
-            $css .= "@media only screen and (max-width: 767px) {.wp-block-th-advance-product-tag-{$attr['uniqueId']}{display:none;}}";
-        }
+        if (isset($attr['advResponsive']['Desktop']) && $attr['advResponsive']['Desktop'] === true) {
+					$css .= "@media only screen and (min-width: 1024px) { .{$attr['uniqueId']} { display: none; } }";
+				}
 
+				if (
+					isset($attr['advResponsive']['Tablet']) &&
+					$attr['advResponsive']['Tablet'] === true
+				) {
+					$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Mobile']) &&
+					$attr['advResponsive']['Mobile'] === true
+				) {
+					$css .= "@media only screen and (max-width: 767px) { .{$attr['uniqueId']} { display: none; } }";
+				}
     }
 
     return $css;

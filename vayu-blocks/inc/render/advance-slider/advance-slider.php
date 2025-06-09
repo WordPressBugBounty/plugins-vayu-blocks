@@ -5,6 +5,10 @@ if (!defined('ABSPATH')) {
 
 // Render callback for the block
 function vayu_blocks_advance_slider_render($attr,$content) {
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
+    
     // Include default attributes
     $default_attributes = include('defaultattributes.php');
 
@@ -133,8 +137,11 @@ function vayu_blocks_advance_slider_render($attr,$content) {
         $outer_classes .= $attributes['advAnimation']['className'];
     }
 
+    $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
+    $dataAttributes = $OBJ_STYLE->follower();
+
     // Now return with conditional class
-    return '<div id="' . esc_attr($uniqueId) . '" ' . get_block_wrapper_attributes([
+    return '<div id="' . esc_attr($uniqueId) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
         'class' => $outer_classes
     ]) . '>' . $slider_content . '</div>';
     

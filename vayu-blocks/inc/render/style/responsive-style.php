@@ -631,14 +631,26 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
             $mainStyles .= "animation-duration: " . esc_attr($attr['advTransition']) . "s !important;";
         }
 
-        // Cursor
-        if (!empty($attr['advCursor'])) {
-            if (isset($attr['advCursor']['type']) && $attr['advCursor']['type'] === 'custom' && !empty($attr['advCursor']['customImage'])) {
-                $mainStyles .= "cursor: url(" . esc_url($attr['advCursor']['customImage']) . "), auto;";
-            } elseif (!empty($attr['advCursor']['aniName'])) {
-                $mainStyles .= "cursor: " . esc_attr($attr['advCursor']['aniName']) . ";";
-            }
+        $cursorStyle = '';
+
+        // Case 1: Hide cursor if enabled and type is not 'none'
+        if (
+            !empty($attr['advFollower']['hideCursor']) &&
+            !empty($attr['advFollower']['type']) &&
+            $attr['advFollower']['type'] !== 'none'
+        ) {
+            $cursorStyle = 'cursor: none;';
         }
+
+        // Case 2: Else use custom cursor image if available
+        elseif (
+            !empty($attr['advCursor']['customImage'])
+        ) {
+            $cursorStyle = 'cursor: url(' . esc_url($attr['advCursor']['customImage']) . '), auto;';
+        }
+
+        // Append to styles
+        $mainStyles .= $cursorStyle;
     
         if (!empty($mainStyles)) {
             $style .= "$className{" . $mainStyles . "}";
@@ -654,6 +666,8 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
     
         if (!empty($attr['advTransition'])) {
             $hoverStyles .= "transition-duration: " . esc_attr($attr['advTransition']) . "s;";
+        }else{
+            $hoverStyles .= "transition-duration: 1s;";
         }
     
         if (!empty($hoverStyles)) {
@@ -835,37 +849,269 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         $video = self::$attribute[$key]['video'];
         $url = esc_url($video['url']);
         $type = $video['type'] ?? '';
+        $playOnce = $video['playOnce'] ?? false;
+        $privacy = $video['privacy'] ?? false;
+        $startTime = $video['startTime'] ?? '';
+        $endTime = $video['endTime'] ?? '';
+        $playOnMobile  = $video['playOnMobile'] ?? '';
+        $mobileClass = (!$playOnMobile) ? 'vb-bg-no-play-on-mobile' : '';
+
         $html = '';
 
         if ($type === 'mp4') {
-            $autoplay  = !empty($video['autoplay']) ? 'autoplay' : '';
-            $loop      = !empty($video['loop']) ? 'loop' : '';
-            $controls  = !empty($video['controls']) ? 'controls' : '';
-            $nofs      = empty($video['allowfs']) ? 'controlsList="nofullscreen"' : '';
 
-            $html .= '<video 
-                ' . $autoplay . ' 
+            $loop = ($playOnce === true || $playOnce === '1') ? '' : 'loop';
+            
+            $html .= '<div style="position:absolute;width:100%;overflow:hidden;height:100%;top:50%;left:50%;z-index:-1;transform:translate(-50%, -50%)"> <video 
                 ' . $loop . ' 
-                ' . $controls . ' 
+                autoplay 
                 muted 
-                ' . $nofs . '
-                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; aspect-ratio: 16 / 9; z-index: 0;">
+                playsinline
+                style="height:100%;transform:translate(-50%, -50%);position: absolute; width: 100%; top: 50%; left: 50%; aspect-ratio: 16 / 9; z-index:-1; object-fit:cover;"
+                class="' . $mobileClass . '">
                 <source src="' . $url . '" type="video/mp4" />
                 Your browser does not support the video tag.
-            </video>';
+            </video> </div>';
         } else {
-            $allowfs = !empty($video['allowfs']) ? ' allowfullscreen' : '';
 
-            $html .= '<iframe class="vb-elementor-background-video-embed"
+            $finalUrl = $url;
+
+            // loop param ko update karo sirf agar playOnce true hai
+            if ($playOnce) {
+                if (strpos($finalUrl, 'loop=') !== false) {
+                    $finalUrl = preg_replace('/loop=\d+/', 'loop=0', $finalUrl);
+                } else {
+                    $finalUrl .= (strpos($finalUrl, '?') !== false ? '&loop=0' : '?loop=0');
+                }
+            }
+
+            // start time add/update karo agar set hai
+            if ($startTime !== '') {
+                if (strpos($finalUrl, 'start=') !== false) {
+                    $finalUrl = preg_replace('/start=\d+/', 'start=' . (int)$startTime, $finalUrl);
+                } else {
+                    $finalUrl .= (strpos($finalUrl, '?') !== false ? '&start=' . (int)$startTime : '?start=' . (int)$startTime);
+                }
+            }
+
+            // end time add/update karo agar set hai
+            if ($endTime !== '') {
+                if (strpos($finalUrl, 'end=') !== false) {
+                    $finalUrl = preg_replace('/end=\d+/', 'end=' . (int)$endTime, $finalUrl);
+                } else {
+                    $finalUrl .= (strpos($finalUrl, '?') !== false ? '&end=' . (int)$endTime : '?end=' . (int)$endTime);
+                }
+            }
+
+            if ($privacy && strpos($finalUrl, 'youtube.com') !== false) {
+                $finalUrl = str_replace(['youtube.com', 'www.youtube.com'], 'youtube-nocookie.com', $finalUrl);
+            }
+
+            $html .= '<div style="position:absolute;width:100%;overflow:hidden;height:100%;top:50%;left:50%;z-index:-1;transform:translate(-50%, -50%)"><iframe class="vb-elementor-background-video-embed"
                 frameborder="0"
+                class="' . $mobileClass . '"
                 referrerpolicy="strict-origin-when-cross-origin"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"' . $allowfs . '
-                src="' . $url . '"
-                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; aspect-ratio: 16 / 9; z-index: 0;">
-            </iframe>';
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                src="' . $finalUrl . '"
+                style="min-height:100%;transform:translate(-50%, -50%);position: absolute; width: 100%; top: 50%; left: 50%; aspect-ratio: 16 / 9; z-index:-1; object-fit:cover;">
+            </iframe> </div>';
         }
 
         return $html;
+    }
+
+    function follower() {
+        $dataAttributes = '';
+
+        // Validate the attribute existence and type
+        if (!isset(self::$attribute['advFollower']) || !is_array(self::$attribute['advFollower'])) {
+            return $dataAttributes; // empty string
+        }
+
+        $attributes = self::$attribute; // alias for readability
+
+        // Check uniqueId also exists for data-block (assuming it's set in self::$attribute or elsewhere)
+        $uniqueId = $attributes['uniqueId'] ?? ''; // ya jahan se aap uniqueId lete ho
+
+        $followerType = $attributes['advFollower']['type'] ?? '';
+
+        $followerStyle = [];
+        if (!empty($followerType) && isset($attributes['advFollower']['style'][$followerType])) {
+            $followerStyle = $attributes['advFollower']['style'][$followerType];
+        }
+
+        $followerBackground = $followerStyle['background'] ?? '';
+        $followerSize = isset($followerStyle['followerSize']) ? $followerStyle['followerSize'] : '';
+
+        // Escape all values safely
+        $escapedId = esc_attr($uniqueId);
+        $escapedType = esc_attr($followerType);
+        $escapedBackground = esc_attr($followerBackground);
+        $escapedSize = esc_attr($followerSize);
+
+        // Build data attributes string conditionally
+        if ($escapedId !== '') {
+            $dataAttributes .= 'data-block="' . $escapedId . '"';
+        }
+        if ($escapedType !== '') {
+            $dataAttributes .= ' data-follower-type="' . $escapedType . '"';
+        }
+        if ($escapedBackground !== '') {
+            $dataAttributes .= ' data-follower-background="' . $escapedBackground . '"';
+        }
+        if ($escapedSize !== '') {
+            $dataAttributes .= ' data-follower-size="' . $escapedSize . '"';
+        }
+
+        return $dataAttributes;
+    }
+
+    function display(){
+        
+        // Validate the attribute existence and type
+        if (!isset(self::$attribute['advDisplayCond']) || !is_array(self::$attribute['advDisplayCond'])) {
+            return '';
+        }
+
+        $conditions = self::$attribute['advDisplayCond'];
+
+        foreach ($conditions as $key => $value) {
+
+            if ($key === 'cond') {
+                continue;
+            }
+
+            // === USER STATE HANDLING ===
+            if ($key === 'user_state' && is_array($value)) {
+                if (isset($value['loggedIn']) && $value['loggedIn']) {
+                    return is_user_logged_in();
+                }
+
+                if (isset($value['loggedOut']) && $value['loggedOut']) {
+                    return !is_user_logged_in();
+                }
+            }
+
+            // === USER ROLE HANDLING ===
+            if ($key === 'user_role' && is_array($value) ) {
+                
+                if (is_user_logged_in()) {
+                    $user = wp_get_current_user(); 
+                    $user_roles = (array) $user->roles; 
+                    $required_roles = (array) $value;
+
+                    //  Check if any user role matches the required roles
+                    $role_matched = false;
+                    foreach ($required_roles as $required_role) {
+                        if (in_array(strtolower($required_role), array_map('strtolower', $user_roles), true)) {
+                            $role_matched = true;
+                            break;
+                        }
+                    }
+
+                    if ($role_matched) {
+                        return true;
+                    } else {
+                        return ''; // User doesn't have any required role
+                    }
+                } else {
+                    return ''; // Not logged in, can't have a role
+                }
+                    
+            }
+
+            // === BROWSER HANDLING ===
+            if ($key === 'browser' && is_array($value)) {
+                // Get user agent
+                $user_agent = $_SERVER['HTTP_USER_AGENT'];
+             
+                // Normalize values for comparison
+                $browser_matched = false;
+                $lower_values = array_map('strtolower', $value);
+
+                // Basic browser detection
+                if (strpos($user_agent, 'Chrome') !== false && strpos($user_agent, 'Edg') === false) {
+                    $browser_name = 'Google Chrome';
+                } elseif (strpos($user_agent, 'Safari') !== false && strpos($user_agent, 'Chrome') === false) {
+                    $browser_name = 'Safari';
+                } elseif (strpos($user_agent, 'Firefox') !== false) {
+                    $browser_name = 'Mozilla Firefox';
+                } elseif (strpos($user_agent, 'Edg') !== false) {
+                    $browser_name = 'Microsoft Edge';
+                } elseif (strpos($user_agent, 'Opera') !== false || strpos($user_agent, 'OPR') !== false) {
+                    $browser_name = 'Opera';
+                } else {
+                    $browser_name = 'Unknown';
+                }
+
+                // Match against the given values
+                if (in_array(strtolower($browser_name), $lower_values, true)) {
+                    return true;
+                } else {
+                    return ''; // No match
+                }
+            }
+
+            // === OPERATING SYSTEM HANDLING ===
+            if ($key === 'os' && is_array($value)) {
+                $user_agent = $_SERVER['HTTP_USER_AGENT'];
+                $os_name = 'Unknown';
+
+                if (stripos($user_agent, 'Windows') !== false) {
+                    $os_name = 'Windows';
+                } elseif (stripos($user_agent, 'Linux') !== false && stripos($user_agent, 'Android') === false) {
+                    $os_name = 'Linux';
+                } elseif (stripos($user_agent, 'Android') !== false) {
+                    $os_name = 'Android';
+                } elseif (stripos($user_agent, 'iPhone') !== false || stripos($user_agent, 'iPad') !== false || stripos($user_agent, 'iOS') !== false) {
+                    $os_name = 'IOS';
+                } elseif (stripos($user_agent, 'Macintosh') !== false || stripos($user_agent, 'Mac OS') !== false) {
+                    $os_name = 'Mac OS';
+                } elseif (stripos($user_agent, 'SunOS') !== false) {
+                    $os_name = 'SunOS';
+                } elseif (stripos($user_agent, 'OpenBSD') !== false) {
+                    $os_name = 'Open BSD';
+                }
+
+                // Check if detected OS matches any required ones
+                if (in_array($os_name, $value, true)) {
+                    return true;
+                } else {
+                    return ''; // OS doesn't match
+                }
+            }
+
+            // === DAY HANDLING ===
+            if ($key === 'day' && is_array($value)) {
+                $current_day = strtolower(date('l'));
+
+                if (isset($value[$current_day]) && $value[$current_day]) {
+                    return true; 
+                } else {
+                    return ''; 
+                }
+            }
+            
+            if ($key === 'date' && is_array($value)) {
+                $start = $value['start'] ?? null;
+                $end = $value['end'] ?? null;
+
+                if ($start && $end) {
+                    $today = date('Y-m-d'); 
+                    if ($today >= $start && $today <= $end) {
+                        // Aaj ki date start aur end date ke beech hai
+                        return true;
+                    } else {
+                        // Aaj ki date range me nahi hai
+                        return false;
+                    }
+                } else {
+                    // Start ya End date missing hai
+                    return false;
+                }
+            }
+
+        }
     }
 
 }     

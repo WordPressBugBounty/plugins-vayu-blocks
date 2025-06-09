@@ -252,7 +252,12 @@ class Vayu_blocks_icon {
 
         $final_class = implode( ' ', $classes );
 
-        return '<div id="' . esc_attr( $uniqueId ) . '" ' . get_block_wrapper_attributes([
+        $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
+        $dataAttributes = $OBJ_STYLE->follower();
+
+        $icon_html .= $OBJ_STYLE->renderVideo('advBackground');
+
+        return '<div id="' . esc_attr( $uniqueId ) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
             'class' => $final_class
         ]) . '>' . $icon_html . '</div>';
 
@@ -262,6 +267,10 @@ class Vayu_blocks_icon {
 
 // Render callback for the block
 function vayu_block_icon_render($attr) {
+    
+    if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
+        return '';
+    }
 
     $default_attributes = include('defaultattributes.php');
 

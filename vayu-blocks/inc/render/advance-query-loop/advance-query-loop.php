@@ -25,6 +25,7 @@ add_filter('rest_post_collection_params', function ($params) {
 
 function vayu_advance_loop_style($attr){
 
+
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
 
     $css = "";
@@ -33,17 +34,23 @@ function vayu_advance_loop_style($attr){
 
 	$css .= $OBJ_STYLE->advanceStyle($wrapper);
     
-    if (isset($attr['responsiveTogHideDesktop']) && $attr['responsiveTogHideDesktop'] == true){
-        $css .= "@media only screen and (min-width: 1024px) {#{$attr['uniqueId']}.wp-block-vayu-blocks-advance-query-loop}{display:none;}}";
-    }
-    //hide on Tablet
-    if (isset($attr['responsiveTogHideTablet']) && $attr['responsiveTogHideTablet'] == true){
-        $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) {#{$attr['uniqueId']}.wp-block-vayu-blocks-advance-query-loop}{display:none;}}";
-    }
-    //hide on Mobile
-    if (isset($attr['responsiveTogHideMobile']) && $attr['responsiveTogHideMobile'] == true){
-        $css .= "@media only screen and (max-width: 767px) {#{$attr['uniqueId']}.wp-block-vayu-blocks-advance-query-loop}{display:none;}}";
-    }
+    if (isset($attr['advResponsive']['Desktop']) && $attr['advResponsive']['Desktop'] === true) {
+					$css .= "@media only screen and (min-width: 1024px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Tablet']) &&
+					$attr['advResponsive']['Tablet'] === true
+				) {
+					$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .{$attr['uniqueId']} { display: none; } }";
+				}
+
+				if (
+					isset($attr['advResponsive']['Mobile']) &&
+					$attr['advResponsive']['Mobile'] === true
+				) {
+					$css .= "@media only screen and (max-width: 767px) { .{$attr['uniqueId']} { display: none; } }";
+				}
 
     return $css;
 

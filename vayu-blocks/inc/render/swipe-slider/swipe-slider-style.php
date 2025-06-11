@@ -15,99 +15,17 @@ function vayu_swiper_slider_style($attr){
     $css = '';
 
     if(isset( $attr['uniqueId'] )){
+		$wrapper = ".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']}";
 
-        $css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']}{";
-		//padding
-		if (isset($attr['Padding']) && is_array($attr['Padding'])){
-			$css .= $OBJ_STYLE ->dimensions('Padding', 'padding', 'Desktop');	
-		}
-        //margin
-		if (isset($attr['Margin']) && is_array($attr['Margin'])){
-			$css .= $OBJ_STYLE ->dimensions('Margin', 'margin', 'Desktop');
-		}
-        
-        //background
-        if ( isset( $attr['backgroundType'] ) && $attr['backgroundType'] == 'image' ) {
-			$css .= isset( $attr['backgroundImage']['url'] ) ? "background-image: url({$attr['backgroundImage']['url']});" : '';
-			$css .= isset( $attr['backgroundAttachment']) ? "background-attachment: {$attr['backgroundAttachment']};" : 'background-attachment:scroll;';
-			$css .= isset( $attr['backgroundRepeat']) ? "background-repeat: {$attr['backgroundRepeat']};" : 'background-repeat:repeat;';
-			$css .= isset( $attr['backgroundSize']) ? "background-size: {$attr['backgroundSize']};" : 'background-size:auto;';
-			$css .= isset( $attr['backgroundPosition']) ? "background-position-x: " . ($attr['backgroundPosition']['x'] * 100) . "%; background-position-y: " . ($attr['backgroundPosition']['y'] * 100) . "%;" : '';
-		}elseif( isset( $attr['backgroundType'] ) && $attr['backgroundType'] == 'gradient' ){
-			$css .= isset( $attr['backgroundGradient'] ) ? "background-image:{$attr['backgroundGradient']};" : 'background-image:linear-gradient(90deg,rgba(54,209,220,1) 0%,rgba(91,134,229,1) 100%)';  
-		}else{
-			$css .= isset( $attr['backgroundColor'] ) ? "background-color:{$attr['backgroundColor']};" : '';
-		}
-        //z-index
-		$css .= isset( $attr['zindex'] ) ? "z-index:{$attr['zindex'] };" : '';
-
-		//border// border-radius//box shadow
-		$css .= $OBJ_STYLE->borderRadiusShadow('advBorder','advBorderRadius','advDropShadow','Desktop');
-        //transition duration
-		$css .= "transition: all ". (isset($attr['transitionAll']) ? $attr['transitionAll'] : '0.2' ). "s ease;";
-        //position property
-
-		$css .= "position: " . (isset($attr['position']) ? $attr['position'] : 'relative' ). ";";
-		
-		if(isset($attr['horizontalOrientation']) && 'left' === $attr['horizontalOrientation']  && 'relative' !== $attr['position']){
-			$horizontalOrientationOffset = isset($attr['horizontalOrientationOffset']) ? $attr['horizontalOrientationOffset'] : '0';
-			$horizontalOrientationOffsetUnit = isset($attr['horizontalOrientationOffsetUnit']) ? $attr['horizontalOrientationOffsetUnit'] : 'px';
-            $css .= "left: {$horizontalOrientationOffset}{$horizontalOrientationOffsetUnit};";
-		}
-		if(isset($attr['horizontalOrientation']) && 'right' === $attr['horizontalOrientation'] && 'relative' !== $attr['position']){
-			$horizontalOrientationOffsetRight = isset($attr['horizontalOrientationOffsetRight']) ? $attr['horizontalOrientationOffsetRight'] : '0';
-			$horizontalOrientationOffsetRightUnit = isset($attr['horizontalOrientationOffsetRightUnit']) ? $attr['horizontalOrientationOffsetRightUnit'] : 'px';
-            $css .= "right: {$horizontalOrientationOffsetRight}{$horizontalOrientationOffsetRightUnit};";
-		}
-		if(isset($attr['verticalOrientation']) && 'top' === $attr['verticalOrientation'] && 'relative' !== $attr['position']){
-			$verticalOrientationOffsetTop = isset($attr['verticalOrientationOffsetTop']) ? $attr['verticalOrientationOffsetTop'] : '0';
-			$verticalOrientationOffsetTopUnit = isset($attr['verticalOrientationOffsetTopUnit']) ? $attr['verticalOrientationOffsetBottomUnit'] : 'px';
-            $css .= "top: {$verticalOrientationOffsetTop}{$verticalOrientationOffsetTopUnit};";
-		}
-		if(isset($attr['verticalOrientation']) && 'bottom' === $attr['verticalOrientation'] && 'relative' !== $attr['position']){
-			$verticalOrientationOffsetBottom = isset($attr['verticalOrientationOffsetBottom']) ? $attr['verticalOrientationOffsetBottom'] : '0';
-			$verticalOrientationOffsetBottomUnit = isset($attr['verticalOrientationOffsetBottomUnit']) ? $attr['verticalOrientationOffsetBottomUnit'] : 'px';
-            $css .= "bottom: {$verticalOrientationOffsetBottom}{$verticalOrientationOffsetBottomUnit};";
-		}
-
-        // flex properties
-		$css .= "align-self: " . (isset($attr['alignSelf']) ? $attr['alignSelf'] : 'inherit;' ). ";";
-        if(isset($attr['order']) && $attr['order'] === 'start'){
-			$css .= "order:-9999;";
-		}elseif(isset($attr['order']) && $attr['order'] === 'end'){
-			$css .= "order:9999;";
-		}elseif(isset($attr['order']) && $attr['order'] === 'custom'){
-		$css .= isset( $attr['customOrder'] ) ? "order:{$attr['customOrder']};" : '';
-		}
-
-		//flex size
-        if(isset($attr['flexSize']) && $attr['flexSize'] === 'none'){
-			
-			$css .= "flex-grow:0;
-				flex-shrink:0;";
-		
-		}elseif(isset($attr['flexSize']) && $attr['flexSize'] === 'grow'){
-			$css .= "flex-grow:1;
-			flex-shrink:0;";
-
-		}elseif(isset($attr['flexSize']) && $attr['flexSize'] === 'shrink'){
-			$css .= "flex-grow:0;
-			flex-shrink:1;";
-		}elseif(isset($attr['flexSize']) && $attr['flexSize'] === 'custom'){
-			$css .= isset( $attr['FlexGrowSize'] ) ? "flex-grow:{$attr['FlexGrowSize']};" : '';
-            $css .= isset( $attr['FlexShrinkSize'] ) ? "flex-shrink:{$attr['FlexShrinkSize']};" : '';
-		}
-
-		$css .="}";
-
+	    $css .= $OBJ_STYLE->advanceStyle($wrapper);
 
         /*******************/ 
         // slide option
 		/*******************/ 
 
 		if(isset($attr['swipeStartGap'])){
-			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel{";
-			$css .= "padding-left: {$attr['swipeStartGap']['Desktop']};";
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-slider-content{";
+			$css .= "max-width: {$attr['swipeStartGap']['Desktop']};";
 			$css .="}";
 		}
 		
@@ -179,29 +97,14 @@ function vayu_swiper_slider_style($attr){
 
       //tablet view
       $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px){";
-	  $css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']}{";
-	  //padding
-	  if (isset($attr['Padding']) && is_array($attr['Padding'])){
-		  $css .= $OBJ_STYLE ->dimensions('Padding', 'padding', 'Tablet');	
-	  }
-	  //margin
-	  if (isset($attr['Margin']) && is_array($attr['Margin'])){
-		  $css .= $OBJ_STYLE ->dimensions('Margin', 'margin', 'Tablet');
-	  }
-	  //z-index
-	  $css .= isset( $attr['zindexTablet'] ) ? "z-index:{$attr['zindexTablet'] };" : '';
-	  //border// border-radius//box shadow
-	  $css .= $OBJ_STYLE->borderRadiusShadow('advBorder','advBorderRadius','advDropShadow','Tablet');
-	  $css .="}";
-
+	
 	     /*******************/ 
         // slide option Tablet
 		/*******************/ 
 
 		if(isset($attr['swipeStartGap'])){
-			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel{";
-			
-			$css .= "padding-left: {$attr['swipeStartGap']['Tablet']};";
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-slider-content{";
+			$css .= "max-width: {$attr['swipeStartGap']['Tablet']};";
 			$css .="}";
 		}
 		
@@ -258,30 +161,13 @@ function vayu_swiper_slider_style($attr){
 	  //mobile view
       $css .= "@media only screen and (max-width: 767px){";
 
-	  $css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']}{";
-	  //padding
-	  if (isset($attr['Padding']) && is_array($attr['Padding'])){
-		  $css .= $OBJ_STYLE ->dimensions('Padding', 'padding', 'Mobile');	
-	  }
-	  //margin
-	  if (isset($attr['Margin']) && is_array($attr['Margin'])){
-		  $css .= $OBJ_STYLE ->dimensions('Margin', 'margin', 'Mobile');
-	  }
-	  //z-index
-	  $css .= isset( $attr['zindexMobile'] ) ? "z-index:{$attr['zindexMobile'] };" : '';
-	  //border// border-radius//box shadow
-	  $css .= $OBJ_STYLE->borderRadiusShadow('advBorder','advBorderRadius','advDropShadow','Mobile');
-	  $css .="}";
-      
-	   
-	     /*******************/ 
+	    /*******************/ 
         // slide option Tablet
 		/*******************/ 
 
 		if(isset($attr['swipeStartGap'])){
-			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel{";
-			
-			$css .= "padding-left: {$attr['swipeStartGap']['Mobile']};";
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-slider-content{";
+			$css .= "max-width: {$attr['swipeStartGap']['Mobile']};";
 			$css .="}";
 		}
 		

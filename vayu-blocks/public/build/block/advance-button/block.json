@@ -170,7 +170,7 @@
       "type": "object",
       "default": {
         "type": "",
-        "color": "",
+        "color": "#7325c6",
         "image": {
           "url": ""
         },
@@ -185,9 +185,15 @@
     },
     "btnBorder": {
       "type": "object",
-      "Desktop": {},
-      "Tablet": {},
-      "Mobile": {}
+      "default": {
+        "Desktop": {
+          "color": "#7325c6",
+          "style": "solid",
+          "width": "2px"
+        },
+        "Tablet": {},
+        "Mobile": {}
+      }
     },
     "btnBorderRadius": {
       "type": "object",
@@ -203,9 +209,15 @@
     },
     "btnBorderHover": {
       "type": "object",
-      "Desktop": {},
-      "Tablet": {},
-      "Mobile": {}
+      "default": {
+        "Desktop": {
+          "color": "#7325c6",
+          "style": "solid",
+          "width": "2px"
+        },
+        "Tablet": {},
+        "Mobile": {}
+      }
     },
     "btnBorderRadiusHover": {
       "type": "object",
@@ -219,7 +231,7 @@
     },
     "hoverColor": {
       "type": "string",
-      "default": ""
+      "default": "#FFF"
     },
     "typography": {
       "type": "object"

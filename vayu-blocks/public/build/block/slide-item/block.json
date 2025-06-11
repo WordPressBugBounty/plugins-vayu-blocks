@@ -30,15 +30,5 @@
     "uniqueId": {
       "type": "string"
     }
-  },
-  "usesContext": [
-    "swipeslideWidth",
-    "swipeslideWidthTablet",
-    "swipeslideWidthMobile",
-    "swipeslideWidthUnit",
-    "swipeslideGap",
-    "swipeslideGapTablet",
-    "swipeslideGapMobile",
-    "swipeslideGapUnit"
-  ]
+  }
 }

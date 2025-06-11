@@ -369,7 +369,7 @@ class Vayu_Advance_Product_Tab {
 
                 case 'category':
                     // Category
-                    $displayCategory = isset($attr['displayCategory']) ? $attr['displayCategory'] : true;
+                    $displayCategory = isset($attr['displayCategory']) ? $attr['displayCategory'] : '';
                     if($displayCategory):
                     $product_content .= '<div class="th-product-cat">';
                     foreach ($product->get_category_ids() as $category_id) {
@@ -836,7 +836,7 @@ public function load_category_products(){
 
                 case 'category':
                     // Category
-                    $displayCategory = isset($attr['displayCategory']) ? $attr['displayCategory'] : true;
+                    $displayCategory = isset($attr['displayCategory']) ? $attr['displayCategory'] : '';
                     if($displayCategory):
                     $product_content .= '<div class="th-product-cat">';
                     foreach ($product->get_category_ids() as $category_id) {

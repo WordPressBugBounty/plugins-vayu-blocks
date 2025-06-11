@@ -19,7 +19,7 @@ function vayu_blocks_get_border_value($border, $side = 'top', $property = 'width
 }
 
 function vayu_blocks_advance_button_render( $attributes ) {
-    
+
     $uniqueID = $attributes['uniqueID'] ?? '';
     $content = $attributes['content'] ?? 'Button';
 
@@ -75,6 +75,19 @@ function vayu_blocks_advance_button_render( $attributes ) {
     $btnBorderHover_left_color = vayu_blocks_get_border_value($btnBorderHover, 'left', 'color');
     $btnBorderHover_left_style = vayu_blocks_get_border_value($btnBorderHover, 'left', 'style');
     
+  // Check if the 'btnBorderRadius' and 'btnBorderRadiusHover' exist before accessing
+$btnRadius_top_left = isset($attributes['btnBorderRadius']['Desktop']['topLeft']) ? $attributes['btnBorderRadius']['Desktop']['topLeft'] : null;
+$btnRadius_top_right = isset($attributes['btnBorderRadius']['Desktop']['topRight']) ? $attributes['btnBorderRadius']['Desktop']['topRight'] : null;
+$btnRadius_bottom_left = isset($attributes['btnBorderRadius']['Desktop']['bottomLeft']) ? $attributes['btnBorderRadius']['Desktop']['bottomLeft'] : null;
+$btnRadius_bottom_right = isset($attributes['btnBorderRadius']['Desktop']['bottomRight']) ? $attributes['btnBorderRadius']['Desktop']['bottomRight'] : null;
+
+// For Border Radius Hover, check if it exists before accessing
+$btnRadiusHover_top_left = isset($attributes['btnBorderRadiusHover']['Desktop']['topLeft']) ? $attributes['btnBorderRadiusHover']['Desktop']['topLeft'] : null;
+$btnRadiusHover_top_right = isset($attributes['btnBorderRadiusHover']['Desktop']['topRight']) ? $attributes['btnBorderRadiusHover']['Desktop']['topRight'] : null;
+$btnRadiusHover_bottom_left = isset($attributes['btnBorderRadiusHover']['Desktop']['bottomLeft']) ? $attributes['btnBorderRadiusHover']['Desktop']['bottomLeft'] : null;
+$btnRadiusHover_bottom_right = isset($attributes['btnBorderRadiusHover']['Desktop']['bottomRight']) ? $attributes['btnBorderRadiusHover']['Desktop']['bottomRight'] : null;
+
+    
 
     // Button styles as inline CSS variables
     $styleVars = [
@@ -118,7 +131,15 @@ function vayu_blocks_advance_button_render( $attributes ) {
         '--btnBorderHover-left-color' => $btnBorderHover_left_color,
         '--btnBorderHover-left-style' => $btnBorderHover_left_style,
         
-        
+        '--btnRadius-top-left' => $btnRadius_top_left,
+        '--btnRadius-top-right' => $btnRadius_top_right,
+        '--btnRadius-bottom-left' => $btnRadius_bottom_left,
+        '--btnRadius-bottom-right' => $btnRadius_bottom_right,
+
+        '--btnRadiusHover-top-left' => $btnRadiusHover_top_left,
+        '--btnRadiusHover-top-right' => $btnRadiusHover_top_right,
+        '--btnRadiusHover-bottom-left' => $btnRadiusHover_bottom_left,
+        '--btnRadiusHover-bottom-right' => $btnRadiusHover_bottom_right,
     ];
 
     $styleInline = '';

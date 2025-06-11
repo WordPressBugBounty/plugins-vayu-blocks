@@ -95,6 +95,10 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'isActive'        => 1,
                 'render_callback' => 'vayu_block_slide_item_render',
             ),
+            'lottie'         => array(
+                'isActive'        => isset($options['lottie']['isActive']) ? $options['lottie']['isActive'] : 0,
+                'render_callback' => 'vayu_block_lottie_render',
+            ),
             
         );
 

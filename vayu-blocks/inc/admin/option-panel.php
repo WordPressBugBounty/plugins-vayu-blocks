@@ -27,6 +27,7 @@ class VAYU_BLOCKS_OPTION_PANEL {
             'blurb' =>  array( 'isActive' => true,'type'=>'free'),
             'unfold' =>  array( 'isActive' => true,'type'=>'free'),
             'postPagination' =>  array( 'isActive' => true,'type'=>'free'),
+            'lottie' =>  array( 'isActive' => true,'type'=>'free'),
         );
 
         }

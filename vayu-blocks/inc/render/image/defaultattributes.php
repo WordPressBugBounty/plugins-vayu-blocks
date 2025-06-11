@@ -19,11 +19,7 @@ return array(
         ),
         'imageborderradiuscircle' => 'square',
         'imagecover' => 'cover',
-        'aspectRatio' => array(
-            'Desktop' => '4/3',
-            'Tablet' => '4/3',
-            'Mobile' => '4/3',
-        ),
+        'aspectRatio' => array(),
         'link' => array(),
         'duotone' => array(),
         'showPreview' => false,
@@ -113,7 +109,7 @@ return array(
         'overlayimageright'=>'5px',
         'overlayspace'=>'space',
         'borderimagesize'=> 30,
-        'imagebackgroundSize' => 'cover',
+        'imagebackgroundSize' => '',
         'borderimageoutset' => 5,
         'animationsettings' => 'without-hvr',
         'wrapperanimation'=>'none',
@@ -135,7 +131,6 @@ return array(
             'height'=> array('Desktop'=>'100%', 'Tablet'=>'100%', 'Mobile'=>'100%'),
             'top'=> array('Desktop'=>'0%', 'Tablet'=>'0%', 'Mobile'=>'0%'),
             'left'=> array('Desktop'=>'0%', 'Tablet'=>'0%', 'Mobile'=>'0%'),
-        ),
-        'editor' => false,
+        )
 )
 ?>

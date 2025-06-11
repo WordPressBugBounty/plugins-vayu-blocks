@@ -52,6 +52,10 @@ function vayu_cycle_through_blocks( $blocks, $post_id ) {
 			 $css .= vayu_advance_container_style($block['attrs']);
 	    } 
 
+		if ( $block['blockName'] === 'vayu-blocks/lottie' ) {
+			$css .= generate_inline_lottie_styles($block['attrs']);
+		} 
+
 		if ( $block['blockName'] === 'vayu-blocks/advance-query-loop' ) {
 			
 			$css .= vayu_advance_loop_style($block['attrs']);

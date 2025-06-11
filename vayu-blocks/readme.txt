@@ -1,20 +1,59 @@
-=== Vayu Blocks - Gutenberg Blocks for WordPress & WooCommerce ===
+=== Vayu Blocks – Website Builder for the Block Editor ===
 Contributors: ThemeHunk, satyendra61
 Tags: block, blocks editor, gutenberg, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Vayu Blocks Transform WordPress & WooCommerce with intuitive full-site editing. Create stunning designs without coding hassle.
+The Most-loved Page Builder With a Visual Drag & Drop Editor. Get 25+ free Gutenberg blocks to build beautiful websites.
 
 == Description ==
-The Vayu Blocks is an add-on plugin For Gutenberg Block Editor. Quickstart the Gutenberg editor with Powerful and elegant blocks to design stunning websites.
-Free Vayu Blocks plugin that amplifies the default WordPress Gutenberg Editor with powerful blocks. 
+A Better Way to Build WordPress Websites with Gutenberg | Introducing Vayu Blocks
 
-### Blocks Available in Vayu
+Vayu Blocks is a visual website builder that makes building fast and accessible websites a reality. It's the most-loved page builder that is easy to use and a favorite among those who prioritize performance and usability.
+
+Vayu Blocks unlocks the full potential of the Gutenberg editor. The drag-and-drop editor and readymade templates help you build amazing websites without touching a line of code.
+
+Vayu Blocks is built for performance and stability. It uses the default WordPress editor and provides clean, optimized code. This ensures your website performs at its best and remains stable, even with new updates to WordPress.
+
+
+### What are Vayu Blocks?
+
+Vayu Blocks is a powerful Gutenberg plugin that adds many amazing features to the block editor, making it more capable and easier to use.
+It includes a set of unique and powerful blocks that help you create beautiful pages in minutes. It also includes readymade Starter Templates, block patterns, wireframes, and much more.
+Whether you're a beginner, a designer, a marketer, or a developer, Vayu Blocks has the tools you need to build stunning, professional websites.
+
+
+### Key Features of Vayu Blocks:
+
+* Fast performance: Vayu Blocks is built for speed, with clean code and optimized asset loading.
+* Secure & stable: With code optimized for the block editor, Vayu Blocks is a secure and stable page builder.
+* User friendly: A simple UI, readymade templates, and a visual editor make Vayu Blocks very easy to use.
+* No coding required: Create amazing websites with a visual drag-and-drop editor without writing a line of code.
+* Fully customizable: Vayu Blocks gives you complete control over the design and layout of your website.
+
+
+### Vayu Blocks Powerful Blocks and Features
+
+Vayu Blocks includes a library of 25+ powerful blocks and a range of amazing features to help you build websites faster and easier.
+Core Blocks – Vayu Blocks offers essential blocks that every website and landing page needs. You’ll find blocks like Container, Advance Heading, Image, Icon, Buttons, flipBox, and Video, which are crucial for crafting your pages.
+Content Blocks – Showcase your content beautifully with Vayu Blocks content blocks. From Sliders and Image blocks to Content Timelines, advance heading, and more, these blocks offer diverse options to present your content in an engaging manner. And if you’re using Vayu Blocks Pro, you’ll even have access to the powerful Loop Builder.
+Post Blocks – Enhance your blog posts with Vayu Blocks Post Blocks. Add a Counter, Post Grid, or Post Timeline to make your blog visually appealing and user-friendly.
+Dynamic Content – Take control of your website’s archive feed with Vayu Blocks Dynamic Content blocks. You can customize the feed based on dynamic parameters like date, name, category, page, posts, and more, giving you flexibility and customization options.
+
+###Who are Vayu Blocks for?
+
+Vayu Blocks are for everyone!
+
+* Web designers – Want to enhance your website-building process without getting stuck in coding? Vayu Blocks has got your back! With its advanced blocks, you can create stunning layouts and customize elements like a pro, all without writing a single line of code.
+* Small business owners – Building a professional website for your business just got easier with Vayu Blocks. Choose from the pre-built WordPress Templates and customize them to match your branding and content. Say goodbye to costly web development and hello to a beautiful online presence.
+* Bloggers – Spice up your blog posts with Vayu Blocks’ eye-catching elements. Add images, engaging call-to-actions, content timelines, and social sharing blocks to make your content pop. It’s time to captivate your readers and take your blog to the next level.
+* SEO Specialists – Vayu Blocks has schema markup blocks like FAQ, How-To, Review, and Table of Content to boost your website rankings and improve search engine representation. Plus, its lightweight and optimized code ensures your site performs at its best. Get ready to conquer the search results!
+* eCommerce store owners – Vayu Blocks helps you create visually stunning product listings, showcase star ratings and reviews, and display pricing information that will make your customers click that “buy” button. Get ready to take your online store to new heights.
+* Marketers – Vayu Blocks is your secret weapon for creating effective landing pages and promotional materials. Use attention-grabbing blocks like call-to-actions, marketing buttons, and testimonials to drive conversions and engage your target audience. Your campaigns just got a whole lot better.
 
 #### Advance Container [FREE]
 Container block allows you to create visually consistent and organized sections within your content area.
@@ -46,7 +85,7 @@ Discover how to make the most of Vayu Blocks with our detailed and user-friendly
 ### Useful Resources
 The plugin is relying on the service behind www.themehunk.com and wpthemes.themehunk.com for accessing the page Template content like template images. No account is required to access the service template collection and the privacy policy can be found [here](https://themehunk.com/privacy-policy/).
 
-### Supported Themes
+### Vayu Blocks works with any theme, including:
 These themes have been tested and are compatible with search plugin without significant issues. Also you can use this plugin to your Block, Elementor, WooCommerce Pages:
 
 * [TH Shop Mania](https://wordpress.org/themes/th-shop-mania/) - by ThemeHunk
@@ -69,6 +108,9 @@ These themes have been tested and are compatible with search plugin without sign
 * [Kadence](https://wordpress.org/themes/kadence/) - by Ben Ritner – Kadence WP
 * [Astra](https://wordpress.org/themes/astra/) - by Brainstorm Force
 * [Storefront](https://wordpress.org/themes/storefront/) - by Automattic
+
+###Vayu Blocks Pro
+Vayu Blocks has a pro version that adds even more powerful features. These include the amazing Loop Builder, dynamic content, advanced blocks for sliders, images, and much more.
 
 == Installation ==
 
@@ -109,6 +151,11 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+
+=1.3.4 =
+Update: Improved all blocks.
+Fix: Resolved image responsiveness issue.
+Fix: Resolved issue with the block editor.
 
 =1.3.3 =
 Update: Improved Image block.
@@ -211,7 +258,7 @@ Initial Release
 
 == Upgrade Notice ==
 
-=1.0.7 =
+=1.3.4 =
 * New : Pro button added in blocks toggle.
 * Update : Icon added in admin block panel.
 

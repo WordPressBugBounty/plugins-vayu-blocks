@@ -52,3 +52,5 @@ require_once VAYU_BLOCKS_DIR_PATH .'inc/render/pin-child/pin-child-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/swipe-slider/swipe-slider.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/swipe-slider/swipe-slider-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/slide-item/slide-item.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/lottie/lottie.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/lottie/lottie-style.php';

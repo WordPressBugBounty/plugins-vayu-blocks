@@ -4,17 +4,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function vayu_block_swipe_slider_render($attributes, $content, $block) {
+
+    // print_r($attributes);
     if ((new VAYUBLOCKS_DISPLAY_CONDITION($attributes))->display()) {
         return '';
     }
-
 
     $navigation = '';
 
     $swipeNavIconLeft = isset($attributes['swipeNavIconLeft']) ? $attributes['swipeNavIconLeft'] : '';
     $swipeNavIconRight = isset($attributes['swipeNavIconRight']) ? $attributes['swipeNavIconRight'] : '';
-    $swipeNav = isset($attributes['swipeNav']) ? $attributes['swipeNav'] : '';
-
+    $swipeNav = isset($attributes['swipeNav']) ? $attributes['swipeNav'] : 'arrowdots';
+    $data_nav = $swipeNav;
     if ($swipeNav === 'arrow' || $swipeNav === 'arrowdots' || $swipeNav === '') {
         switch ($swipeNavIconLeft) {
             case 'arrowLeft':
@@ -57,7 +58,6 @@ function vayu_block_swipe_slider_render($attributes, $content, $block) {
     $wrapclassnames = $attributes['uniqueId'] . ' swipe-scroll-wrapper swipe-feature-slider-wrapper';
     $innerclass = 'swiper-wrapper swipe-carousel';
     $id = $attributes['uniqueId'];
-    $data_nav = ($swipeNav === 'arrow') ? 'arrow' : ($swipeNav === 'arrowdots' ? 'arrowdots' : 'dots');
 
     $wrapper_attributes = get_block_wrapper_attributes(array('class' => trim($wrapclassnames)));
     return sprintf(

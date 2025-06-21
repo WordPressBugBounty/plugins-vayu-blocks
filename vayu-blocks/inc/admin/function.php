@@ -16,14 +16,18 @@ function vayu_blocks_categories( $categories ) {
 }
 add_filter( 'block_categories_all', 'vayu_blocks_categories', 11, 2);
 
-
+// Force add type="module"
+add_filter('script_loader_tag', function ($tag, $handle, $src) {
+    if ($handle === 'vayu-blocks-global') {
+        return '<script type="module" src="' . esc_url($src) . '" id="vayu-blocks-global-js"></script>';
+    }
+    return $tag;
+}, 10, 3);
 
 
 // frontend css and js
 function vayu_blocks_frontend_enqueue_styles() {
     $asset_file = VAYU_BLOCKS_URL .'inc/assets/css/global.css';
-    
-
     wp_enqueue_style(
         'vayu-blocks-global', // Handle
         $asset_file, // Path to your CSS
@@ -31,12 +35,10 @@ function vayu_blocks_frontend_enqueue_styles() {
         filemtime(VAYU_BLOCKS_DIR_PATH. '/inc/assets/css/global.css'), // Version (useful for cache busting)
         'all' // Media type
     );
-
-
     wp_enqueue_script(
 		'vayu-blocks-global',
 		VAYU_BLOCKS_URL . 'inc/assets/js/global.js',
-		 array('jquery'), // ✅ FIXED
+		 array('jquery'), 
 		'1.0.0',
 		true
 	);
@@ -44,13 +46,7 @@ function vayu_blocks_frontend_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'vayu_blocks_frontend_enqueue_styles');
 
-// ✅ Force add type="module"
-add_filter('script_loader_tag', function ($tag, $handle, $src) {
-    if ($handle === 'vayu-blocks-global') {
-        return '<script type="module" src="' . esc_url($src) . '" id="vayu-blocks-global-js"></script>';
-    }
-    return $tag;
-}, 10, 3);
+
 
 /**
  * Register and enqueue stylesheet for the editor only.
@@ -60,10 +56,12 @@ add_action( 'enqueue_block_assets', 'vayu_blocks_enqueue_panel_styles' );
 
 
 function vayu_blocks_enqueue_panel_styles() {
+
     $asset_file = VAYU_BLOCKS_URL .'inc/assets/css/global.css';
 
    if ( is_admin() ) {
         wp_enqueue_style( 'vayu-blocks-panel-style',  VAYU_BLOCKS_URL . 'inc/assets/css/editor-panel.css' );
+
         wp_enqueue_style(
             'vayu-blocks-editor-global', // Handle
             $asset_file, // Path to your CSS
@@ -71,18 +69,22 @@ function vayu_blocks_enqueue_panel_styles() {
             filemtime(VAYU_BLOCKS_DIR_PATH. '/inc/assets/css/global.css'), // Version (useful for cache busting)
             'all' // Media type
         );
+        $options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option();
+        wp_localize_script( 'registerPlugin-block', 'ThBlockData', array(
+            'homeUrl'           => get_home_url(),
+            'container_width'   => $options['global']['containerWidth'] ?? '1200px',
+            'container_gap'     => $options['global']['containerGap'] ?? '18px',
+            'container_padding' => $options['global']['containerPadding'] ?? '20px',
+            'autoRecovery' => $options['global']['autoRecovery'] ?? true,
+        ) );
     }
 }
 
-
-
-
 function vayu_blocks_editor_assets(){
     $asset_file_global = VAYU_BLOCKS_URL .'inc/assets/css/global.css';
-
-
     $registerPlugin = require_once VAYU_BLOCKS_DIR_PATH .'public/build/registerPlugin.asset.php';
     $asset_file = require_once VAYU_BLOCKS_DIR_PATH .'public/build/component-editor.asset.php';
+    $index_asset = require_once VAYU_BLOCKS_DIR_PATH .'public/build/index.asset.php';
 
     wp_enqueue_style(
         'vayu-blocks-global', // Handle
@@ -100,6 +102,17 @@ function vayu_blocks_editor_assets(){
 			$asset_file['dependencies']
 		),	'1.0.0'
     );
+
+    	wp_enqueue_script(
+		'vayu-block-index',
+		VAYU_BLOCKS_URL . 'public/build/index.js',
+		array_merge(
+			$index_asset['dependencies']
+		),
+		'1.0.0',
+		true
+	);
+
 
 	wp_enqueue_script(
 		'registerPlugin-block',

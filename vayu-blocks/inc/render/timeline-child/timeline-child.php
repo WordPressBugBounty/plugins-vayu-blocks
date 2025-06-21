@@ -29,10 +29,10 @@ class Vayu_blocks_timeline_child {
         $uniqueId     = esc_attr($get_attr('uniqueId'));
         $layout       = $get_attr('layout_child');
         $blockIndex   = (int) esc_html($get_attr('blockIndex_child', 0));
-        $printedIcon  = htmlspecialchars_decode($get_attr('printedIcon_child', ''));
+        $printedIcon  = vayu_blocks_get_icon_svg($get_attr('printedIcon_child', ''));
 
         if($attr['iconglobal']){
-            $printedIcon= htmlspecialchars_decode($get_attr('printedIcon', ''));;
+            $printedIcon= vayu_blocks_get_icon_svg($get_attr('iconName', ''));;
         }
 
         $connector    = $get_attr('connector', false);

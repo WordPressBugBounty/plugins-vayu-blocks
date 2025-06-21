@@ -16,6 +16,8 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
     $className      = !empty($attributes['className']) ? esc_attr($attributes['className']) : '';
 	$content_width  = !empty($attributes['contentWidthType']) ? esc_attr($attributes['contentWidthType']) : 'boxed';
     $animationCls   = !empty($attributes['advAnimation']['className']) ? esc_attr($attributes['advAnimation']['className']) : '';
+    //slide
+    $innerContSlide      = !empty($attributes['innerContSlide']) ? esc_attr($attributes['innerContSlide']) : '';
 	// Detect if current block is nested inside another vayu container block
 	global $post;
     $parent_block;
@@ -29,6 +31,23 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
         $unique_id,
         $parent_block ? 'vayu-container-child' : 'vayu-container-parent',
     ];
+
+    // Build data attributes if marquee-slide
+    $data_attributes = '';
+    $stopHover = !empty($attributes['slideOnHover']) ? esc_attr($attributes['slideOnHover']) : 'false' ;
+
+    // Add vb_marqee_slide class if not a child block and innerContSlide is marquee-slide
+    if (!$parent_block && $innerContSlide === 'marquee-slide') {
+        $classes[] = 'vb_marqee_slide';
+        // Prepare data attributes
+        $data_attributes = sprintf(
+            'data-vayu-marquee="%s" data-speed="%s" data-direction="%s" data-stophover="%s"',
+            $unique_id,
+            esc_attr( !empty($attributes['slideSpeed']) ? esc_attr($attributes['slideSpeed']) : '1' ), // Your speed attribute from block
+            esc_attr( !empty($attributes['slideDirection']) ? esc_attr($attributes['slideDirection']) : 'right-to-left' ), // Your direction attribute from block
+            $stopHover
+        );
+    }
 
 	// Only add alignfull if NO parent block exists
     if (!$parent_block && in_array($content_width, ['boxed', 'fullwidth'], true)) {
@@ -72,8 +91,9 @@ function vayu_blocks_advance_container_render($attributes, $content, $block) {
     $inner_content_class = $content_width === 'fullwidth' ? 'vb-block-wrap' : 'th-inside-container th-con';
 
 	$inside_content = sprintf(
-        '<div class="%s">%s</div>',
+        '<div class="%s" %s>%s</div>',
         esc_attr( $inner_content_class ),
+        $data_attributes,
         $content
     );
 

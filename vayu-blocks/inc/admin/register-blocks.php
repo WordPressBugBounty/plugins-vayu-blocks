@@ -8,9 +8,13 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
     public function register_blocks_init() {
 
         $options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option(); // Fetch the options array
-        $blocks_dir = VAYU_BLOCKS_DIR_PATH . '/public/build/block';
+        $blocks_dir = VAYU_BLOCKS_DIR_PATH . 'public/build/block';
         // Define the block-specific render callbacks in an associative array
         $blocks_with_render_callbacks = array(
+             'advance-container' => array(
+                'isActive'        => isset($options['container']['isActive']) ? $options['container']['isActive'] : 1,
+                'render_callback' => 'vayu_blocks_advance_container_render',
+            ),
             'advance-heading' => array(
                 'isActive'        => isset($options['heading']['isActive']) ? $options['heading']['isActive'] : 1,
                 'render_callback' => 'vayu_blocks_advance_heading_render',
@@ -18,6 +22,10 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
             'advance-button'=> array(
                 'isActive'        => isset($options['button']['isActive']) ? $options['button']['isActive'] : 1,
                 'render_callback' => 'vayu_blocks_advance_button_render',
+            ),
+            'advance-spacer'=> array(
+                'isActive'        => isset($options['spacer']['isActive']) ? $options['spacer']['isActive'] : 1,
+                 'render_callback' => '',
             ),
             'flip-box'      => array(
                 'isActive'        => isset($options['flipBox']['isActive']) ? $options['flipBox']['isActive'] : 0,
@@ -99,6 +107,14 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'isActive'        => isset($options['lottie']['isActive']) ? $options['lottie']['isActive'] : 0,
                 'render_callback' => 'vayu_block_lottie_render',
             ),
+            'faq'         => array(
+                'isActive'        => isset($options['faq']['isActive']) ? $options['faq']['isActive'] : 0,
+                'render_callback' => 'vayu_block_faq_render',
+            ),
+            'faq-child'         => array(
+                'isActive'        => 1,
+                'render_callback' => 'vayu_block_faq_child_render',
+            ),
             
         );
 
@@ -109,10 +125,10 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'render_callback' => array( new Vayu_Advance_Product_Tab(), 'render_callback' ),
             );
         }
-    
+
         foreach ( $blocks_with_render_callbacks as $block_name => $block_options ) {
             if ($block_options['isActive'] == 1) {
-                $block_path = $blocks_dir . '/' . $block_name;
+                 $block_path = $blocks_dir . '/' . $block_name;
 
                 
                 if ( isset($block_options['skip_inner_blocks']) ) {

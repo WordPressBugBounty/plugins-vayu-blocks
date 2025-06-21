@@ -41,39 +41,6 @@ function vayu_blocks_advance_button_render( $attributes ) {
     $animationClass = $attributes['advAnimation']['className'] ?? '';
     $effectClass = $attributes['animationData']['background']['value'] ?? 'none';
     $effectTrigger = $attributes['animationData']['background']['type'] ?? 'onhvr';
-
-    $btnBorder_top_width = vayu_blocks_get_border_value($btnBorder, 'top', 'width');
-    $btnBorder_top_color = vayu_blocks_get_border_value($btnBorder, 'top', 'color');
-    $btnBorder_top_style = vayu_blocks_get_border_value($btnBorder, 'top', 'style');
-
-    $btnBorder_right_width = vayu_blocks_get_border_value($btnBorder, 'right', 'width');
-    $btnBorder_right_color = vayu_blocks_get_border_value($btnBorder, 'right', 'color');
-    $btnBorder_right_style = vayu_blocks_get_border_value($btnBorder, 'right', 'style');
-
-    $btnBorder_bottom_width = vayu_blocks_get_border_value($btnBorder, 'bottom', 'width');
-    $btnBorder_bottom_color = vayu_blocks_get_border_value($btnBorder, 'bottom', 'color');
-    $btnBorder_bottom_style = vayu_blocks_get_border_value($btnBorder, 'bottom', 'style');
-
-    $btnBorder_left_width = vayu_blocks_get_border_value($btnBorder, 'left', 'width');
-    $btnBorder_left_color = vayu_blocks_get_border_value($btnBorder, 'left', 'color');
-    $btnBorder_left_style = vayu_blocks_get_border_value($btnBorder, 'left', 'style');
-
-    //Border Hover
-    $btnBorderHover_top_width = vayu_blocks_get_border_value($btnBorderHover, 'top', 'width');
-    $btnBorderHover_top_color = vayu_blocks_get_border_value($btnBorderHover, 'top', 'color');
-    $btnBorderHover_top_style = vayu_blocks_get_border_value($btnBorderHover, 'top', 'style');
-
-    $btnBorderHover_right_width = vayu_blocks_get_border_value($btnBorderHover, 'right', 'width');
-    $btnBorderHover_right_color = vayu_blocks_get_border_value($btnBorderHover, 'right', 'color');
-    $btnBorderHover_right_style = vayu_blocks_get_border_value($btnBorderHover, 'right', 'style');
-
-    $btnBorderHover_bottom_width = vayu_blocks_get_border_value($btnBorderHover, 'bottom', 'width');
-    $btnBorderHover_bottom_color = vayu_blocks_get_border_value($btnBorderHover, 'bottom', 'color');
-    $btnBorderHover_bottom_style = vayu_blocks_get_border_value($btnBorderHover, 'bottom', 'style');
-
-    $btnBorderHover_left_width = vayu_blocks_get_border_value($btnBorderHover, 'left', 'width');
-    $btnBorderHover_left_color = vayu_blocks_get_border_value($btnBorderHover, 'left', 'color');
-    $btnBorderHover_left_style = vayu_blocks_get_border_value($btnBorderHover, 'left', 'style');
     
   // Check if the 'btnBorderRadius' and 'btnBorderRadiusHover' exist before accessing
 $btnRadius_top_left = isset($attributes['btnBorderRadius']['Desktop']['topLeft']) ? $attributes['btnBorderRadius']['Desktop']['topLeft'] : null;
@@ -91,45 +58,13 @@ $btnRadiusHover_bottom_right = isset($attributes['btnBorderRadiusHover']['Deskto
 
     // Button styles as inline CSS variables
     $styleVars = [
-        '--animation-box-button' => $attributes['animationData']['background']['bg'] ?? '',
+        // '--animation-box-button' => $attributes['animationData']['background']['bg'] ?? '',
         '--button-color' => $buttonColor,
         '--button-hvr-color' => $hoverColor,
         '--button-background' => $bgColor,
         '--button-gradient' => $bgGradient,
         '--button-hvr-background' => $hoverBgColor,
         '--button-hvr-gradient' => $hoverBgGradient,
-
-        '--btnBorder-top-width' => $btnBorder_top_width,
-        '--btnBorder-top-color' => $btnBorder_top_color,
-        '--btnBorder-top-style' => $btnBorder_top_style,
-
-        '--btnBorder-right-width' => $btnBorder_right_width,
-        '--btnBorder-right-color' => $btnBorder_right_color,
-        '--btnBorder-right-style' => $btnBorder_right_style,
-
-        '--btnBorder-bottom-width' => $btnBorder_bottom_width,
-        '--btnBorder-bottom-color' => $btnBorder_bottom_color,
-        '--btnBorder-bottom-style' => $btnBorder_bottom_style,
-
-        '--btnBorder-left-width' => $btnBorder_left_width,
-        '--btnBorder-left-color' => $btnBorder_left_color,
-        '--btnBorder-left-style' => $btnBorder_left_style,
-
-        '--btnBorderHover-top-width' => $btnBorderHover_top_width,
-        '--btnBorderHover-top-color' => $btnBorderHover_top_color,
-        '--btnBorderHover-top-style' => $btnBorderHover_top_style,
-
-        '--btnBorderHover-right-width' => $btnBorderHover_right_width,
-        '--btnBorderHover-right-color' => $btnBorderHover_right_color,
-        '--btnBorderHover-right-style' => $btnBorderHover_right_style,
-
-        '--btnBorderHover-bottom-width' => $btnBorderHover_bottom_width,
-        '--btnBorderHover-bottom-color' => $btnBorderHover_bottom_color,
-        '--btnBorderHover-bottom-style' => $btnBorderHover_bottom_style,
-
-        '--btnBorderHover-left-width' => $btnBorderHover_left_width,
-        '--btnBorderHover-left-color' => $btnBorderHover_left_color,
-        '--btnBorderHover-left-style' => $btnBorderHover_left_style,
         
         '--btnRadius-top-left' => $btnRadius_top_left,
         '--btnRadius-top-right' => $btnRadius_top_right,

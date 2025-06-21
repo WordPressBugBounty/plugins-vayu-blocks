@@ -5,7 +5,7 @@
  * Description:       The Vayu Blocks is an add-on plugin For Gutenberg Block Editor. Quickstart the Gutenberg editor with Powerful and elegant blocks to design stunning websites. Free Vayu Blocks plugin that amplifies the default WordPress Gutenberg Editor with powerful blocks.
  * Requires at least: 6.2
  * Requires PHP:      7.4
- * Version:           1.3.4
+ * Version:           1.3.6
  * Author:            ThemeHunk
  * Author URI:        https://themehunk.com
  * License:           GPLv3
@@ -18,7 +18,7 @@
  if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } 
-define( 'VAYU_BLOCKS_VERSION', '1.3.4' );
+define( 'VAYU_BLOCKS_VERSION', '1.3.6' );
 define( 'VAYU_BLOCKS_BASEFILE', __FILE__ );
 define( 'VAYU_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
 define( 'VAYU_BLOCKS_PATH', dirname( __FILE__ ) );
@@ -43,30 +43,28 @@ class Vayu_Block_Plugin {
     public function __construct() {
         
         require_once VAYU_BLOCKS_DIR_PATH .'inc/init.php';
-        add_action( 'init', array( $this, 'vayu_register_blocks' ) );
+       // add_action( 'init', array( $this, 'vayu_register_blocks' ) );
         add_action('admin_menu',  array( $this, 'vayu_plugin_menu'));
 
     }
 
     public function vayu_register_blocks() {
-
         $options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option();
-    
         $blocks = array(
-            array(
-                'name'           => 'vayu-blocks/advance-container',
-                'script_handle'  => 'advance-container',
-                'editor_style'   => 'advance-container-editor-style',
-                'frontend_style' => 'advance-container-frontend-style',
-                'status'         => $options['container']['isActive'],
-                'render_callback' => 'vayu_blocks_advance_container_render',
-                'localize_data'  => array(
-                    'homeUrl' => get_home_url(),
-                    'container_width' => $options['global']['containerWidth'],
-                    'container_gap' => $options['global']['containerGap'],
-                    'container_padding' => $options['global']['containerPadding'],
-                ),
-            ),
+            // array(
+            //     'name'           => 'vayu-blocks/advance-container',
+            //     'script_handle'  => 'advance-container',
+            //     'editor_style'   => 'advance-container-editor-style',
+            //     'frontend_style' => 'advance-container-frontend-style',
+            //     'status'         => $options['container']['isActive'],
+            //     'render_callback' => 'vayu_blocks_advance_container_render',
+            //     'localize_data'  => array(
+            //         'homeUrl' => get_home_url(),
+            //         'container_width' => $options['global']['containerWidth'],
+            //         'container_gap' => $options['global']['containerGap'],
+            //         'container_padding' => $options['global']['containerPadding'],
+            //     ),
+            // ),
             array(
                 'name'           => 'vayu-blocks/advance-spacer',
                 'script_handle'  => 'advance-spacer',
@@ -79,31 +77,32 @@ class Vayu_Block_Plugin {
         foreach ($blocks as $key => $block) {
             if (isset($block['status']) && ($block['status'] == 1)) {
                 // Register JavaScript file
-                wp_register_script(
-                    $block['script_handle'],
-                    VAYU_BLOCKS_URL . 'public/build/' . $block['script_handle'] . '.js',
-                    array('wp-blocks', 'wp-element', 'wp-editor'),
-                    filemtime(VAYU_BLOCKS_PATH . '/public/build/' . $block['script_handle'] . '.js')
-                );
+                // wp_register_script(
+                //     $block['script_handle'],
+                //     VAYU_BLOCKS_URL . 'public/build/' . $block['script_handle'] . '.js',
+                //     array('wp-blocks', 'wp-element', 'wp-editor'),
+                //     filemtime(VAYU_BLOCKS_PATH . '/public/build/' . $block['script_handle'] . '.js')
+                // );
+               
                 // Register editor style if defined
-                if (isset($block['editor_style']) && !empty($block['editor_style'])) {
-                    wp_register_style(
-                        $block['editor_style'],
-                        VAYU_BLOCKS_URL . 'public/build/' . $block['script_handle'] . '.css',
-                        array('wp-edit-blocks'),
-                        filemtime(VAYU_BLOCKS_PATH . '/public/build/' . $block['script_handle'] . '.css')
-                    );
-                }
+                // if (isset($block['editor_style']) && !empty($block['editor_style'])) {
+                //     wp_register_style(
+                //         $block['editor_style'],
+                //         VAYU_BLOCKS_URL . 'public/build/' . $block['editor_style'] . '.css',
+                //         array('wp-edit-blocks'),
+                //         filemtime(VAYU_BLOCKS_PATH . '/public/build/' . $block['editor_style'] . '.css')
+                //     );
+                // }
     
                 // Register front end block style if defined
-                if (isset($block['frontend_style']) && !empty($block['frontend_style'])) {
-                    wp_register_style(
-                        $block['frontend_style'],
-                        VAYU_BLOCKS_URL . 'public/build/style-' . $block['script_handle'] . '.css',
-                        array(),
-                        filemtime(VAYU_BLOCKS_PATH . '/public/build/style-' . $block['script_handle'] . '.css')
-                    );
-                }
+                // if (isset($block['frontend_style']) && !empty($block['frontend_style'])) {
+                //     wp_register_style(
+                //         $block['frontend_style'],
+                //         VAYU_BLOCKS_URL . 'public/build/style-' . $block['frontend_style'] . '.css',
+                //         array(),
+                //         filemtime(VAYU_BLOCKS_PATH . '/public/build/style-' . $block['frontend_style'] . '.css')
+                //     );
+                // }
     
                 // Localize the script with data
                 if ( isset( $block['localize_data'] ) && ! is_null( $block['localize_data'] ) ) {
@@ -118,6 +117,7 @@ class Vayu_Block_Plugin {
                 $block_args = array(
                     'editor_script' => $block['script_handle'],
                 );
+
     
                 if (isset($block['editor_style']) && !empty($block['editor_style'])) {
                     $block_args['editor_style'] = $block['editor_style'];

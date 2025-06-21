@@ -1,10 +1,10 @@
 === Vayu Blocks – Website Builder for the Block Editor ===
 Contributors: ThemeHunk, satyendra61
-Tags: block, blocks editor, gutenberg, page builder, gutenberg templates
+Tags: block, blocks editor, block editor, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.4
+Stable tag: 1.3.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -152,6 +152,12 @@ create a new thread on the [Support](https://themehunk.com/contact-us/) And also
 
 == Changelog ==
 
+=1.3.5 =
+New: Added new FAQ block.
+New: Added rotating flex feature to the Container block.
+Update: General improvements to all blocks.
+Fix: Resolved "Attempt Block Recovery" issue.
+
 =1.3.4 =
 Update: Improved all blocks.
 Fix: Resolved image responsiveness issue.
@@ -258,7 +264,10 @@ Initial Release
 
 == Upgrade Notice ==
 
-=1.3.4 =
-* New : Pro button added in blocks toggle.
-* Update : Icon added in admin block panel.
+=1.3.5 =
+New: Added new FAQ block.
+New: Added rotating flex feature to the Container block.
+Update: General improvements to all blocks.
+Fix: Resolved "Attempt Block Recovery" issue.
+
 

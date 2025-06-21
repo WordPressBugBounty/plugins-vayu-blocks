@@ -54,3 +54,7 @@ require_once VAYU_BLOCKS_DIR_PATH .'inc/render/swipe-slider/swipe-slider-style.p
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/slide-item/slide-item.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/lottie/lottie.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/lottie/lottie-style.php';
+// require_once VAYU_BLOCKS_DIR_PATH .'inc/render/faq/faq-style.php';
+// require_once VAYU_BLOCKS_DIR_PATH .'inc/render/faq-child/faq-child.php';
+// require_once VAYU_BLOCKS_DIR_PATH .'inc/render/faq-child/faq-child-style.php';
+// require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/icon-library.php';

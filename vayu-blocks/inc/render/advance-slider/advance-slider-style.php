@@ -19,6 +19,15 @@ function generate_inline_slider_styles($attr) {
     $wrapper = '.wp_block_vayu-blocks-advance-slider-main.vayu-block-' . $uniqueId;
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
 
+
+    $css .= ".vb-slider-wrapper-{$uniqueId} {";
+        $css .= "display: flex;";
+        $css .= "align-items: center;";
+        $css .="margin:auto !important;";
+        $css .="width:100% !important;";
+        $css .= "justify-content: center;";
+    $css .= "}";
+
     //Main div
     $css .= "$wrapper {";
 
@@ -50,7 +59,7 @@ function generate_inline_slider_styles($attr) {
 
         $css .= "--vb-arrow-type-left: '{$leftArrow}';";
         $css .= "--vb-arrow-type-right: '{$rightArrow}';";
-
+     
         $css .= "--swiper-navigation-sizeTablet: " . esc_attr($attr['navigationsizeTablet']) . "px !important;";
         $css .= "--swiper-navigation-sizeMobile: " . esc_attr($attr['navigationsizeMobile']) . "px !important;";
         $css .= "--swiper-navigation-navigationtopTablet: " . esc_attr($attr['navigationtopTablet']) . "% !important;";
@@ -75,25 +84,30 @@ function generate_inline_slider_styles($attr) {
         $css .= "--swiper-pagination-bullet-height: " . esc_attr($attr['bulletsize']) . "px !important;";
         $css .= "--swiper-navigation-size: " . esc_attr($attr['navigationsize']) . "px !important;";
         $css .= "width: 100%;";
+        $css .="padding: 0;";
     $css .= "}";
 
     $css .= $OBJ_STYLE->advanceStyle($wrapper);
 
     //scrollbar
-    $css .= ".wp-block-vayu-blocks-advance-slider .swiper-scrollbar-drag {";
+    $css .= "$wrapper .swiper-scrollbar-drag {";
         $css .= "height: " . esc_attr($attr['scrollheight']) . "px !important;";
         $css .= "background: " . esc_attr($attr['scroll']) . ";";
     $css .= "}";
 
-    $css .= ".wp-block-vayu-blocks-advance-slider .swiper-scrollbar {";
+    $css .= "$wrapper .swiper-scrollbar {";
         $css .= "width: 100% !important;";
         $css .= "background: " . esc_attr($attr['scrollBox']) . ";";
-        $css .= "align-content: center !important;"; // This property is not standard for scrollbar
-        $css .= "left: 0 !important;"; // Percent not necessary for a scrollbar
-        $css .= "top: " . esc_attr($attr['scrolltop']) . "% !important;";
+        $css .= "align-content: center !important;";
+        $css .= "left: 0 !important;"; 
+        $scroll_top = isset($attr['scrolltop']['Desktop']) ? esc_attr($attr['scrolltop']['Desktop']) : '0';
+        $css .= "top: {$scroll_top} !important;";
         $css .= "height: " . esc_attr($attr['scrollheight']) . "px !important;";
-        $css .= "opacity: 0;";
+        $scroll_opacity = (isset($attr['scrolltype']) && $attr['scrolltype'] === 'hover') ? '0' : '1';
+        $css .= "opacity: {$scroll_opacity};";
         $css .= "transition: all 0.5s ease;";
+        $css .= "position: absolute;";
+        $css .= "z-index: 99;";
     $css .= "}";
 
     $css .= ".swiper:hover .swiper-scrollbar {";
@@ -122,6 +136,7 @@ function generate_inline_slider_styles($attr) {
    
     // Tablet Navigation
     $css .= "@media (min-width: 768px) and (max-width: 1024px) {";
+
         $css .= ".swiper-button-next, .swiper-button-prev {";
             $css .= $OBJ_STYLE->borderRadiusShadow('arrowborder', 'arrowborderradius', 'Tablet');
             $css .= $OBJ_STYLE->dimensions('arrowpadding', 'Padding',  'Tablet');	
@@ -222,12 +237,61 @@ function generate_inline_slider_styles($attr) {
         $css .= "font-size: " . esc_attr($attr['bulletsize']) . "px !important;"; // Fixed interpolation
     $css .= "}";
 
-    $css .= ".swiper-pagination {"; // Fixed interpolation and added percenarrowe
-        $css .= "width: 100% !important;";
-        $css .= "height: 70px !important;";
-        $css .= "left: 50% !important;";
-        $css .= "transform: translate(-50%);";
-        $css .= "left: " . esc_attr($attr['dotsplace']) . "% !important;";
+    $css .= "$wrapper .swiper .swiper-pagination {";
+        $css .= "position: absolute !important;";
+        $css .= "display: flex !important;";
+        $css .= "position:relative !important;";
+        $css .= "overflow: visible !important;";
+        $css .= "transform: translate(-50%, -50%) !important;";
+        $css .= "align-items:center;";
+        $css .= "left:50% !important;";
+        $css .= "gap: 10px !important;";
+        $css .= "min-height:fit-content !important;";
+        $css .= "width:100% !important;";
+        $css .= "top:unset !important;";
+
+        $alignment = isset($attr['dotsalignment']['Desktop']) ? $attr['dotsalignment']['Desktop'] : 'center';
+        $css .= "justify-content: $alignment !important;";
+
+        $dotsBottom = isset($attr['dotsheight']['Desktop']) ? $attr['dotsheight']['Desktop'] : '0px';
+        $dotssize = '0px';
+
+        if (isset($attr['dotstype']) && $attr['dotstype'] === 'progressbar') {
+            $dotssize_raw = isset($attr['progresssize']) 
+                ? preg_replace('/[^0-9.]/', '', $attr['progresssize']) 
+                : 0;
+        } else {
+            $dotssize_raw = isset($attr['bulletsize']) 
+                ? preg_replace('/[^0-9.]/', '', $attr['bulletsize']) 
+                : 0;
+        }
+
+        // Now use $dotssize_raw in calculations
+        $dotssize_half = floatval($dotssize_raw) / 2;
+
+        // Example: calculate bottom offset
+        $dotsBottom = isset($attr['dotsheight']['Desktop']) 
+            ? preg_replace('/[^0-9.]/', '', $attr['dotsheight']['Desktop']) 
+            : 0;
+
+        $finalBottom = floatval($dotsBottom) - $dotssize_half;
+
+        // Use it in CSS
+        $css .= "bottom: {$finalBottom}px !important;";
+
+
+        if (isset($attr['dotstype']) && $attr['dotstype'] === 'progressbar') {
+            $progressheightsize = isset($attr['progresssize']) 
+                ? preg_replace('/[^0-9.]/', '', $attr['progresssize']) . 'px' 
+                : '0px';
+
+            $css .= "--swiper-pagination-progressbar-size: $progressheightsize;";
+        } 
+
+      
+   
+        $background = isset($attr['dotsbackground']) ? $attr['dotsbackground'] : 'transparent';
+        $css .= "background: $background !important;";
     $css .= "}";
 
     $displaypaginationprogressopacity = 1;

@@ -49,7 +49,7 @@ if (isset($attr['btnBackground'])) {
   $css .= $OBJ_STYLE->dimensions('btnPadding', 'padding', 'Desktop');
 }
 else{
-    $css .= "padding: 12px 18px 12px 18px;";
+    $css .= "padding: 8px 18px 8px 18px;";
 }
 
 
@@ -94,10 +94,15 @@ else{
       isset($attr['typography']['fontSize']) &&
       isset($attr['typography']['fontSize']['Desktop'])
   ) {
-      $css .= ".th-button-wrapper{$uniqueId} .vayu_blocks_icon_block_main_icon_svg {";
+      $css .= ".th-button-wrapper{$uniqueId} .vayu-icon {";
       $css .= "width: {$attr['typography']['fontSize']['Desktop']};";
       $css .= "}";
   }
+    else{
+      $css .= ".th-button-wrapper{$uniqueId} .vayu-icon {";
+        $css .= "width: 1.375rem;";
+        $css .= "}";
+    }
 
             //    tablet view
      $css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) {";
@@ -137,7 +142,7 @@ else{
                 isset($attr['typography']['fontSize']) &&
                 isset($attr['typography']['fontSize']['Tablet'])
               ) {
-                $css .= ".th-button-wrapper{$uniqueId} .vayu_blocks_icon_block_main_icon_svg {";
+                $css .= ".th-button-wrapper{$uniqueId} .vayu-icon {";
                 $css .= "width: {$attr['typography']['fontSize']['Tablet']};";
                 $css .= "}";
                 }
@@ -186,7 +191,7 @@ else{
             isset($attr['typography']['fontSize']) &&
             isset($attr['typography']['fontSize']['Mobile'])
         ) {
-            $css .= ".th-button-wrapper{$uniqueId} .vayu_blocks_icon_block_main_icon_svg {";
+            $css .= ".th-button-wrapper{$uniqueId} .vayu-icon {";
             $css .= "width: {$attr['typography']['fontSize']['Mobile']};";
             $css .= "}";
         }
@@ -200,13 +205,13 @@ else{
               }"; 
 
     //Icon Style
-    $css .= ".th-button-wrapper{$uniqueId} .vayu_blocks_icon_block_main_icon_svg svg{";
+    $css .= ".th-button-wrapper{$uniqueId} .vayu-icon svg{";
     $css .= isset( $attr['color']) ? "fill: {$attr['color']};" : 'fill: #FFF;';
     $css .= isset( $attr['color']) ? "color: {$attr['color']};" : 'color: #FFF;';
     $css .= "}";
 
     //Icon Style Hover
-    $css .= ".th-button-wrapper{$uniqueId} .th-button.th-button-inside:hover .vayu_blocks_icon_block_main_icon_svg svg{";
+    $css .= ".th-button-wrapper{$uniqueId} .th-button.th-button-inside:hover .vayu-icon svg{";
     $css .= isset( $attr['hoverColor'] ) ? "fill:{$attr['hoverColor'] };" : '';
     $css .= isset( $attr['hoverColor'] ) ? "color:{$attr['hoverColor'] };" : '';
     $css .= "}";

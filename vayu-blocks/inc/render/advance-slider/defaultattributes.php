@@ -28,7 +28,6 @@ return array(
         'slideslength' => 0,
         'scrollBox' => 'rgba(0, 0, 0, .1)',
         'scroll' => '#00000063',
-        'scrolltop' => 98,
         'scrollheight' => 6,
         'scrollerheight' => 6,
         'navigationbackground' => '',
@@ -101,7 +100,7 @@ return array(
 
         'paginationbackground' => 'blue',
         'paginationinactivebackground' => '#070ae378',
-        'paginationtop' => 85,
+        'paginationtop' => 90,
         'bulletsize' => 10,
         'numberscolor' => 'black',
         'dotsplace' => 50,
@@ -123,8 +122,8 @@ return array(
         'navigationtopMobile'=>46,
         'rightarrowTablet'=>11,
         'rightarrowMobile'=>11,
-        'paginationtopTablet'=>85,
-        'paginationtopMobile'=>85,
+        'paginationtopTablet'=>90,
+        'paginationtopMobile'=>90,
         'bulletsizeTablet'=>10,
         'bulletsizeMobile'=>10,
         'dotsplaceTablet'=>50,
@@ -181,6 +180,8 @@ return array(
         'arrowBottomBorderColorMobile' => 'blue',
         'arrowLeftBorderColorMobile' => 'blue',
         'arrowRightBorderColorMobile' => 'blue',
+        'scrolltype'=>'hover',
+        'scrolltop'=>array('Desktop'=>'95%','Tablet'=>'95%','Mobile'=>'95%' ),
 
 );
 ?>

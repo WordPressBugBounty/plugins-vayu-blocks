@@ -9,6 +9,7 @@ class VAYU_BLOCKS_OPTION_PANEL {
                 'containerWidth' => 1250,
                 'containerGap' => 18,
                 'containerPadding' => 20,
+                'autoRecovery' => true,
             ),
             'container' => array( 'isActive' => true,'type'=>'free'),
             'button' =>  array( 'isActive' => true,'type'=>'free'),
@@ -28,10 +29,10 @@ class VAYU_BLOCKS_OPTION_PANEL {
             'unfold' =>  array( 'isActive' => true,'type'=>'free'),
             'postPagination' =>  array( 'isActive' => true,'type'=>'free'),
             'lottie' =>  array( 'isActive' => true,'type'=>'free'),
+            'faq' =>  array( 'isActive' => true,'type'=>'free'),
         );
 
-        }
-
+    }
 
     public function key_diff_update($getOption,$default){
         $keyDiff = array_diff_key($getOption, $default);

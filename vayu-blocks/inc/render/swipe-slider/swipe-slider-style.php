@@ -15,6 +15,7 @@ function vayu_swiper_slider_style($attr){
     $css = '';
 
     if(isset( $attr['uniqueId'] )){
+
 		$wrapper = ".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']}";
 
 	    $css .= $OBJ_STYLE->advanceStyle($wrapper);
@@ -27,18 +28,31 @@ function vayu_swiper_slider_style($attr){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-slider-content{";
 			$css .= "max-width: {$attr['swipeStartGap']['Desktop']};";
 			$css .="}";
+		}else{
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-slider-content{";
+			$css .= "max-width:1140px;";
+			$css .="}";
 		}
 		
-		if (isset($attr['swipeslideWidth']) || isset($attr['swipeslideGap'])){
+		if (isset($attr['swipeslideWidth'])){
 			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
-			if (isset($attr['swipeslideWidth'])) {
-				$css .= "width: {$attr['swipeslideWidth']['Desktop']};";
-			}
-			if (isset($attr['swipeslideGap'])) {
-				$css .= "margin-right: {$attr['swipeslideGap']['Desktop']};";
-			}
+			$css .= "width: {$attr['swipeslideWidth']['Desktop']};";
 			$css .="}";
-	    }
+	    }else{
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
+			$css .= "width:300px;";
+			$css .="}";
+		}
+
+        if (isset($attr['swipeslideGap'])) {
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
+			$css .= "margin-right: {$attr['swipeslideGap']['Desktop']};";
+			$css .="}";
+		}else{
+			$css .=".wp-block-vayu-blocks-swipe-slider.{$attr['uniqueId']} .swipe-carousel .slide-item{";
+			$css .= "margin-right:10px;";
+			$css .="}";
+		}
 
         /**************************/ 
         // slide navigation option

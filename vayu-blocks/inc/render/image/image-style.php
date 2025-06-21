@@ -127,21 +127,20 @@ function generate_inline_image_styles($attr) {
             $css .= "    filter: url(#duotone-filter-{$attr['uniqueId']}) !important;";
         }        
 
-        if (!empty($attr['frameData']['radius'])) {
-            $radiusData = $attr['frameData']['radius']['Desktop'];
-            
-            if (!empty($radiusData['width'])) {
-                // If a general width is set, apply it to all corners
-                $css .= "border-radius: " . $radiusData['width'] . ";";
-            } else {
-                // Otherwise, check individual values and apply them
-                $topLeft     = !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                $topRight    = !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                $bottomRight = !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                $bottomLeft  = !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
-        
-                $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
-            }
+        $radius = [];
+        if (
+            isset($attr['frameData']) &&
+            isset($attr['frameData']['radius']) &&
+            isset($attr['frameData']['radius']['Desktop'])
+        ) {
+            $radius = $attr['frameData']['radius']['Desktop'];
+        }
+
+        if (!empty($radius)) {
+            $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
+            $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
+            $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
+            $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
         }
         
         // Box-shadow
@@ -304,10 +303,19 @@ function generate_inline_image_styles($attr) {
         $css .= "box-sizing: border-box;";
         $css .= "overflow:hidden;";
        
-        $overlayalignmenttablet = explode(' ', $attr['overlayalignment']); // Split the string
-        $vertical = $overlayalignmenttablet[0]; // First part (vertical)
-        $horizontal = $overlayalignmenttablet[1]; // Second part (horizontal)
-        
+        // ⬇️ Backdrop Filter styles
+        $filter = $attr['filter'] ?? [];
+
+        $blur       = isset($filter['blur']) ? (int) $filter['blur'] : 0;
+        $brightness = isset($filter['brightness']) ? (int) $filter['brightness'] : 100;
+        $contrast   = isset($filter['contrast']) ? (int) $filter['contrast'] : 100;
+        $saturation = isset($filter['saturation']) ? (int) $filter['saturation'] : 100;
+        $hue        = isset($filter['hue']) ? (int) $filter['hue'] : 0;
+
+        $backdrop = "blur({$blur}px) brightness({$brightness}%) contrast({$contrast}%) saturate({$saturation}%) hue-rotate({$hue}deg)";
+        $css .= "backdrop-filter: {$backdrop};";
+        $css .= "-webkit-backdrop-filter: {$backdrop};"; // Safari support
+
     $css .= "}";
 
     $css .= "$wrapper .vb-image-overlay-wrapper:after {";
@@ -350,6 +358,22 @@ function generate_inline_image_styles($attr) {
         top: 0;
         left: 0;
         z-index:-1;';
+
+        $radius = [];
+        if (
+            isset($attr['frameData']) &&
+            isset($attr['frameData']['radius']) &&
+            isset($attr['frameData']['radius']['Desktop'])
+        ) {
+            $radius = $attr['frameData']['radius']['Desktop'];
+        }
+
+        if (!empty($radius)) {
+            $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
+            $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
+            $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
+            $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
+        }
     $css .= "}";
     
     if (!empty($attr['animationData']['mask']) && isset($attr['animationData']['mask']['maskshape'])) {
@@ -637,29 +661,8 @@ function generate_inline_image_styles($attr) {
             $css .= "justify-content: {$desktopAlignment} !important;";
         $css .= "}";
 
-        $css .= "$wrapper .vb-image-tag {";
-            // Ensure $attr['frameData']['radius'] is set before accessing
-            if (isset($attr['frameData']['radius']) && !empty($attr['frameData']['radius'])) {
-                $radiusData = $attr['frameData']['radius']['Tablet'];
-                if (isset($radiusData['width']) && !empty($radiusData['width'])) {
-                    $css .= "border-radius: " . $radiusData['width'] . ";";
-                } else {
-                    $topLeft = isset($radiusData['top-left']) && !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                    $topRight = isset($radiusData['top-right']) && !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                    $bottomRight = isset($radiusData['bottom-right']) && !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                    $bottomLeft = isset($radiusData['bottom-left']) && !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
-                    $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
-                }
-            }
-        $css .= "}";
-
         $css .= "$wrapper .vb-image-caption-text {";
             $css .= $OBJ_STYLE->typography('typography','Tablet');
-        $css .= "}";
-
-        $css .= "$wrapper .vb-image-tag {";
-            $aspectRatio = isset($attr['aspectRatio']['Tablet']) ? esc_attr($attr['aspectRatio']['Tablet']) : 'auto';
-            $css .= "aspect-ratio: $aspectRatio;";
         $css .= "}";
         
         $css .= "$wrapper .vb-image-overlay-wrapper {";    
@@ -681,7 +684,42 @@ function generate_inline_image_styles($attr) {
         $css .= "}";
                 
         $css .= "$wrapper .vb-image-tag {";
+            $aspectRatio = isset($attr['aspectRatio']['Tablet']) ? esc_attr($attr['aspectRatio']['Tablet']) : 'auto';
+            $css .= "aspect-ratio: $aspectRatio;";
+            $radius = [];
+            if (
+                isset($attr['frameData']) &&
+                isset($attr['frameData']['radius']) &&
+                isset($attr['frameData']['radius']['Tablet'])
+            ) {
+                $radius = $attr['frameData']['radius']['Tablet'];
+            }
+
+            if (!empty($radius)) {
+                $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
+                $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
+                $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
+                $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
+            }
             $css .= "text-align:" . (isset($attr['captionalignment']['Tablet']) ? esc_attr($attr['captionalignment']['Tablet']) : 'auto') . ";";
+        $css .= "}";
+
+        $css .= "$wrapper .vb-image-overlay-wrapper:before {";
+            $radius = [];
+            if (
+                isset($attr['frameData']) &&
+                isset($attr['frameData']['radius']) &&
+                isset($attr['frameData']['radius']['Tablet'])
+            ) {
+                $radius = $attr['frameData']['radius']['Tablet'];
+            }
+
+            if (!empty($radius)) {
+                $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
+                $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
+                $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
+                $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
+            }
         $css .= "}";
 
     $css .= "}"; 
@@ -706,34 +744,52 @@ function generate_inline_image_styles($attr) {
             }
         $css .= "}";
 
+        $css .= "$wrapper .vb-image-overlay-wrapper:before {";
+            $radius = [];
+            if (
+                isset($attr['frameData']) &&
+                isset($attr['frameData']['radius']) &&
+                isset($attr['frameData']['radius']['Mobile'])
+            ) {
+                $radius = $attr['frameData']['radius']['Mobile'];
+            }
+
+            if (!empty($radius)) {
+                $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
+                $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
+                $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
+                $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
+            }
+        $css .= "}";
+
         $css .= " $wrapper .vb-image-main-container {";
             $desktopAlignment = isset($attr['imagealignment']['Mobile']) && !empty($attr['imagealignment']['Mobile']) ? $attr['imagealignment']['Mobile'] : '';
             $css .= "justify-content: {$desktopAlignment} !important;";
         $css .= "}";
 
         $css .= "$wrapper .vb-image-tag {";
-            // Ensure $attr['frameData']['radius'] is set before accessing
-            if (isset($attr['frameData']['radius']) && !empty($attr['frameData']['radius'])) {
-                $radiusData = $attr['frameData']['radius']['Mobile'];
-                if (isset($radiusData['width']) && !empty($radiusData['width'])) {
-                    $css .= "border-radius: " . $radiusData['width'] . ";";
-                } else {
-                    $topLeft = isset($radiusData['top-left']) && !empty($radiusData['top-left']) ? $radiusData['top-left'] : "0";
-                    $topRight = isset($radiusData['top-right']) && !empty($radiusData['top-right']) ? $radiusData['top-right'] : "0";
-                    $bottomRight = isset($radiusData['bottom-right']) && !empty($radiusData['bottom-right']) ? $radiusData['bottom-right'] : "0";
-                    $bottomLeft = isset($radiusData['bottom-left']) && !empty($radiusData['bottom-left']) ? $radiusData['bottom-left'] : "0";
-                    $css .= "border-radius: $topLeft $topRight $bottomRight $bottomLeft;";
-                }
+            $css .= "text-align:" . (isset($attr['captionalignment']['Mobile']) ? esc_attr($attr['captionalignment']['Mobile']) : 'auto') . ";";
+            $aspectRatio = isset($attr['aspectRatio']['Mobile']) ? esc_attr($attr['aspectRatio']['Mobile']) : 'auto';
+            $css .= "aspect-ratio: $aspectRatio;";
+            $radius = [];
+            if (
+                isset($attr['frameData']) &&
+                isset($attr['frameData']['radius']) &&
+                isset($attr['frameData']['radius']['Mobile'])
+            ) {
+                $radius = $attr['frameData']['radius']['Mobile'];
+            }
+
+            if (!empty($radius)) {
+                $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
+                $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
+                $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
+                $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
             }
         $css .= "}";
 
         $css .= "$wrapper .vb-image-caption-text {";
             $css .= $OBJ_STYLE->typography('typography','Mobile');
-        $css .= "}";
-
-        $css .= "$wrapper .vb-image-tag {";
-            $aspectRatio = isset($attr['aspectRatio']['Mobile']) ? esc_attr($attr['aspectRatio']['Mobile']) : 'auto';
-            $css .= "aspect-ratio: $aspectRatio;";
         $css .= "}";
 
         $css .= "$wrapper .vb-image-overlay-wrapper {";
@@ -751,14 +807,9 @@ function generate_inline_image_styles($attr) {
             $css .= "left: " . esc_attr($left) . ";";
           
         $css .= "}";
-        
 
         $css .= "$wrapper{";
             $css .= "justify-content:" . (isset($attr['imagealignment']['Mobile']) ? esc_attr($attr['imagealignment']['Mobile']) : 'auto') . ";";
-        $css .= "}";
-
-        $css .= "$wrapper .vb-image-tag {";
-            $css .= "text-align:" . (isset($attr['captionalignment']['Mobile']) ? esc_attr($attr['captionalignment']['Mobile']) : 'auto') . ";";
         $css .= "}";
                 
     $css .= "}";

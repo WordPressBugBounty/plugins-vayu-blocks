@@ -378,6 +378,9 @@ function generate_inline_video_styles($attr) {
 
         if (isset($attr['screenfit']) && $attr['screenfit'] === 'auto') {
             $aspectRatio = $attr['imageaspectratio']['Desktop'] ?? '16/9';
+            if ( $aspectRatio === 'auto' || empty($aspectRatio) ) {
+                $aspectRatio = '16/9';
+            }
             $css .= "aspect-ratio: $aspectRatio;";
             $css .= "width:650px;";
         } else if(isset($attr['screenfit']) && $attr['screenfit'] === 'screenfit'){

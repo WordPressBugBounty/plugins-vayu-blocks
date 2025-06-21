@@ -83,7 +83,6 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
     }
 
     function boxShadow($boxshadow) {
-
         return 'box-shadow:'.$boxshadow['css'].';';
     }
 
@@ -110,11 +109,10 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         if ($radiusValue) {
             $style .= $this->borderRadius($radiusValue);
         }
-    
+
         // Box Shadow
         $shadowKey = $isHover ? $shadow . $pre : $shadow;
         $shadowValue = self::$attribute[$shadowKey][$device] ?? null;
-    
         if (
             $shadowValue &&
             isset($shadowValue['elements']['elevation']) &&
@@ -175,9 +173,7 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
     function dimensions($dimensions, $type = 'padding', $device = 'Desktop',$blocks = false) {
         if(isset(self::$attribute[$dimensions][$device]) && empty(self::$attribute[$dimensions][$device])){
 
-            if($blocks==='container'){
-                return;
-            }
+            if($blocks==='container') return;
             return $type.": 0;";
         }
         $dim = self::$attribute[$dimensions][$device] ?? null;
@@ -292,13 +288,13 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
     
         if ($type === 'media' && !empty($background['image']['url'])) {
             $imageURL = $background['image']['url'];
+
+            $style .= "background:  url($imageURL) ;";
     
             if (!empty($background['color'])) {
                 $style .= "background-color: {$background['color']} ;";
             }
-
-            $style .= "background:  url($imageURL) ;";
-    
+            
             $repeat     = isset($background['image']['repeat']) ? $background['image']['repeat'] : 'no-repeat';
             $size       = isset($background['image']['size']) ? $background['image']['size'] : 'cover';
             $attachment = isset($background['image']['attachment']) ? $background['image']['attachment'] : 'scroll';
@@ -612,13 +608,13 @@ class VAYUBLOCKS_RESPONSIVE_STYLE{
         }
     
         // Padding
-        if (!empty($attr['advPadding'])) {
-            $mainStyles .= $this->dimensions('advPadding', 'padding', 'Desktop');
-        }
-    
+        // if (!empty($attr['advPadding'])) {
+        //     $mainStyles .= $this->dimensions('advPadding', 'padding', 'Desktop',$block);
+        // }
+     
         // Margin
         if (!empty($attr['advMargin'])) {
-            $mainStyles .= $this->dimensions('advMargin', 'margin', 'Desktop');
+            $mainStyles .= $this->dimensions('advMargin', 'margin', 'Desktop',$block);
         } else {
             if (isset($attr['advWidth']['value']) && $attr['advWidth']['value'] === 'customwidth') {
                 $mainStyles .= "margin:0 !important;";

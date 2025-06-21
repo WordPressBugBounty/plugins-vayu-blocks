@@ -140,10 +140,17 @@ function vayu_blocks_advance_slider_render($attr,$content) {
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attr);
     $dataAttributes = $OBJ_STYLE->follower();
 
+
+    $classeswr = 'vb-slider-start vb-slider-wrapper-' . esc_attr($uniqueId);
+
+    if (isset($attr['align'])) {
+        $classeswr .= ' align' . esc_attr($attr['align']);
+    }
+
     // Now return with conditional class
-    return '<div id="' . esc_attr($uniqueId) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
+    return '<div class="'. esc_attr($classeswr) .'"><div id="' . esc_attr($uniqueId) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
         'class' => $outer_classes
-    ]) . '>' . $slider_content . '</div>';
+    ]) . '>' . $slider_content . '</div></div>';
     
 }
 

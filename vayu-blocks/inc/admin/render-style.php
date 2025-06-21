@@ -56,6 +56,14 @@ function vayu_cycle_through_blocks( $blocks, $post_id ) {
 			$css .= generate_inline_lottie_styles($block['attrs']);
 		} 
 
+		if ( $block['blockName'] === 'vayu-blocks/faq' ) {
+			$css .= generate_inline_faq_styles($block['attrs']);
+		} 
+
+		if ( $block['blockName'] === 'vayu-blocks/faq-child' ) {
+			$css .= generate_inline_faq_child_styles($block['attrs']);
+		} 
+
 		if ( $block['blockName'] === 'vayu-blocks/advance-query-loop' ) {
 			
 			$css .= vayu_advance_loop_style($block['attrs']);

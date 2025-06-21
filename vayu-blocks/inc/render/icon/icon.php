@@ -1,32 +1,143 @@
 <?php
 if (!defined('ABSPATH')) {
-    exit; // Exit if accessed directly.
+    exit; 
 }
      
 class Vayu_blocks_icon {
 
-    private $attr; //attributes
+    private $attr;
 
     public function __construct($attr) {
         $this->attr = $attr;
     }
 
-    //Render
     public function render() {
-        ob_start(); // Start output buffering
+        ob_start();
         echo $this->render_icon();
-        return ob_get_clean(); // Return the buffered output
+        return ob_get_clean();
     }
 
-    //main container containing icon and overlay
     private function render_icon() {
         $attributes = $this->attr; // Access attributes
         $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
-        $icon = isset($attributes['printedIcon']) ? $attributes['printedIcon'] : '';
+        $iconName = $attributes['iconName'] ?? '';
+
+        if (empty($this->attr['iconName'] ?? '') && empty($this->attr['mediaIcon'] ?? '')) return '';
+
+        $animated = isset($attributes['className']) ? esc_attr($attributes['className']) : '';
+        $classes = [];
+
+        $classes[] = 'vayu-blocks-icon-main-container-' . $uniqueId;
+        $classes[] = 'wp_block_vayu-blocks-icon-main';
+
+        if ( isset($attributes['advWidth']['value']) && in_array($attributes['advWidth']['value'], ['fullwidth', 'customwidth']) ) {
+            $classes[] = 'alignfull';
+        }
+
+        $final_class = implode( ' ', $classes );
+
+        $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
+        $dataAttributes = $OBJ_STYLE->follower();
+
+        // Improvement: get SVG from media or library
+		$svg_output = ($iconName === 'medf' && !empty($attributes['mediaIcon']))
+			? $attributes['mediaIcon']
+			: vayu_blocks_get_icon_svg($iconName);
+
+        $svg_output = $this->vayu_blocks_inject_svg_attributes($svg_output, $attributes);
+        $animationClassMap = $this->vayu_blocks_get_animation_map();
+   
         $icon_html = '';
         
-        // Define the animation class map
-        $animationClassMap = [
+        // Assuming $attributes is an array with 'iconAnimation' and 'animationsettings' keys
+        $iconAnimation = $attributes['animationData']['infinite']['value'] ?? '';
+        $animationsettings = $attributes['animationData']['infinite']['hovertype'] ?? 'without-hvr';
+
+        // Get the animation class
+        $iconAnimationClass = isset($animationClassMap[$iconAnimation][$animationsettings]) 
+            ? $animationClassMap[$iconAnimation][$animationsettings] 
+            : '';
+
+        $hoverclasses = '';
+        if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
+            $hoverclasses = $attributes['advAnimation']['className'];
+        }
+
+        $type = $attributes['animationData']['background']['type'] ?? '';
+        $value = $attributes['animationData']['background']['value'] ?? '';
+
+        $containclass = ($value === 'two-wave') ? ($type === 'onhvr' ? 'vayu_blocks-two-wave-con-hvr' : 'vayu_blocks-two-wave-con') : '';
+
+        //icon html 
+        if (!empty($iconName)) {
+            $icon_html .= $this->get_icon_html($svg_output, $iconAnimationClass, $containclass, $hoverclasses, $type, $value);
+        }
+
+        $icon_html .= $OBJ_STYLE->renderVideo('advBackground');
+
+        return '<div id="' . esc_attr( $uniqueId ) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
+            'class' => $final_class
+        ]) . '>' . $icon_html . '</div>';
+
+    }
+
+    private function get_icon_html($svg_output, $iconAnimationClass, $containclass, $hoverclasses, $type, $value) {
+
+        $attributes = $this->attr;
+        $icon_html = '';
+
+        $icon_html .= '<div class="vb-icon-block-main-container ' . esc_attr($containclass) . ' ' . esc_attr( $hoverclasses ) . '">';
+            $icon_html .= '<div class="vb-icon-animation ' . $this->getAnimationClass($type, $value) . '"></div>';
+
+                if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
+                    $icon_html .= '<a 
+                        href="' . $attributes['link']['url'] . '" 
+                        id="' . (!empty($attributes['link']['id']) ? $attributes['link']['id'] : 'default-id') . '" 
+                        title="' . (!empty($attributes['link']['title']) ? $attributes['link']['title'] : 'Default Title') . '" 
+                        target="' . (!empty($attributes['link']['opensInNewTab']) && $attributes['link']['opensInNewTab'] ? '_blank' : '_self') . '" 
+                        rel="' . (!empty($attributes['link']['opensInNewTab']) && $attributes['link']['opensInNewTab'] ? 'noopener noreferrer' : '') . '">';
+                    $icon_html .= '<div class="vb-icon-front-svg ' . $iconAnimationClass . '">';
+                        $icon_html .= $svg_output;
+                    $icon_html .= '</div>';
+                    $icon_html .= '</a>';
+                } else {
+                    $icon_html .= '<div class="vb-icon-front-svg ' . $iconAnimationClass . '">';
+                        $icon_html .= $svg_output;
+                    $icon_html .= '</div>';
+                }
+
+                if (!empty($attributes['icontextallow']) && !empty($attributes['icontxt'])) {
+                    $icon_html .= '<div class="vb-icon-text';
+                    $icon_html .= '">';
+                    $icon_html .= '<text>' . esc_html($attributes['icontxt']) . '</text>';
+                    $icon_html .= '</div>';
+                }                
+
+        $icon_html .= '</div>';
+
+        return $icon_html;
+    }
+
+    private function vayu_blocks_inject_svg_attributes($svg, $attributes) {
+        $role         = ! empty( $attributes['mode'] ) ? esc_attr( $attributes['mode'] ) : 'img';
+        $aria_label   = ! empty( $attributes['textmode'] ) ? esc_attr( $attributes['textmode'] ) : 'Icon';
+        $stroke       = ! empty( $attributes['stroke'] ) ? esc_attr( $attributes['stroke'] ) : 'currentColor';
+        $strokeWidth  = ! empty( $attributes['strokeWidth'] ) ? esc_attr( $attributes['strokeWidth'] ) : '0';
+        $dashLength   = ! empty( $attributes['strokedashlength'] ) ? esc_attr( $attributes['strokedashlength'] ) : '0';
+        $dashGap      = ! empty( $attributes['strokedashgap'] ) ? esc_attr( $attributes['strokedashgap'] ) : '0';
+        $tabIndex     = '0';
+
+        $svg = preg_replace('/(stroke|stroke-width|stroke-dasharray|role|aria-label|tabindex)="[^"]*"/', '', $svg);
+        return str_replace(
+            '<svg',
+            '<svg role="' . $role . '" aria-label="' . $aria_label . '" stroke="' . $stroke . '" stroke-width="' . $strokeWidth . '" stroke-dasharray="' . $dashLength . ', ' . $dashGap . '" tabindex="' . $tabIndex . '"',
+            $svg
+        );
+    }
+
+    private function vayu_blocks_get_animation_map() {
+
+        return [
             "vayu_blocks_none_compoents_animation"=> [
             "one-time"=> "vayu-blocks-animation-none-one-time",
             "without-hvr"=> "vayu-blocks-animation-icon-none-without-hvr",
@@ -98,9 +209,9 @@ class Vayu_blocks_icon {
             "with-hvr"=> "vayu-blocks-animation-ripple-with-hvr"
             ]
         ];
+    }
 
-        if (!function_exists('getAnimationClass')) {
-            function getAnimationClass($effectType, $imageselectedAnimation, $isClicked = false) {
+    private function getAnimationClass($effectType, $imageselectedAnimation, $isClicked = false) {
                 
                 switch ($effectType) {
                     case 'always':
@@ -177,92 +288,7 @@ class Vayu_blocks_icon {
                         return ''; // Return an empty string if no effectType match
                 }
             }
-        }
-        
-        // Assuming $attributes is an array with 'iconAnimation' and 'animationsettings' keys
-        $iconAnimation = $attributes['animationData']['infinite']['value'] ?? '';
-        $animationsettings = $attributes['animationData']['infinite']['hovertype'] ?? 'without-hvr';
-
-        // Get the animation class
-        $iconAnimationClass = isset($animationClassMap[$iconAnimation][$animationsettings]) 
-            ? $animationClassMap[$iconAnimation][$animationsettings] 
-            : ''; // Default to empty string if no match found
-
-        $hoverclasses = '';
-        if ( ! empty( $attributes['advAnimation'] ) && ! empty( $attributes['advAnimation']['className'] ) ) {
-            $hoverclasses = $attributes['advAnimation']['className'];
-        }
-
-        $type = $attributes['animationData']['background']['type'] ?? '';
-        $value = $attributes['animationData']['background']['value'] ?? '';
-
-        $containclass = '';
-        if($value === 'two-wave'){
-
-            if($type === 'onhvr'){
-                $containclass = 'vayu_blocks-two-wave-con-hvr';
-            }else{
-                $containclass = 'vayu_blocks-two-wave-con';
-            }
-        }
-
-        // If the icon is not empty and is a string
-        if (!empty($icon)) {
-            // Output the SVG string directly
-        $icon_html .= '<div class="vb-icon-block-main-container ' . esc_attr($containclass) . ' ' . esc_attr( $hoverclasses ) . '">';
-
-        $icon_html .= '<div class="vb-icon-animation ' . getAnimationClass($type, $value) . '"></div>';
-
-               if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
-                    $icon_html .= '<a 
-                        href="' . $attributes['link']['url'] . '" 
-                        id="' . (!empty($attributes['link']['id']) ? $attributes['link']['id'] : 'default-id') . '" 
-                        title="' . (!empty($attributes['link']['title']) ? $attributes['link']['title'] : 'Default Title') . '" 
-                        target="' . (!empty($attributes['link']['opensInNewTab']) && $attributes['link']['opensInNewTab'] ? '_blank' : '_self') . '" 
-                        rel="' . (!empty($attributes['link']['opensInNewTab']) && $attributes['link']['opensInNewTab'] ? 'noopener noreferrer' : '') . '">';
-                    $icon_html .= '<div class="vb-icon-front-svg ' . $iconAnimationClass . '">';
-                    $icon_html .= $icon; // This is the SVG string
-                    $icon_html .= '</div>';
-                    $icon_html .= '</a>';
-                } else {
-                    $icon_html .= '<div class="vb-icon-front-svg ' . $iconAnimationClass . '">';
-                    $icon_html .= $icon; // This is the SVG string
-                    $icon_html .= '</div>';
-                }
-
-                if (!empty($attributes['icontextallow']) && !empty($attributes['icontxt'])) {
-                    $icon_html .= '<div class="vb-icon-text';
-                    $icon_html .= '">';
-                    $icon_html .= '<text>' . esc_html($attributes['icontxt']) . '</text>';
-                    $icon_html .= '</div>';
-                }                
-
-            $icon_html .= '</div>';
-        }
-
-        $animated = isset($attributes['className']) ? esc_attr($attributes['className']) : '';
-        $classes = [];
-
-        $classes[] = 'vayu-blocks-icon-main-container-' . $uniqueId;
-        $classes[] = 'wp_block_vayu-blocks-icon-main';
-
-        if ( isset($attributes['advWidth']['value']) && in_array($attributes['advWidth']['value'], ['fullwidth', 'customwidth']) ) {
-            $classes[] = 'alignfull';
-        }
-
-        $final_class = implode( ' ', $classes );
-
-        $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
-        $dataAttributes = $OBJ_STYLE->follower();
-
-        $icon_html .= $OBJ_STYLE->renderVideo('advBackground');
-
-        return '<div id="' . esc_attr( $uniqueId ) . '" ' . $dataAttributes . ' ' . get_block_wrapper_attributes([
-            'class' => $final_class
-        ]) . '>' . $icon_html . '</div>';
-
-    }
-      
+    
 }
 
 // Render callback for the block
@@ -271,11 +297,8 @@ function vayu_block_icon_render($attr) {
     if ((new VAYUBLOCKS_DISPLAY_CONDITION($attr))->display()) {
         return '';
     }
-
     $default_attributes = include('defaultattributes.php');
-
     $attr = array_merge($default_attributes, $attr);
-
     $icon = new Vayu_blocks_icon($attr);
 
     return $icon->render();

@@ -4,7 +4,7 @@ Tags: block, blocks editor, block editor, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -151,9 +151,10 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+Stable tag: 1.3.7
+New: Added new FAQ block.
 
 =1.3.5 =
-New: Added new FAQ block.
 New: Added rotating flex feature to the Container block.
 Update: General improvements to all blocks.
 Fix: Resolved "Attempt Block Recovery" issue.
@@ -264,10 +265,7 @@ Initial Release
 
 == Upgrade Notice ==
 
-=1.3.5 =
+=1.3.7 =
 New: Added new FAQ block.
-New: Added rotating flex feature to the Container block.
-Update: General improvements to all blocks.
-Fix: Resolved "Attempt Block Recovery" issue.
 
 

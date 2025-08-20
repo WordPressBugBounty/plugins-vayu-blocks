@@ -129,9 +129,18 @@ if ( ! class_exists( 'VAYU_BLOCK_SITES_BUILDER_MENU' ) ) {
 
         public function admin_enqueue( $hook = '' ) {
             // && 'toplevel_page_'.self::$plugin_slug !== $hook 
-            if ( self::$plugin_slug.'_page_vayu-sites'!== $hook && 'post.php'!==$hook && 'post-new.php'!==$hook && 'toplevel_page_vayu-blocks' !==$hook) {
-				return;
-			}
+                    $allowed_hooks = [
+                        self::$plugin_slug . '_page_vayu-sites',
+                        'site-editor.php',
+                        'post.php',
+                        'post-new.php',
+                        'toplevel_page_vayu-blocks',
+                    ];
+
+                    if ( ! in_array( $hook, $allowed_hooks, true ) ) {
+                        return;
+                    }
+
 
             if(isset($_GET['template']) && sanitize_text_field( $_GET['template'] )){
 

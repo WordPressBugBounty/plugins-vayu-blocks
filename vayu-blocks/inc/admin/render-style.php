@@ -60,6 +60,10 @@ function vayu_cycle_through_blocks( $blocks, $post_id ) {
 			$css .= generate_inline_faq_styles($block['attrs']);
 		} 
 
+		if ( $block['blockName'] === 'vayu-blocks/table-of-contents' ) {
+			$css .= generate_inline_toc_styles($block['attrs']);
+		} 
+
 		if ( $block['blockName'] === 'vayu-blocks/faq-child' ) {
 			$css .= generate_inline_faq_child_styles($block['attrs']);
 		} 

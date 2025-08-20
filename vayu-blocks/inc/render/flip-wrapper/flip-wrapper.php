@@ -28,7 +28,7 @@ class Vayu_blocks_front_image {
         $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
 
         $image_html .= '<div class="vayu_blocks_front_image_wrapper-for-front" id='. $uniqueId .'>';          
-                $image_html .= $this->content;
+            $image_html .= $this->content;
         $image_html .= '</div>';
     
         return '<div class="vb-flip-innerblock-' . $uniqueId . ' ' . $animated . '">' . $image_html . '</div>';
@@ -41,9 +41,7 @@ function vayu_blocks_flip_wrapper_render($attr,$content) {
     $default_attributes = include('defaultattributes.php');
 
     $attr = array_merge($default_attributes, $attr);
-
     $image = new Vayu_blocks_front_image($attr,$content);
-    
     $className = isset($attr['classNamemain']) ? esc_attr($attr['classNamemain']) : '';
 
     // Render and return the image output inside a div with the dynamic class name

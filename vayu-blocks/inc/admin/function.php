@@ -24,7 +24,6 @@ add_filter('script_loader_tag', function ($tag, $handle, $src) {
     return $tag;
 }, 10, 3);
 
-
 // frontend css and js
 function vayu_blocks_frontend_enqueue_styles() {
     $asset_file = VAYU_BLOCKS_URL .'inc/assets/css/global.css';
@@ -46,8 +45,6 @@ function vayu_blocks_frontend_enqueue_styles() {
 }
 add_action('wp_enqueue_scripts', 'vayu_blocks_frontend_enqueue_styles');
 
-
-
 /**
  * Register and enqueue stylesheet for the editor only.
  */
@@ -68,6 +65,14 @@ function vayu_blocks_enqueue_panel_styles() {
             array(), // Dependencies
             filemtime(VAYU_BLOCKS_DIR_PATH. '/inc/assets/css/global.css'), // Version (useful for cache busting)
             'all' // Media type
+        );
+
+        wp_enqueue_style(
+            'modal-style',
+            VAYU_BLOCKS_URL . 'public/build/modal-style.css',
+             filemtime(VAYU_BLOCKS_DIR_PATH. 'public/build/modal-style.css'),
+             array(),
+            'all'
         );
         $options = (new VAYU_BLOCKS_OPTION_PANEL())->get_option();
         wp_localize_script( 'registerPlugin-block', 'ThBlockData', array(
@@ -94,20 +99,18 @@ function vayu_blocks_editor_assets(){
         'all' // Media type
     );
 
-
     wp_enqueue_style(
         'vayu-blocks-component-editor-css',
         VAYU_BLOCKS_URL . 'public/build/component-editor.css',
-        array_merge(
-			$asset_file['dependencies']
-		),	'1.0.0'
+			$asset_file['dependencies'],'1.0.0'
     );
 
     	wp_enqueue_script(
 		'vayu-block-index',
 		VAYU_BLOCKS_URL . 'public/build/index.js',
 		array_merge(
-			$index_asset['dependencies']
+			$index_asset['dependencies'],
+           [ 'wp-edit-post', 'wp-plugins' ],
 		),
 		'1.0.0',
 		true
@@ -179,7 +182,6 @@ if( $hook !== 'toplevel_page_vayu-blocks' && $hook !== 'vayu-blocks_page_vayu-si
         VAYU_BLOCKS_URL . 'public/build/adminDashboard-style.css',
         '1.0.0'
     );
-
     
     
 }
@@ -255,10 +257,6 @@ function vayu_blocks_array_merge_recursive_distinct(array &$array1, array &$arra
     return $merged;
 }
 
-
- 
-
-
 add_action('rest_api_init', function() {
     add_filter('rest_post_query', 'vayu_blocks_filter_posts_with_featured_image', 10, 2);
 });
@@ -274,3 +272,31 @@ function vayu_blocks_filter_posts_with_featured_image($args, $request) {
     }
     return $args;
 }
+
+add_action('rest_api_init', function () {
+	register_rest_route('vayu-blocks/v1', '/google-fonts', [
+		'methods' => 'GET',
+		'callback' => function () {
+			$response = wp_remote_get('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyClGdkPJ1BvgLOol5JAkQY4Mv2lkLYu00k');
+
+			if (is_wp_error($response)) {
+				return new WP_REST_Response([
+					'error' => 'Failed to fetch Google Fonts',
+					'message' => $response->get_error_message()
+				], 500);
+			}
+
+			$body = wp_remote_retrieve_body($response);
+			$data = json_decode($body, true);
+
+			if (empty($data['items'])) {
+				return new WP_REST_Response([
+					'error' => 'Invalid response from Google Fonts API',
+				], 502);
+			}
+
+			return rest_ensure_response($data);
+		},
+		'permission_callback' => '__return_true',
+	]);
+});

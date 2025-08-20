@@ -1,0 +1,29 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "vayu-blocks/table-of-contents",
+  "version": "0.2.0",
+  "title": "Table of Contents",
+  "category": "vayu-blocks",
+  "keywords": [
+    "Table of Contents"
+  ],
+  "description": "Add a table of contents to allow page navigation.",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
+  },
+  "example": {
+    "attributes": {
+      "title": "Hello GutSlider Block"
+    }
+  },
+  "textdomain": "vayu-blocks",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScriptModule": "file:./view.js"
+}

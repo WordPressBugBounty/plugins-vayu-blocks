@@ -30,6 +30,7 @@ class VAYU_BLOCKS_OPTION_PANEL {
             'postPagination' =>  array( 'isActive' => true,'type'=>'free'),
             'lottie' =>  array( 'isActive' => true,'type'=>'free'),
             'faq' =>  array( 'isActive' => true,'type'=>'free'),
+            'tableOfContents' => array('isActive' => true,'type'=>'free'),
         );
 
     }

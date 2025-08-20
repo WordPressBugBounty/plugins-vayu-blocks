@@ -11,8 +11,8 @@ function vayu_block_unfold_render($attributes, $content, $block) {
 
     $is_unfolded = !empty($attributes['isUnfolded']);
     $unfold_content_template = $content;
-    $fold_text = !empty($attributes['foldBtnTxt']) ? $attributes['foldBtnTxt'] : __('', 'vayu-blocks');
-    $unfold_text = !empty($attributes['unfoldBtnTxt']) ? $attributes['unfoldBtnTxt'] : __('', 'vayu-blocks');
+    $fold_text = array_key_exists('foldBtnTxt', $attributes) ? $attributes['foldBtnTxt'] : __('Fold', 'vayu-blocks');
+    $unfold_text = array_key_exists('unfoldBtnTxt', $attributes) ? $attributes['unfoldBtnTxt'] : __('UnFold', 'vayu-blocks');
 
     $OBJ_STYLE = new VAYUBLOCKS_RESPONSIVE_STYLE($attributes);
     $dataAttributes = $OBJ_STYLE->follower();
@@ -93,49 +93,50 @@ function vayu_block_unfold_render($attributes, $content, $block) {
 
     ob_start();
     ?>
-    <div id="<?php echo esc_attr($attributes['uniqueId']);?>"  <?php echo $dataAttributes; ?>  <?php echo get_block_wrapper_attributes(); ?>>
+        <div id="<?php echo esc_attr($attributes['uniqueId']);?>"  <?php echo $dataAttributes; ?>  <?php echo get_block_wrapper_attributes(); ?>>
 
-       <?= $image_html ?>
-        <div class="unfold-inner"
-            style="cursor: <?php echo isset($attributes['contentShowEvent']) && in_array($attributes['contentShowEvent'], ['contentclick', 'contenthover']) ? 'pointer' : 'auto'; ?>;"
-            data-content-show-event="<?php echo esc_attr(isset($attributes['contentShowEvent']) ? $attributes['contentShowEvent'] : ''); ?>"
-            data-hide-unfold-button="<?php echo esc_attr(isset($attributes['hideUnfoldButton']) ? $attributes['hideUnfoldButton'] : ''); ?>"
-            data-unfold-text="<?php echo esc_attr($unfold_text); ?>"
-            data-fold-text="<?php echo esc_attr($fold_text); ?>"
-            >
-            <div class="vb-bg-unfold-full-button <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
-                <div class="unfold-content <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
-                    <?php echo $unfold_content_template; ?>
-                </div>
-            </div>
-
-            <?php
-if (
-    ! (isset($attributes['hideUnfoldButton']) && $attributes['hideUnfoldButton']) ||
-    (isset($attributes['contentShowEvent']) && $attributes['contentShowEvent'] === 'buttonclick')
-) :
-?>
-                <div class="unfold-content-btn">
-                <div class="unfold-button" 
-                role="button"
-                aria-expanded="<?php echo $is_unfolded ? 'true' : 'false'; ?>"
-                style="cursor: pointer;"
+        <?= $image_html ?>
+            <div class="unfold-inner"
+                style="cursor: <?php echo isset($attributes['contentShowEvent']) && in_array($attributes['contentShowEvent'], ['contentclick', 'contenthover']) ? 'pointer' : 'auto'; ?>;"
+                data-content-show-event="<?php echo esc_attr(isset($attributes['contentShowEvent']) ? $attributes['contentShowEvent'] : ''); ?>"
+                data-hide-unfold-button="<?php echo esc_attr(isset($attributes['hideUnfoldButton']) ? $attributes['hideUnfoldButton'] : ''); ?>"
+                data-unfold-text="<?php echo esc_attr($unfold_text); ?>"
                 data-fold-text="<?php echo esc_attr($fold_text); ?>"
-                data-unfold-text="<?php echo esc_attr($unfold_text); ?>">
-                <span class="btn-fold-icon" style="display: <?php echo esc_attr($is_unfolded) ? 'inline-flex' : 'none'; ?>;">
-                <?php echo $fold_icon; ?>
-                </span>
-                <span class="btn-unfold-icon" style="display: <?php echo esc_attr($is_unfolded) ? 'none' : 'inline-flex'; ?>;">
-                    <?php echo $unfold_icon; ?>
-                </span>
-                <span class="btn-text">
-                <?php echo esc_attr($is_unfolded) ? esc_attr($fold_text) : esc_attr($unfold_text); ?>
-                </span>
-            </div>
+                >
+                <div class="vb-bg-unfold-full-button <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
+                    <div class="unfold-content <?php echo esc_attr($is_unfolded) ? 'unfolded' : ''; ?>">
+                        <?php echo $unfold_content_template; ?>
+                    </div>
                 </div>
-            <?php endif; ?>
+
+                <?php
+                    if (
+                        ! (isset($attributes['hideUnfoldButton']) && $attributes['hideUnfoldButton']) ||
+                        (isset($attributes['contentShowEvent']) && $attributes['contentShowEvent'] === 'buttonclick')
+                    ) :
+                    ?>
+                        <div class="unfold-content-btn">
+                            <div class="unfold-button" 
+                                role="button"
+                                aria-expanded="<?php echo $is_unfolded ? 'true' : 'false'; ?>"
+                                style="cursor: pointer;"
+                                data-fold-text="<?php echo esc_attr($fold_text); ?>"
+                                data-unfold-text="<?php echo esc_attr($unfold_text); ?>">
+                                <span class="btn-fold-icon" style="display: <?php echo esc_attr($is_unfolded) ? 'inline-flex' : 'none'; ?>;">
+                                    <?php echo $fold_icon; ?>
+                                </span>
+                                <span class="btn-unfold-icon" style="display: <?php echo esc_attr($is_unfolded) ? 'none' : 'inline-flex'; ?>;">
+                                    <?php echo $unfold_icon; ?>
+                                </span>
+                                <span class="btn-text">
+                                    <?php echo esc_attr($is_unfolded) ? esc_attr($fold_text) : esc_attr($unfold_text); ?>
+                                </span>
+                            </div>
+                        </div>
+                <?php endif; ?>
+            </div>
         </div>
-    </div>
     <?php
+    
     return ob_get_clean();
 }

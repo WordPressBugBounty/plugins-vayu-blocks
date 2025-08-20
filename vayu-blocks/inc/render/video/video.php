@@ -368,7 +368,6 @@ class Vayu_blocks_video {
 
     }
     
-
     private function safe_attr($array, $keyPath, $default = '') {
         $value = $array;
         foreach (explode('.', $keyPath) as $key) {
@@ -485,7 +484,6 @@ class Vayu_blocks_video {
             </div>
         SVG;
     }
-
 }
 
 // Render callback for the block
@@ -496,11 +494,8 @@ function vayu_block_video_render($attr,$content) {
     }
 
     $default_attributes = include('defaultattributes.php');
-
     $attr = array_merge($default_attributes, $attr);
-
     $image = new Vayu_blocks_video($attr,$content);
     
     return $image->render();
-
 }

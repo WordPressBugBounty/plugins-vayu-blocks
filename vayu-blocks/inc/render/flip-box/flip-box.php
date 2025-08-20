@@ -28,57 +28,51 @@ class Vayu_blocks_image_flip {
         $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
         $innerclass = '';
 
+        $imageEffect = $attributes['imagehvreffect'] ?? '';
+        $flipSide    = $attributes['flipside'] ?? '';
 
-        if(isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'flip') {
-            if (isset($attributes['flipside']) && $attributes['flipside'] === 'right') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_flip-front';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'left') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_flip-front-left';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'top') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_flip-back';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'bottom') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_flip-back-bottom';
-            }
-        } elseif (isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'flip-z') {
-            $innerclass = 'vayu_blocks_flip-box-inner_animation_div_flip-z';
-        } elseif (isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'flip-x') {
-            $innerclass = 'vayu_blocks_flip-box-inner_animation_div_flip-x';
-        } elseif (isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'zoom-in') {
-            $innerclass = 'vayu_blocks_flip-box-inner_animation_div_zoom-in';
-        } elseif (isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'zoom-out') {
-            $innerclass = 'vayu_blocks_flip-box-inner_animation_div_zoom-out';
-        } elseif (isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'fade-in') {
-            $innerclass = 'vayu_blocks_flip-box-inner_animation_div_fade-in';
-        } else if(isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'slide') {
-            if (isset($attributes['flipside']) && $attributes['flipside'] === 'right') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_slide_animation-right';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'left') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_slide_animation-left';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'top') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_slide_animation-top';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'bottom') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_slide_animation-bottom';
-            }
-        } else if(isset($attributes['imagehvreffect']) && $attributes['imagehvreffect'] === 'push') {
-            if (isset($attributes['flipside']) && $attributes['flipside'] === 'right') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_push_animation-right';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'left') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_push_animation-left';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'top') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_push_animation-top';
-            } elseif (isset($attributes['flipside']) && $attributes['flipside'] === 'bottom') {
-                $innerclass = 'vayu_blocks_flip-box-inner_animation_div_push_animation-bottom';
-            }
+        $flipMap = [
+            'flip' => [
+                'right'  => 'vayu_blocks_flip-box-inner_animation_div_flip-front',
+                'left'   => 'vayu_blocks_flip-box-inner_animation_div_flip-front-left',
+                'top'    => 'vayu_blocks_flip-box-inner_animation_div_flip-back',
+                'bottom' => 'vayu_blocks_flip-box-inner_animation_div_flip-back-bottom',
+            ],
+            'slide' => [
+                'right'  => 'vayu_blocks_flip-box-inner_animation_div_slide_animation-right',
+                'left'   => 'vayu_blocks_flip-box-inner_animation_div_slide_animation-left',
+                'top'    => 'vayu_blocks_flip-box-inner_animation_div_slide_animation-top',
+                'bottom' => 'vayu_blocks_flip-box-inner_animation_div_slide_animation-bottom',
+            ],
+            'push' => [
+                'right'  => 'vayu_blocks_flip-box-inner_animation_div_push_animation-right',
+                'left'   => 'vayu_blocks_flip-box-inner_animation_div_push_animation-left',
+                'top'    => 'vayu_blocks_flip-box-inner_animation_div_push_animation-top',
+                'bottom' => 'vayu_blocks_flip-box-inner_animation_div_push_animation-bottom',
+            ],
+        ];
+
+        $staticMap = [
+            'flip-z'   => 'vayu_blocks_flip-box-inner_animation_div_flip-z',
+            'flip-x'   => 'vayu_blocks_flip-box-inner_animation_div_flip-x',
+            'zoom-in'  => 'vayu_blocks_flip-box-inner_animation_div_zoom-in',
+            'zoom-out' => 'vayu_blocks_flip-box-inner_animation_div_zoom-out',
+            'fade-in'  => 'vayu_blocks_flip-box-inner_animation_div_fade-in',
+        ];
+
+        // Priority 1: Effects that depend on flip side
+        if ( isset($flipMap[$imageEffect]) && isset($flipMap[$imageEffect][$flipSide]) ) {
+            $innerclass = $flipMap[$imageEffect][$flipSide];
+
+        // Priority 2: Direct mapping
+        } elseif ( isset($staticMap[$imageEffect]) ) {
+            $innerclass = $staticMap[$imageEffect];
         }
 
-        // Assuming $attributes is already defined and contains 'dbox' and 'imagehvreffect'
-        if ($attributes['dbox'] && !($attributes['imagehvreffect'] === 'zoom-in' || 
-                                    $attributes['imagehvreffect'] === 'zoom-out' || 
-                                    $attributes['imagehvreffect'] === 'fade-in'|| 
-                                    $attributes['imagehvreffect'] === 'slide'|| 
-                                    $attributes['imagehvreffect'] === 'push')) {
-                                     
-            $innerclass .= '-dbox'; // Append '-dbox' if conditions are met
+        $excludedEffects = [ 'zoom-in', 'zoom-out', 'fade-in', 'slide', 'push' ];
+
+        if ( $attributes['dbox'] && ! in_array( $attributes['imagehvreffect'], $excludedEffects, true ) ) {
+            $innerclass .= '-dbox';
         }
 
         $image_html .= '<div class="vb-flip-box-wrapper" id='. $uniqueId .'>';
@@ -110,16 +104,10 @@ function vayu_blocks_flip_box_render($attr,$content) {
         return '';
     }
 
-    // Include default attributes
     $default_attributes = include('defaultattributes.php');
-
-    // Merge default attributes with provided attributes
     $attr = array_merge($default_attributes, $attr);
-
-    // Initialize the image with the merged attributes
     $image = new Vayu_blocks_image_flip($attr,$content);
     
-    return $image->render();
-           
+    return $image->render();   
 }
 

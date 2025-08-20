@@ -67,9 +67,8 @@ function generate_inline_video_styles($attr) {
             height: 540px;
             max-width: 100%;
             max-height: 100%;";
-        $css .= "}";
+    $css .= "}";
    
-
     $css .= "$wrapper .vb-video-poster{";
         if(!$attr['posterOn']) {
             $css .= "display:none;";
@@ -222,7 +221,6 @@ function generate_inline_video_styles($attr) {
 
     $css .= "}";
 
-    // Append CSS rules to $css
     $css .= "$wrapper $inline {";
         if ( isset($attr['imagealignment']) && is_array($attr['imagealignment']) && isset($attr['imagealignment']['Desktop']) ) {
             $css .= "justify-content: {$attr['imagealignment']['Desktop']} !important;";
@@ -364,7 +362,6 @@ function generate_inline_video_styles($attr) {
         height: 100% !important;";
 
     $css .= "}";
-
     
     $css .= "$wrapper .vb-video-iframe-cont{";
 
@@ -413,7 +410,6 @@ function generate_inline_video_styles($attr) {
         // $css .= "padding-bottom: 56% !important;";
     $css .= "}";
 
-    // Append hover effect CSS rules
     $css .= " $wrapper $inline:hover .vb-video-iframe {";
         $css .= "    transform: var(--image-hover-effect-transform, none);";
         $css .= "    filter: var(--image-filter-effect, none);";
@@ -782,16 +778,15 @@ function generate_inline_video_styles($attr) {
         $css .= "text-align: " . esc_attr($attr['captionalignment']) . ";";
     $css .= "}";
 
-    $overlayalignmenttablet = explode(' ', $attr['overlayalignmenttablet']); // Split the string
-    $vertical = $overlayalignmenttablet[0]; // First part (vertical)
-    $horizontal = $overlayalignmenttablet[1]; // Second part (horizontal)
+    $overlayalignmenttablet = explode(' ', $attr['overlayalignmenttablet']);
+    $vertical = $overlayalignmenttablet[0]; 
+    $horizontal = $overlayalignmenttablet[1]; 
 
     
-    $overlayalignmentmobile = explode(' ', $attr['overlayalignmentmobile']); // Split the string
-    $verticalmobile = $overlayalignmentmobile[0]; // First part (vertical)
-    $horizontalmobile = $overlayalignmentmobile[1]; // Second part (horizontal)
+    $overlayalignmentmobile = explode(' ', $attr['overlayalignmentmobile']);
+    $verticalmobile = $overlayalignmentmobile[0]; 
+    $horizontalmobile = $overlayalignmentmobile[1]; 
 
-   // For tablet (max-width: 1024px)
     $css .= "@media (max-width: 1024px) {";
 
         $css .= "$wrapper .vb-video-iframe-cont{";
@@ -958,7 +953,6 @@ function generate_inline_video_styles($attr) {
 
     $css .= "}";
 
-    // For mobile (max-width: 767px, assuming 400px is part of this range)
     $css .= "@media (max-width: 767px) {";
 
         $css .= "$wrapper .vb-video-iframe-cont{";

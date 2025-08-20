@@ -1,19 +1,17 @@
 === Vayu Blocks – Website Builder for the Block Editor ===
 Contributors: ThemeHunk, satyendra61
-Tags: block, blocks editor, block editor, page builder, gutenberg templates
+Tags: block, blocks editor, addons, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.8
-Requires PHP: 7.4
-Stable tag: 1.3.7
+Requires PHP: 7.8
+Stable tag: 1.3.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-The Most-loved Page Builder With a Visual Drag & Drop Editor. Get 25+ free Gutenberg blocks to build beautiful websites.
+Vayu Blocks - Page Builder For Gutenberg Editor, Block Addons & FSE Templates
 
 == Description ==
-A Better Way to Build WordPress Websites with Gutenberg | Introducing Vayu Blocks
-
-Vayu Blocks is a visual website builder that makes building fast and accessible websites a reality. It's the most-loved page builder that is easy to use and a favorite among those who prioritize performance and usability.
+Unlock the full potential of the WordPress Block Editor (Gutenberg) with Vayu Blocks – your all-in-one, lightning-fast website and page builder! Tired of slow, bloated page builders? Vayu Blocks is engineered for peak performance and unparalleled ease of use, letting you craft stunning, high-converting websites without a single line of code. Whether you're a beginner or a seasoned designer, our intuitive drag-and-drop interface, combined with a robust library of 25+ powerful blocks and dozens of readymade templates, makes website creation a breeze.
 
 Vayu Blocks unlocks the full potential of the Gutenberg editor. The drag-and-drop editor and readymade templates help you build amazing websites without touching a line of code.
 
@@ -55,23 +53,24 @@ Vayu Blocks are for everyone!
 * eCommerce store owners – Vayu Blocks helps you create visually stunning product listings, showcase star ratings and reviews, and display pricing information that will make your customers click that “buy” button. Get ready to take your online store to new heights.
 * Marketers – Vayu Blocks is your secret weapon for creating effective landing pages and promotional materials. Use attention-grabbing blocks like call-to-actions, marketing buttons, and testimonials to drive conversions and engage your target audience. Your campaigns just got a whole lot better.
 
-#### Advance Container [FREE]
-Container block allows you to create visually consistent and organized sections within your content area.
+###Popular Block Addons
 
-#### Post Grid [FREE]
-The Post Grid block is an essential content element designed to showcase a collection of posts in a visually appealing grid format. This block allows you to organize and display your content with ease, making it perfect for blogs and news websites. With customizable options for layout, spacing, and styling, the Post Grid block enhances the user experience by presenting your posts in a clean, structured way, ensuring that your content stands out and remains accessible to your audience.
-
-#### Advance Heading [FREE]
-Heading block is a fundamental content block used for creating and styling headings or titles within your posts or pages.
-
-#### Advance Spacer [FREE]
-Spacer block is used to create empty spaces between content blocks, improving visual separation and layout control.
-
-#### Advance Button [FREE]
-Easily design attractive buttons with Vayu Blocks advanced customizations.
-
-#### Advance Product [FREE]
-This enables you to seamlessly integrate your WooCommerce products into your content, in posts or pages.
+* Creative Heading: Go beyond basic styling to implement gradients, text shadows, animations, and responsive typography. [Learn more](https://vayublocks.com/blocks/advance-heading)
+* Advanced Query: Go beyond simple post grids to create dynamic lists of posts, products, or custom post types based on categories, tags, custom fields, dates, authors, etc. [Learn more](https://vayublocks.com/blocks/)
+* Flip Box: Transform static information into engaging, interactive elements. Present content on the front, then reveal a different message, call to action, or additional details when a user hovers or clicks. [Learn more](https://vayublocks.com/blocks/flip-box/)
+* Slider Block: let you beautifully display multiple images, text, or even entire content sections in an engaging, rotating carousel. Effortlessly create dynamic image galleries, testimonials.[Learn more](https://vayublocks.com/blocks/slider/)
+* Unfold Block: It allow you to present lengthy content concisely, only revealing the full details when a user clicks to expand. Perfect for lengthy descriptions, or detailed instructions. [Learn more](https://vayublocks.com/blocks/unfold/)
+* Image Hotspot: Transform your static pictures into engaging, informative hubs. Easily add clickable markers or "hotspots" to specific areas of an image. [Learn more](https://vayublocks.com/blocks/image-hotspot/)
+* Advance Image: Easily add dynamic masks, stunning overlays, subtle animations, intricate borders, and responsive sizing options. [Learn more](https://vayublocks.com/blocks/image/)
+* Icons: Let you effortlessly add stunning vector graphics to your content, instantly boosting visual appeal and guiding user attention.[Learn more](https://vayublocks.com/blocks/icons/)
+* Timeline: Easily highlight key dates, descriptions, and accompanying media, making complex histories or step-by-step guides. [Learn more](https://vayublocks.com/blocks/timeline/)
+* Advance Video: Go beyond basic embeds to add custom play buttons, privacy overlays, mute on load, looping, and advanced responsiveness. [Learn more](https://vayublocks.com/blocks/video/)
+* Advance Button: It give you complete design freedom to create stunning, high-impact calls to action that truly stand out. [Learn more](https://vayublocks.com/blocks/advance-buttons/)
+* Products Block: Effortlessly create dynamic grids or carousels of your latest, featured, or best-selling products, complete with images, prices, and direct "Add to Cart" buttons.
+* FAQ Block: Streamline your content by presenting common questions and their answers in an organized, collapsible format.
+* Dynamic Content: let you display information on your website that automatically changes based on various conditions or data sources.
+* Post Grid: This block give you the power to elegantly display your latest blog posts, products, or any custom content in customizable grid layouts. 
+* Contact Form: Easily create professional, customizable forms to gather inquiries, feedback, or leads, ensuring smooth communication and helping you stay connected with your audience without hassle.
 
 ### Vayu Addons 
 Vayu block addons & Website Templates [View More](https://themehunk.com/vayu-blocks).
@@ -151,10 +150,19 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
-Stable tag: 1.3.7
+
+= 1.3.8 =
+New: Design library added.
+New: Pattern import feature added.
+New: Template import feature added.
+Update: Style issues improved.
+Fix: Security issue resolved.
+
+= 1.3.7 =
 New: Added new FAQ block.
 
 =1.3.5 =
+New: Added new FAQ block.
 New: Added rotating flex feature to the Container block.
 Update: General improvements to all blocks.
 Fix: Resolved "Attempt Block Recovery" issue.
@@ -265,7 +273,13 @@ Initial Release
 
 == Upgrade Notice ==
 
-=1.3.7 =
-New: Added new FAQ block.
+=1.3.8 =
+New: Design library added.
+New: Pattern import feature added.
+New: Template import feature added.
+Update: Style issues improved.
+Fix: Security issue resolved.
+
+
 
 

@@ -6,7 +6,6 @@ return array(
         'heightwrapper' => 0, 
         'parentBlock' => '',
         'globaloff'=>false,
-        'parentBlockAttributes'=>array(),
 
     //Advanced
         'classNamemain' => '',
@@ -27,5 +26,6 @@ return array(
         'advanceborder'=>array(),
         'advanceRadius'=>array(),
         'boxShadow'=> array(),
+        'boxalignment' => 'center center',
 );
 ?>

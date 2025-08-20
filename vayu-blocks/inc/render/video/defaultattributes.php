@@ -13,7 +13,6 @@ return array(
         'imagehvrfilter' => 'none',
         'imageoverlayouteffect' => 'none',
         'overlayhvrcolor' => '',
-        
         'focalPoint' => array(
             'x' => 0.5,
             'y' => 0.5,
@@ -46,9 +45,9 @@ return array(
           ),
 
         'imagealignment' =>  array(
-        'Desktop' => 'center',
-        'Tablet' => 'center',
-        'Mobile' => 'center'
+            'Desktop' => 'center',
+            'Tablet' => 'center',
+            'Mobile' => 'center'
         ),
         'screenfit'=> 'auto',
         'imageaspectratio' => 'original',
@@ -131,7 +130,6 @@ return array(
         'vimeobackground'=>false,
         'vimeocolor'=>'00adef',
         'vimeofullscreen'=>true,
-
         'videoheight' => array(
             'Desktop' => '315px',
             'Tablet'  => '315px',
@@ -143,7 +141,6 @@ return array(
             'Mobile'  => '560px'
         ),
         'youtubeshorts' => false,
-        
         'posterOn'=>false,
         'poimage'=>'',
         'pofocalPoint'=> array(
@@ -154,7 +151,6 @@ return array(
         'pooverlaycolor' => 'transparent',
         'pooverlayopacity' => 0.5,
         'lightboxcolor' => '',
-
         'cancelcolor'=>'',
         'cancelbg'=>'white',
         'cancelcolorhover'=>'',

@@ -20,19 +20,19 @@ function vayu_unfold_style($attr){
 
     $css .= "{$wrapper} {";
 
-    if (isset($attr['trans'])) {
-        $css .= "--fold-transition: 0s;";
-        $css .= "--fold-transition-function: ease;";
-        
-    } else {
-        $duration = !empty($attr['transition']) ? $attr['transition'] : '1';
-        $css .= "--fold-transition: {$duration}s;";
-        $foldTrans = !empty($attr['foldTrans']) ? $attr['foldTrans'] : 'ease';
-        $css .= "--fold-transition-function: {$foldTrans};";
-    }
+        if (isset($attr['trans'])) {
+            $css .= "--fold-transition: 0s;";
+            $css .= "--fold-transition-function: ease;";
+            
+        } else {
+            $duration = !empty($attr['transition']) ? $attr['transition'] : '1';
+            $css .= "--fold-transition: {$duration}s;";
+            $foldTrans = !empty($attr['foldTrans']) ? $attr['foldTrans'] : 'ease';
+            $css .= "--fold-transition-function: {$foldTrans};";
+        }
 
-    $maxHeight = isset($attr['maxHeight']) && is_numeric($attr['maxHeight']) ? $attr['maxHeight'] : 1000;
-    $css .= "--unfolded-height: {$maxHeight}px;";
+        $maxHeight = isset($attr['maxHeight']) && is_numeric($attr['maxHeight']) ? $attr['maxHeight'] : 1000;
+        $css .= "--unfolded-height: {$maxHeight}px;";
 
     $css .= "}";
 
@@ -79,7 +79,6 @@ function vayu_unfold_style($attr){
     $css .= "$wrapper .unfold-content:not(.unfolded)::after { 
         height: $fadeHeight;
     }";
-
 
     if (isset($attr['align']['Desktop'])) {
         $css .= "$wrapper .unfold-content-btn .unfold-button { text-align: " . esc_attr($attr['align']['Desktop']) . "; }";
@@ -245,24 +244,6 @@ function vayu_unfold_style($attr){
 
     
     $css .= "}";
-
-    if (isset($attr['advResponsive']['Desktop']) && $attr['advResponsive']['Desktop'] === true) {
-					$css .= "@media only screen and (min-width: 1024px) { .{$attr['uniqueId']} { display: none; } }";
-				}
-
-				if (
-					isset($attr['advResponsive']['Tablet']) &&
-					$attr['advResponsive']['Tablet'] === true
-				) {
-					$css .= "@media only screen and (min-width: 768px) and (max-width: 1023px) { .{$attr['uniqueId']} { display: none; } }";
-				}
-
-				if (
-					isset($attr['advResponsive']['Mobile']) &&
-					$attr['advResponsive']['Mobile'] === true
-				) {
-					$css .= "@media only screen and (max-width: 767px) { .{$attr['uniqueId']} { display: none; } }";
-				}
 
     return $css;
 }

@@ -53,9 +53,9 @@ function generate_inline_image_styles($attr) {
     $css .= "}";
     
     $css .= "$wrapper .vayu_block_styling-effect10:hover {";
-    $effectColor = isset($attr['animationData']['effect']['effectColor']) ? esc_attr($attr['animationData']['effect']['effectColor']) : 'transparent';
+        $effectColor = isset($attr['animationData']['effect']['effectColor']) ? esc_attr($attr['animationData']['effect']['effectColor']) : 'transparent';
 
-    $css .= " box-shadow:
+        $css .= " box-shadow:
         1px 1px 0 1px {$effectColor},
         -1px 0 28px 0 rgba(34, 33, 81, 0.01),
         54px 54px 28px -10px rgba(34, 33, 81, 0.15) !important;";
@@ -94,39 +94,31 @@ function generate_inline_image_styles($attr) {
     
     // Append CSS rules to $css
     $css .= "$wrapper .vb-image-tag {";
-
-        if (!empty($attr['animationData']['hovereffect']) && !empty($attr['animationData']['hovereffect']['value'])) {
-            if ($attr['animationData']['hovereffect']['value'] === 'flip-front' || $attr['animationData']['hovereffect']['value']) {
-                $css .= "backface-visibility: hidden;";
-            }
+        if (
+            !empty($attr['animationData']['hovereffect']) &&
+            !empty($attr['animationData']['hovereffect']['value']) &&
+            $attr['animationData']['hovereffect']['value'] === 'flip-front'
+        ) {
+            $css .= "backface-visibility: hidden;";
         }
 
         $css .= "width: auto;";
         $css .= "max-width: 100%;";
         $css .= "max-height: 100%;";
         $css .= "height: auto;";
-
         $css .= "box-sizing: border-box;";
-        
         $css .= "    transition: transform {$transitionTime}s ease, filter {$transitionTime}s ease, opacity {$transitionTime}s ease;";
-
         $css .= "    opacity: 1;"; // Assuming a default opacity value
         if(isset($attr['imagebackgroundSize'])){
-
-     
-        $css .= "    object-fit: " . esc_attr($attr['imagebackgroundSize']) . ";"; // Assuming this controls object-fit
-   }
+            $css .= "    object-fit: " . esc_attr($attr['imagebackgroundSize']) . ";"; // Assuming this controls object-fit
+        }
         // Apply focal point if it exists, default to center
         $css .= "    object-position: " . (isset($attr['focalPoint']) ? esc_attr($attr['focalPoint']['x'] * 100) : '50') . "% " . (isset($attr['focalPoint']) ? esc_attr($attr['focalPoint']['y'] * 100) : '50') . "%;";
-
         $aspectRatio = isset($attr['aspectRatio']['Desktop']) ? esc_attr($attr['aspectRatio']['Desktop']) : 'auto';
-
-        $css .= "    aspect-ratio: $aspectRatio;";
-
+        $css .= " aspect-ratio: $aspectRatio;";
         if (isset($attr['duotone']) && !empty($attr['duotone'])) {
             $css .= "    filter: url(#duotone-filter-{$attr['uniqueId']}) !important;";
         }        
-
         $radius = [];
         if (
             isset($attr['frameData']) &&
@@ -135,19 +127,16 @@ function generate_inline_image_styles($attr) {
         ) {
             $radius = $attr['frameData']['radius']['Desktop'];
         }
-
         if (!empty($radius)) {
             $css .= "border-top-left-radius: " . esc_attr($radius['topLeft'] ?? '0px') . ";";
             $css .= "border-top-right-radius: " . esc_attr($radius['topRight'] ?? '0px') . ";";
             $css .= "border-bottom-left-radius: " . esc_attr($radius['bottomLeft'] ?? '0px') . ";";
             $css .= "border-bottom-right-radius: " . esc_attr($radius['bottomRight'] ?? '0px') . ";";
         }
-        
         // Box-shadow
         if (!empty($attr['imageboxShadow'])) {
             $css .= $OBJ_STYLE->borderRadiusShadow('', '', 'imageboxShadow', 'Desktop');
         }
-
     $css .= "}";
 
     // Append hover effect CSS rules
@@ -155,7 +144,6 @@ function generate_inline_image_styles($attr) {
         $css .= "    transform: var(--image-hover-effect-transform, none);";
         $css .= "    filter: var(--image-filter-effect, none);";
         $css .= "    opacity: var(--image-hover-effect-opacity, 1);";
-
         
         // Apply individual border-radius values if all values are set and not empty
         if (
@@ -283,9 +271,7 @@ function generate_inline_image_styles($attr) {
 
     /* Overlay styles */
     $css .= "$wrapper .vb-image-overlay-wrapper {";
-
         $position = $attr['position'] ?? [];
-
         $width  = $position['width']['Desktop'] ?? '100%';
         $height = $position['height']['Desktop'] ?? '100%';
         $top    = $position['top']['Desktop'] ?? '0';
@@ -303,7 +289,7 @@ function generate_inline_image_styles($attr) {
         $css .= "box-sizing: border-box;";
         $css .= "overflow:hidden;";
        
-        // ⬇️ Backdrop Filter styles
+        //  Backdrop Filter styles
         $filter = $attr['filter'] ?? [];
 
         $blur       = isset($filter['blur']) ? (int) $filter['blur'] : 0;
@@ -321,13 +307,13 @@ function generate_inline_image_styles($attr) {
     $css .= "$wrapper .vb-image-overlay-wrapper:after {";
         
         $css .= 'content: " ";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
-        z-index: 10;
-        box-sizing:border-box;';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            box-sizing:border-box;';
 
          $css .= "-webkit-mask-image: radial-gradient(circle, white 100%, transparent 100%);";
 
@@ -336,9 +322,7 @@ function generate_inline_image_styles($attr) {
         }
         
         if($attr['parentBlock']==="vayu-blocks/advance-slider" && !$attr['borderframe']){
-
             $css .= $OBJ_STYLE->borderFrame('sliderframeData','Desktop');
-
         }else{
             $css .= $OBJ_STYLE->borderFrame('frameData','Desktop');
         }

@@ -131,6 +131,15 @@ return array(
             'height'=> array('Desktop'=>'100%', 'Tablet'=>'100%', 'Mobile'=>'100%'),
             'top'=> array('Desktop'=>'0%', 'Tablet'=>'0%', 'Mobile'=>'0%'),
             'left'=> array('Desktop'=>'0%', 'Tablet'=>'0%', 'Mobile'=>'0%'),
-        )
+        ),
+        'parallax' => array(
+            'switch'=> false,
+            'scale'=> 1.3,
+            'orientation'=> 'up',
+            'delay'=> 0.2,
+            'transition'=> 'cubic-bezier(0,0,0,1)',
+            'overflow'=> true,
+            'maxTransition'=> 60
+        ),
 )
 ?>

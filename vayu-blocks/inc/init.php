@@ -6,6 +6,7 @@ require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/functions-style.php';
 require_once VAYU_BLOCKS_DIR_PATH . 'inc/admin/admin-api.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/render-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/admin/enqueue-render-style.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/design-library/design-library.php';
 // render block include files
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/responsive-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/display-condition.php';
@@ -59,3 +60,5 @@ require_once VAYU_BLOCKS_DIR_PATH .'inc/render/faq/faq-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/faq-child/faq-child.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/faq-child/faq-child-style.php';
 require_once VAYU_BLOCKS_DIR_PATH .'inc/render/style/icon-library.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/table-of-contents/table-of-contents.php';
+require_once VAYU_BLOCKS_DIR_PATH .'inc/render/table-of-contents/table-of-contents-style.php';

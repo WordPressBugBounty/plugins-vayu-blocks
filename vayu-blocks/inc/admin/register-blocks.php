@@ -115,6 +115,10 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
                 'isActive'        => 1,
                 'render_callback' => 'vayu_block_faq_child_render',
             ),
+            'table-of-contents'         => array(
+                'isActive'        => isset($options['tableOfContents']['isActive']) ? $options['tableOfContents']['isActive'] : 0,
+                'render_callback' => 'vayu_block_toc_render',
+            ),
             
         );
 

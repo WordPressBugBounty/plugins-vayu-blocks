@@ -21,10 +21,6 @@ return array(
         'imageaspectratio' => 'original',
         'duotone' => '',
         'showPreview' => false,
-        'overlayalignment' => 'center center',
-        'overlayalignmenttablet' => 'center center',
-        'overlayalignmentmobile' => 'center center',
-        'overlayalignmentvertical' => 'center',
         'imagealttext'  => '',
         'dbox' => false,
         'flipside' => 'top',
@@ -66,10 +62,6 @@ return array(
         'backimagecover' => 'cover',
         'backimageaspectratio' => 'original',
         'backduotone' => '',
-        'backoverlayalignment' => 'center center',
-        'backoverlayalignmenttablet' => 'center center',
-        'backoverlayalignmentmobile' => 'center center',
-        'backoverlayalignmentvertical' => 'center',
         'backimagealttext'  => '',
 
     //Advanced

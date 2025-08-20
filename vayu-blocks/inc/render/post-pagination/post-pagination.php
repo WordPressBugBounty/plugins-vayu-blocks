@@ -7,8 +7,11 @@ function vayu_block_post_pagination_render($attributes, $content, $block) {
 
     // Check for enhanced pagination context
     $enhanced_pagination = isset($block->context['enhancedPagination']) && $block->context['enhancedPagination'];
-    $page_key = isset($block->context['queryId']) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';
-    $page = empty($_GET[$page_key]) ? 1 : (int) $_GET[$page_key];
+
+    $page_key = isset( $block->context['queryId'] )
+    ? 'query-' . sanitize_key( $block->context['queryId'] ) . '-page'
+    : 'query-page';
+    $page = isset( $_GET[ $page_key ] ) ? (int) $_GET[ $page_key ] : 1;
     $perpage = isset($block->context['query']['perPage']) ? $block->context['query']['perPage'] : 10;
     $block_query = new \WP_Query( build_query_vars_from_query_block( $block, $page ) );
     $max_page = $block_query->max_num_pages;

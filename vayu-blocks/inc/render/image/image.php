@@ -41,6 +41,19 @@ class Vayu_blocks_image {
         $wrapperanimation = $this->safe_attr($attributes, 'animationData.effect.animationValue');
         $hover_type  = $this->safe_attr($attributes, 'animationData.imageAnimation.hover', 'without-hvr');
         $animation_value  = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
+
+        if ( ! empty( $attributes['parallax']['switch'] ) ) {
+            $parallax_data = ' data-parallax="true"'
+                . ' data-orientation="' . esc_attr( $attributes['parallax']['orientation'] ?? 'up' ) . '"'
+                . ' data-delay="' . esc_attr( $attributes['parallax']['delay'] ?? 0 ) . '"'
+                . ' data-transition="' . esc_attr( $attributes['parallax']['transition'] ?? 'cubic-bezier(0,0,0,1)' ) . '"'
+                . ' data-scale="' . esc_attr( $attributes['parallax']['scale'] ?? 1.2 ) . '"'
+                . ' data-overflow="' . ( ! empty( $attributes['parallax']['overflow'] ) ? 'true' : 'false' ) . '"'
+                . ' data-max-transition="' . esc_attr( $attributes['parallax']['maxTransition'] ?? 60 ) . '"';
+        } else {
+            $parallax_data = '';
+        }
+
         
         $animation_classname = match ($hover_type) {
             'with-hvr'    => $animation_value . 'hvr',
@@ -84,6 +97,7 @@ class Vayu_blocks_image {
                             src="' . $imageSrc . '" 
                             alt="' . $imageAlt . '" 
                             class="vb-image-tag ' . $imageHvrEffect . ' ' . $imageHvrFilter . ' '. $imagemaskshape .'" 
+                            ' . $parallax_data . ' 
                         />';
                     }
 
@@ -255,13 +269,8 @@ function vayu_block_image_render($attr,$content) {
         return ;
     }
 
-    // Include default attributes
     $default_attributes = include('defaultattributes.php');
-
-    // Merge default attributes with provided attributes
     $attr = array_merge($default_attributes, $attr);
-
-    // Initialize the image with the merged attributes
     $image = new Vayu_blocks_image($attr,$content);
 
     return $image->render();

@@ -3,9 +3,12 @@
 	exit;
 } 
 function vayu_block_wrapper_render($attributes, $content, $block){
-    $page_key            = isset( $block->context['queryId'] ) ? 'query-' . $block->context['queryId'] . '-page' : 'query-page';
+	    $page_key            = isset( $block->context['queryId'] )
+        ? 'query-' . sanitize_key( $block->context['queryId'] ) . '-page'
+        : 'query-page';
+
 	$enhanced_pagination = isset( $block->context['enhancedPagination'] ) && $block->context['enhancedPagination'];
-	$page                = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
+    $page                = isset( $_GET[ $page_key ] ) ? absint( $_GET[ $page_key ] ) : 1;
 
 	// Use global query if needed.
 	$use_global_query = ( isset( $block->context['query']['inherit'] ) && $block->context['query']['inherit'] );
@@ -49,17 +52,17 @@ function vayu_block_wrapper_render($attributes, $content, $block){
 	// Ensure backwards compatibility by flagging the number of columns via classname when using grid layout.
 	if ( isset( $attributes['layoutType'] ) && 'grid' === $attributes['layoutType'] ) {
     // Initialize class name variable
-    $classnames .= ' ' . sanitize_title( 'columns-' . $attributes['gridColumn'] ); // Default class for desktop
+    $classnames .= ' ' . sanitize_html_class( 'columns-' . $attributes['gridColumn'] ); // Default class for desktop
 
     // Check for responsive column values based on device types
     if ( $deviceType === 'tablet' && ! empty( $attributes['gridColumnTablet'] ) ) {
-        $classnames .= ' ' . sanitize_title( 'columns-tablet-' . $attributes['gridColumnTablet'] ); // Tablet class
+        $classnames .= ' ' . sanitize_html_class( 'columns-tablet-' . $attributes['gridColumnTablet'] ); // Tablet class
     } elseif ( $deviceType === 'mobile' && ! empty( $attributes['gridColumnMobile'] ) ) {
-        $classnames .= ' ' . sanitize_title( 'columns-mobile-' . $attributes['gridColumnMobile'] ); // Mobile class
+        $classnames .= ' ' . sanitize_html_class( 'columns-mobile-' . $attributes['gridColumnMobile'] ); // Mobile class
     }
 }
 
-	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => trim( $classnames ) ) );
+	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => esc_attr(trim( $classnames )) ) );
 
 	$content = '';
 	while ( $query->have_posts() ) {

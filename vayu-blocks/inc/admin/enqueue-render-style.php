@@ -39,7 +39,7 @@ function vayu_render_server_side_css() {
 
 		global $post;
 
-		if ( ! is_object( $post ) && ( !is_404() ) ) {
+		if ( ! is_object( $post ) && ( !is_404() ) && ! is_search() ) {
 			return;
 		}
 

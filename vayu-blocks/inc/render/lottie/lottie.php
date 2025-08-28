@@ -47,23 +47,23 @@ class Vayu_blocks_lottie {
             $link_target  = !empty($attributes['link']['opensInNewTab']) ? '_blank' : '_self';
             $link_rel     = !empty($attributes['link']['opensInNewTab']) ? 'noopener noreferrer' : '';
         
-            $lottie_html .= '<a href="' . $link_url . '" id="' . $link_id . '" title="' . $link_title . '" target="' . $link_target . '" rel="' . $link_rel . '">';
+            $lottie_html .= '<a href="' . $link_url . '" id="' . $link_id . '" title="' . $link_title . '" target="' . esc_attr($link_target) . '" rel="' . esc_attr($link_rel) . '">';
         }
 
             $lottie_html .= '<div class="vb-lottie-container">';
                 $lottie_html .= '<div 
                     id="' . esc_attr($uniqueId) . '" 
                     class="vb-lottie-frontend" 
-                    data-lottie="' . $lottie_url . '" 
-                    data-speed="' . $speed . '" 
-                    data-direction="' . $direction . '"
-                    data-start="' . $start . '" 
-                    data-end="' . $end . '" 
-                    data-loop="' . $loop . '" 
-                    data-autoplay="' . $autoplay . '" 
-                    data-trigger="' . $trigger . '"
-                    data-top="' . $top . '" 
-                    data-bottom="' . $bottom . '" 
+                    data-lottie="' . esc_url($lottie_url) . '" 
+                    data-speed="' . esc_attr($speed) . '" 
+                    data-direction="' . esc_attr($direction) . '"
+                    data-start="' . esc_attr($start) . '" 
+                    data-end="' . esc_attr($end) .  '"
+                    data-loop="' . esc_attr($loop) . '" 
+                    data-autoplay="' . esc_attr($autoplay) . '" 
+                    data-trigger="' . esc_attr($trigger) . '"
+                    data-top="' . esc_attr($top) . '" 
+                    data-bottom="' . esc_attr($bottom) . '" 
                 ></div>';
             $lottie_html .= '</div>';
 

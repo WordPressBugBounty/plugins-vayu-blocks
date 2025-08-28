@@ -4,7 +4,7 @@ Tags: block, blocks editor, addons, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.8
 Requires PHP: 7.8
-Stable tag: 1.3.9
+Stable tag: 1.3.10
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -151,6 +151,9 @@ create a new thread on the [Support](https://themehunk.com/contact-us/) And also
 
 == Changelog ==
 
+= 1.3.10 =
+Fix: Lottie block security issue fixed.
+
 = 1.3.9 =
 New: site editor issue fixed.
 
@@ -277,11 +280,7 @@ Initial Release
 == Upgrade Notice ==
 
 =1.3.8 =
-New: Design library added.
-New: Pattern import feature added.
-New: Template import feature added.
-Update: Style issues improved.
-Fix: Security issue resolved.
+Fix: Lottie block security issue fixed.
 
 
 

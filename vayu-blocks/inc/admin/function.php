@@ -174,9 +174,17 @@ function vayu_admin_react_script($hook) {
         $localizeItems
     );
 
-if( $hook !== 'toplevel_page_vayu-blocks' && $hook !== 'vayu-blocks_page_vayu-sites' ) {
-        return;
-}
+    $allowed_hooks = [
+                'toplevel_page_vayu-blocks',
+                'vayu-blocks_page_vayu-sites',
+                'vayu-blocks_page_vayu-blocks-settings',
+                ];
+
+                    if ( ! in_array( $hook, $allowed_hooks, true ) ) {
+                        return;
+                    }
+
+
     wp_enqueue_style(
         'adminDashboard-style',
         VAYU_BLOCKS_URL . 'public/build/adminDashboard-style.css',

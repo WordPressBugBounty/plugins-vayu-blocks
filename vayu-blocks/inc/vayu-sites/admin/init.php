@@ -29,7 +29,7 @@ if ( ! class_exists( 'VAYU_BLOCK_SITES_BUILDER_MENU' ) ) {
         }
 
         function admin_icon_style() {
-        $style =  '<style>#adminmenu .toplevel_page_ai-site-builder .wp-menu-image img { padding: 2px 0 0;}</style>';
+        $style =  '<style>#adminmenu .wp-not-current-submenu.toplevel_page_vayu-blocks .wp-menu-image img { padding: 4px 0 0;}</style>';
         $arr = array( 'style' => array());
         echo wp_kses( $style, $arr );
         
@@ -134,7 +134,9 @@ if ( ! class_exists( 'VAYU_BLOCK_SITES_BUILDER_MENU' ) ) {
                         'site-editor.php',
                         'post.php',
                         'post-new.php',
-                        'toplevel_page_vayu-blocks',
+                        'toplevel_page_'.self::$plugin_slug,
+                        self::$plugin_slug .'_page_vayu-sites',
+                        self::$plugin_slug .'_page_vayu-blocks-settings'
                     ];
 
                     if ( ! in_array( $hook, $allowed_hooks, true ) ) {
@@ -173,6 +175,7 @@ if ( ! class_exists( 'VAYU_BLOCK_SITES_BUILDER_MENU' ) ) {
                 'baseurl' => site_url( '/' ),
                 'pluginpath'=>VAYU_BLOCKS_SITES_URL,
                 'rootPath' => VAYU_BLOCKS_URL,
+                'version' =>VAYU_BLOCKS_VERSION,
                 'upgrade'=> esc_url('https://themehunk.com/vayu-blocks'),
                 'activate' => $this->get_plugin_activation_link( 'vayu-blocks-pro/vayu-blocks-pro.php' )          
                  )

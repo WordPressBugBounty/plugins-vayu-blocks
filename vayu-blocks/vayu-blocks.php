@@ -5,7 +5,7 @@
  * Description:       The Vayu Blocks is an add-on plugin For Gutenberg Block Editor. Quickstart the Gutenberg editor with Powerful and elegant blocks to design stunning websites. Free Vayu Blocks plugin that amplifies the default WordPress Gutenberg Editor with powerful blocks.
  * Requires at least: 6.2
  * Requires PHP:      7.4
- * Version:           1.3.10
+ * Version:           1.3.11
  * Author:            ThemeHunk
  * Author URI:        https://themehunk.com
  * License:           GPLv3
@@ -18,7 +18,7 @@
  if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } 
-define( 'VAYU_BLOCKS_VERSION', '1.3.10' );
+define( 'VAYU_BLOCKS_VERSION', '1.3.11' );
 define( 'VAYU_BLOCKS_BASEFILE', __FILE__ );
 define( 'VAYU_BLOCKS_URL', plugins_url( '/', __FILE__ ) );
 define( 'VAYU_BLOCKS_PATH', dirname( __FILE__ ) );
@@ -138,10 +138,9 @@ class Vayu_Block_Plugin {
         }
     }
     
- 
+
     // plugin menu option add
     public function vayu_plugin_menu() {
-        
         add_menu_page(
             'Vayu Blocks',
             'Vayu Blocks',
@@ -152,13 +151,31 @@ class Vayu_Block_Plugin {
             59
         );
 
+         add_submenu_page(
+            'vayu-blocks',
+            'Blocks',
+            'Blocks',
+            'manage_options', 
+            'vayu-blocks',
+            array( $this, 'vayu_plugin_page_callback' ),
+        );
+
+            add_submenu_page(
+            'vayu-blocks',
+            'Settings',
+            'Settings',
+            'manage_options',
+            'vayu-blocks-settings',
+            array( $this, 'vayu_plugin_page_callback' )
+        );
+
         add_submenu_page(
             'vayu-blocks',
-            'Vayu Sites',
-            'Vayu Sites',
+            'Starter Templates',
+            'Starter Templates',
             'manage_options',
             'vayu-sites',
-            array( $this, 'vayu_blocks_sites_callback' )
+            array( $this, 'vayu_plugin_page_callback' )
         );
 
     }

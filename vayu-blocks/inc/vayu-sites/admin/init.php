@@ -164,11 +164,18 @@ if ( ! class_exists( 'VAYU_BLOCK_SITES_BUILDER_MENU' ) ) {
             echo $clean_html;
 
             }
-
+            $asset_file = require_once VAYU_BLOCKS_DIR_PATH .'public/build/optional-panel.asset.php';
 			wp_enqueue_style( 'vayu-blocks-sites-admin', VAYU_BLOCKS_SITES_URL . 'admin/assets/css/admin.css', 1.0, 'true' );
-            wp_enqueue_script( 'vayu-blocks-sites-block-admin', VAYU_BLOCKS_URL . '/public/build/vayu-sites.js', array( 'wp-element','wp-components', 'wp-i18n','wp-api-fetch','wp-url' ), '1.0', true );
-           
-            wp_localize_script( 'vayu-blocks-sites-block-admin', 'VAYUB',
+          //  wp_enqueue_script( 'vayu-blocks-sites-block-admin', VAYU_BLOCKS_URL . '/public/build/vayu-sites.js', array( 'wp-element','wp-components', 'wp-i18n','wp-api-fetch','wp-url' ), '1.0', true );
+                wp_enqueue_script(
+                'vayu-blocks-optional-panel',
+                VAYU_BLOCKS_URL . 'public/build/optional-panel.js',
+                    $asset_file['dependencies'],
+                '1.0.0',
+                true
+            );
+            
+            wp_localize_script( 'vayu-blocks-optional-panel', 'VAYUB',
             array( 
                 'ajaxurl' => admin_url( 'admin-ajax.php' ),
                 'vsecurity' =>wp_create_nonce( 'vayu_nonce' ),

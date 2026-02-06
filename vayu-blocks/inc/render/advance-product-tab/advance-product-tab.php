@@ -43,7 +43,6 @@ class Vayu_Advance_Product_Tab {
         return ;
         }
 
-        wp_enqueue_style( 'th-icon', VAYU_BLOCKS_URL . '/inc/th-icon/style.css', '', '1.0.0' );
         wp_enqueue_script( 'advance-product-tab-script', VAYU_BLOCKS_URL .'/inc/render/advance-product-tab/js/advance-product-tab.js', array( 'jquery' ), '', true );
         wp_localize_script(
                 'advance-product-tab-script',
@@ -241,7 +240,7 @@ class Vayu_Advance_Product_Tab {
                 $args['meta_key'] = 'total_sales';
                 break; 
                 
-            case 'rating':
+            case 'rating': 
                     
                 $args['orderby'] = 'meta_value_num';
                 $args['meta_key'] = '_wc_average_rating';
@@ -307,14 +306,26 @@ class Vayu_Advance_Product_Tab {
                     $showWishlist = isset($attr['showWishlist']) ? $attr['showWishlist'] : false;
                     if($showWishlist):
                     //wishlist
-                    if( shortcode_exists( 'yith_wcwl_add_to_wishlist' ) ){
-                    $product_content .= '<div class="th-icons th-wishlist-button">';
-                    
-                    $product_content .= '<div class="thunk-wishlist">
-                        <span class="thunk-wishlist-inner">'.do_shortcode('[yith_wcwl_add_to_wishlist  product_id=' . esc_attr($product->get_id()) . ' icon="th-icon th-icon-heart1" label="" already_in_wishslist_text="" browse_wishlist_text="" product_added_text=""]' ).'</div></span>';
-                    
-                    $product_content .= '</div>';
-                   }
+                     if (shortcode_exists('thwl_add_to_wishlist')) {
+                        $product_content .= '<div class="th-icons th-wishlist-button">';
+                        $product_content .= '<div class="thunk-wishlist">
+                            <span class="thunk-wishlist-inner">'.do_shortcode('[thwl_add_to_wishlist
+                                product_id="' . esc_attr($product->get_id()) . '"
+                                add_icon=""
+                                add_text="' . esc_attr__('Wishlist', 'th-shop-mania') . '"
+                                add_browse_icon=""
+                                browse_text="' . esc_attr__('Added', 'th-shop-mania') . '"
+                                theme_style="yes"
+                                custom_class="th-wishlist-integrated"
+                                ]').'</div></span>';
+                        $product_content .= '</div>';
+                        }elseif( shortcode_exists( 'yith_wcwl_add_to_wishlist' ) ){
+                            $product_content .= '<div class="th-icons th-wishlist-button">';
+                            
+                            $product_content .= '<div class="thunk-wishlist">
+                                <span class="thunk-wishlist-inner">'.do_shortcode('[yith_wcwl_add_to_wishlist  product_id=' . esc_attr($product->get_id()) . ' icon="th-icon th-icon-heart1" label="" already_in_wishslist_text="" browse_wishlist_text="" product_added_text=""]' ).'</div></span>';
+                            $product_content .= '</div>';
+                         }
                    endif;
 
                     //compare
@@ -780,7 +791,20 @@ public function load_category_products(){
                     $showWishlist = isset($attr['showWishlist']) ? $attr['showWishlist'] : false;
                     if($showWishlist):
                     //wishlist
-                    if( shortcode_exists( 'yith_wcwl_add_to_wishlist' ) ){
+                    if (shortcode_exists('thwl_add_to_wishlist')) {
+                        $product_content .= '<div class="th-icons th-wishlist-button">';
+                        $product_content .= '<div class="thunk-wishlist">
+                            <span class="thunk-wishlist-inner">'.do_shortcode('[thwl_add_to_wishlist
+                                product_id="' . esc_attr($product->get_id()) . '"
+                                add_icon=""
+                                add_text="' . esc_attr__('Wishlist', 'th-shop-mania') . '"
+                                add_browse_icon=""
+                                browse_text="' . esc_attr__('Added', 'th-shop-mania') . '"
+                                theme_style="yes"
+                                custom_class="th-wishlist-integrated"
+                                ]').'</div></span>';
+                        $product_content .= '</div>';
+                        }elseif( shortcode_exists( 'yith_wcwl_add_to_wishlist' ) ){
                     $product_content .= '<div class="th-icons th-wishlist-button">';
                     
                     $product_content .= '<div class="thunk-wishlist">

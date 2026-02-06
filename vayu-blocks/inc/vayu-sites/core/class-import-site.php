@@ -40,6 +40,7 @@ if ( ! class_exists( 'VAYU_BLOCKS_SITES_IMPORT' ) ) {
 				// Use this for premium demos.
 				$request_params = apply_filters(
 					'themehunk_sites_api_params', array(
+						'name'=>'vayu-x',
 						'site_key' => '',
 						'site_url'     => '',
 					)
@@ -63,11 +64,8 @@ if ( ! class_exists( 'VAYU_BLOCKS_SITES_IMPORT' ) ) {
 			}
 			$remote_args = array();
 
-
 			if ( ! isset( $data['data'] ) ) {
 				$remote_args['id']                  = $data['id'];
-				$remote_args['widgets']    	= isset($data['themehunk-widget'])? json_decode( $data['themehunk-widget'] ):json_decode( $data['zita-widget'] );
-				$remote_args['customizer'] 	= isset($data['themehunk-customizer'])?$data['themehunk-customizer']:$data['zita-customizer'];
 				$remote_args['xml']        	= isset($data['themehunk-xml'])?$data['themehunk-xml']:$data['zita-xml']; 
 				$remote_args['option']        = isset($data['themehunk-option'])?$data['themehunk-option']:$data['zita-option'];
 			}
@@ -145,29 +143,7 @@ if ( ! class_exists( 'VAYU_BLOCKS_SITES_IMPORT' ) ) {
 
 		}
 
-		/**
-		 * Import Widgets.
-		 *
-		 * @since 1.0.0
-		 * @return void
-		 */
-		static public function import_widgets($widgets_data) {
-
-			$widgets_data =  (object)$widgets_data;
-
-			if ( isset( $widgets_data ) ) {
-				$widgets_importer = Vayu_Blocks_Sites_Widget_Importer::instance();
-
-				$status  = $widgets_importer->import_widgets_data( $widgets_data );
-
-				wp_send_json_success( __( 'Widget data is update successfully.', 'vayu-blocks' ) );
-			} else {
-				wp_send_json_error( __( 'Widget data is empty!', 'vayu-blocks' ) );
-			}
-
-		}
-
-
+		
 
     }
 }

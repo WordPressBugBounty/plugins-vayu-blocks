@@ -3,12 +3,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } 
 
-function vayu_render_init(){
-	add_action( 'wp_head', 'vayu_render_server_side_css',999 );
-}
+// function vayu_render_init(){
+// 	add_action( 'wp_head', 'vayu_render_server_side_css',999 );
+// }
 
 
-add_action( 'init', 'vayu_render_init', 99);
+// add_action( 'init', 'vayu_render_init', 99);
+
+
+// function vayu_blocks_block_frontend_styles() {
+// 	echo "satyendra";
+//  vayu_render_server_side_css();
+// }
+// add_action( 'enqueue_block_assets', 'vayu_blocks_block_frontend_styles' );
+
+
 
 function vayu_render_server_side_css() {
 	global $_wp_current_template_content;
@@ -17,6 +26,8 @@ function vayu_render_server_side_css() {
 	$slugs           = array();
 
 	$template_blocks = parse_blocks( $_wp_current_template_content );
+
+	print_r($template_blocks);
 
 	foreach ( $template_blocks as $template_block ) {
 		if ( 'core/template-part' === $template_block['blockName'] ) {
@@ -67,11 +78,11 @@ function vayu_render_server_side_css() {
 			return;
 		}
 		//vayu_blocks_save_custom_css_to_uploads($css,get_the_ID());
-		$style  = "\n" . '<style id="vayu-block-css">' . "\n";
+		$style  = "\n" . '<style id="vayu-block-css-sdsdsd">' . "\n";
 		$style .= $css;
 		$style .= "\n" . '</style>' . "\n";
 
-		echo $style;
+		//echo $style;
 	   }
 
 }

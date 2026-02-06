@@ -30,7 +30,7 @@ add_action('rest_api_init', function() {
     ]);
 
     register_rest_route('vayu-blocks/v1', '/upload-media', [
-        'methods' => 'POST',
+        'methods' => 'GET',
         'callback' => 'vayu_upload_media',
         'args' => [
             'url' => [

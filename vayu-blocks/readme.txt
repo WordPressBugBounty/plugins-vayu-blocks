@@ -2,9 +2,9 @@
 Contributors: ThemeHunk, satyendra61
 Tags: block, blocks editor, addons, page builder, gutenberg templates
 Requires at least: 6.2
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.8
-Stable tag: 1.3.11
+Stable tag: 1.4.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -150,6 +150,25 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+
+= 1.4.4 =
+Fix: Swipe slider issue fixed.
+Fix: Elementor animation conflict issue fixed.
+Fix: WooCommerce advanced product tab “class not found” issue fixed.
+
+= 1.4.3 =
+Fix: Import template issue fixed and import function modify.
+
+= 1.4.2 =
+Fix: 'th-icon' issue fixed.
+
+= 1.4.1 =
+Fix: Blocks addon error fixed.
+= 1.4.0 =
+Update: Natural Supplements demo added.
+Update: Enter key jumps to top on Post edit page issue is fixed.
+Fix: TH Wishlist plugin Inegrated at product block and border radius option added in classic sale.
+New: Essential Oil demo added and 2 new demo added.
 
 = 1.3.11 =
 New: Added new premium templates.

@@ -21,9 +21,9 @@ function vayu_blocks_advance_heading_render( $attributes, $content, $block ) {
 
 	global $post;
 
-	if ( ! is_object( $post ) && ( !is_404() ) ) {
-		return;
-	}
+	// if ( ! is_object( $post ) && ( !is_404() ) ) {
+	// 	return;
+	// }
 
     $source_field = isset( $attributes['selectedSourceField'] ) ? $attributes['selectedSourceField'] : 'none';
 	$selectedPost = isset( $attributes['selectedPost'] ) ? $attributes['selectedPost'] : 'none';

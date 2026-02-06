@@ -45,9 +45,13 @@ class Vayu_Blocks_Animation {
 			define( 'VAYU_BLOCKS_ANIMATION_PATH', VAYU_BLOCKS_PATH );
 		}
 
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
-		add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_frontend_assets' ) );
-		add_filter( 'render_block', array( $this, 'frontend_load' ), 800, 2 );
+		// add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
+		// add_action( 'enqueue_block_assets', array( $this, 'enqueue_block_frontend_assets' ) );
+		// add_filter( 'render_block', array( $this, 'frontend_load' ), 800, 2 );
+
+
+		//add_action( 'wp_head', array( $this, 'add_fontend_anim_inline_style' ), 10 );
+
 	}
 
 	/**
@@ -164,7 +168,6 @@ class Vayu_Blocks_Animation {
 
 			wp_script_add_data( 'vayu-block-animation-frontend', 'async', true );
 
-			add_action( 'wp_head', array( $this, 'add_fontend_anim_inline_style' ), 10 );
 
 			self::$scripts_loaded['animation'] = true;
 		}
@@ -260,4 +263,4 @@ class Vayu_Blocks_Animation {
 	}
 }
 
-Vayu_Blocks_Animation::instance();
+ Vayu_Blocks_Animation::instance();

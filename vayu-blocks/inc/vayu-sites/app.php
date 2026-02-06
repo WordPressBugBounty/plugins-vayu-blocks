@@ -17,7 +17,6 @@ class VAYU_BLOCKS_SITES_APP{
     add_action( 'wp_ajax_vayu_blocks_sites_ajax_import_xml', array( $this, 'import_xml') );	
     add_action( 'wp_ajax_vayu_blocks_sites_ajax_cutomizer', array( $this, 'init_cutomizer') );
     add_action( 'wp_ajax_vayu_blocks_sites_aimport_options', array( $this, 'init_options') );
-    add_action( 'wp_ajax_vayu_blocks_sites_import_widgets', array( $this, 'init_widgets' ) );
     add_action( 'wp_ajax_vayu_blocks_sites_core', array( $this, 'init_site_url' ) );
 
   }
@@ -105,23 +104,7 @@ class VAYU_BLOCKS_SITES_APP{
     }
   }
 
-  public function init_widgets() {
 
-
-    if ( ! isset( $_POST['vsecurity'] ) || ! wp_verify_nonce( $_POST['vsecurity'], 'vayu_nonce' ) ) {
-      wp_send_json_error( array( 'message' => 'Invalid nonce.' ) );
-      wp_die();
-  }
-
-
-    if(isset( $_POST['data'] ) && current_user_can('manage_options')){
-
-            $data = stripslashes( $_POST['data']);
-              $data = json_decode($data)->data;
-          VAYU_BLOCKS_SITES_IMPORT::instance()->import_widgets($data);
-          exit();
-      }
- }
 
   public function init_site_url(){
 

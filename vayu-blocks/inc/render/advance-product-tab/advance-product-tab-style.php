@@ -231,6 +231,12 @@ function vayu_advance_product_tab_style($attr){
             $css .= "}";
         }
 
+        if (isset($attr['saleBrdradius'])) {
+            $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-sale.style1{";
+            $css .= "border-radius:{$attr['saleBrdradius']['Desktop']};";
+            $css .= "}";
+		}
+
         if (isset($attr['postMetaClr'])) {
             $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-meta .th-icons,.wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-meta .th-icons a{";
             $css .= "color: {$attr['postMetaClr']};";
@@ -332,6 +338,12 @@ function vayu_advance_product_tab_style($attr){
             $css .= "}";
 		}
 
+        if (isset($attr['saleBrdradius'])) {
+            $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-sale.style1{";
+            $css .= "border-radius:{$attr['saleBrdradius']['Tablet']};";
+            $css .= "}";
+		}
+
         //button
         $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-add-btn a{";
         $css .= $OBJ_STYLE->borderRadiusShadow('buttonBorder', 'buttonRadius', 'buttonShadow', 'Tablet');
@@ -410,6 +422,13 @@ function vayu_advance_product_tab_style($attr){
             $css .= "grid-column-gap:{$attr['elementGap']['Mobile']};";
             $css .= "}";
 		}
+
+        if (isset($attr['saleBrdradius'])) {
+            $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-sale.style1{";
+            $css .= "border-radius:{$attr['saleBrdradius']['Mobile']};";
+            $css .= "}";
+		}
+
 
         // product-box-hover
         $css .= ".wp-block-th-advance-product-tag-{$attr['uniqueId']} .th-product-block-product-content .th-product-item:hover .th-product-block-content-wrap{";

@@ -123,7 +123,7 @@ class VAYU_BLOCKS_REGISTER_BLOCKS {
         );
 
         // Check if WooCommerce is active before adding the advance-product block
-        if (class_exists('WooCommerce')) {
+        if (class_exists('WooCommerce') && class_exists('Vayu_Advance_Product_Tab')) {
             $blocks_with_render_callbacks['advance-product'] = array(
                 'isActive'        => isset($options['product']['isActive']) ? $options['product']['isActive'] : 1,
                 'render_callback' => array( new Vayu_Advance_Product_Tab(), 'render_callback' ),

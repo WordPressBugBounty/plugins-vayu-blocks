@@ -33,7 +33,8 @@ function vayu_admin_react_script($hook) {
         'ajaxurl' => admin_url( 'admin-ajax.php' ),
         'homeUrl2' => get_home_url(),
         'nonce' => wp_create_nonce('vayu_blocks_nonce'),
-        'options'=> (new VAYU_BLOCKS_OPTION_PANEL())->get_option()
+        'options'=> (new VAYU_BLOCKS_OPTION_PANEL())->get_option(),
+        'version' => VAYU_BLOCKS_VERSION,
     );
     
     if( class_exists('Vayu_Block_Plugin_Pro') ){

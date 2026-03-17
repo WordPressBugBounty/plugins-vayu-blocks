@@ -55,12 +55,15 @@ class Vayu_blocks_image {
         }
 
         
-        $animation_classname = match ($hover_type) {
-            'with-hvr'    => $animation_value . 'hvr',
-            'one-time'    => $animation_value . 'onetime',
-            'without-hvr' => $animation_value,
-            default       => '',
-        };
+        if ($hover_type === 'with-hvr') {
+            $animation_classname = $animation_value . 'hvr';
+        } elseif ($hover_type === 'one-time') {
+            $animation_classname = $animation_value . 'onetime';
+        } elseif ($hover_type === 'without-hvr') {
+            $animation_classname = $animation_value;
+        } else {
+            $animation_classname = '';
+        }
 
         $wrapperclasses = array_filter([
             'vb-image-wrapper',
@@ -160,12 +163,15 @@ class Vayu_blocks_image {
         $hover              = $this->safe_attr($attributes, 'animationData.imageAnimation.hover');
         $animationValue     = $this->safe_attr($attributes, 'animationData.imageAnimation.animationValue');
 
-        $animation_classname = match ($hover) {
-            'with-hvr'  => $animationValue . 'hvr',
-            'one-time'  => $animationValue . 'onetime',
-            'without-hvr' => $animationValue,
-            default     => ''
-        };
+        if ($hover === 'with-hvr') {
+            $animation_classname = $animationValue . 'hvr';
+        } elseif ($hover === 'one-time') {
+            $animation_classname = $animationValue . 'onetime';
+        } elseif ($hover === 'without-hvr') {
+            $animation_classname = $animationValue;
+        } else {
+            $animation_classname = '';
+        }
         
         $wrapperanimation = '';
         if (isset($attributes['animationData']['effect']['animationValue']) && $attributes['animationData']['effect']['animationValue'] === 'vayu_block_styling-effect7') {

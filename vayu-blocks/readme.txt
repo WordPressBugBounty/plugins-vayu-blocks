@@ -4,7 +4,7 @@ Tags: block, blocks editor, addons, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 7.8
-Stable tag: 1.4.4
+Stable tag: 1.4.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -150,6 +150,15 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+
+= 1.4.6 =
+New: Deactivation feedback popup added to collect user feedback when deactivating the plugin.
+Style: Admin dashboard header redesigned with nav tab icons and version badge.
+Style: Starter Templates welcome page UI improved.
+Style: Admin dashboard UI enhancements and refinements.
+
+= 1.4.5 =
+Fix: image block issue fixed.
 
 = 1.4.4 =
 Fix: Swipe slider issue fixed.
@@ -303,10 +312,10 @@ Initial Release
 
 == Upgrade Notice ==
 
-= 1.3.11 =
-New: Added new premium templates.
-Style: Updated dashboard UI.
-Fix: Resolved errors.
+= 1.4.6 =
+New: Deactivation feedback popup added.
+Style: Admin dashboard header redesigned with nav tab icons and version badge.
+Style: Starter Templates welcome page UI improved.
 
 
 

@@ -74,6 +74,7 @@ return array(
         'contentani' => true,
         'wrapppereffect3color' => 'white',
         'overlayshow'=>false,
+        'overlayHoverMode'=>'always',
         'maskshape'=> 'none',
         'masksize'=>'auto',
         'maskposition'=>'center center',

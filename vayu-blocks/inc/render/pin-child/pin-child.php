@@ -14,14 +14,14 @@ function vayu_block_pin_child_render( $attributes, $content ) {
 
     ob_start();
     ?>
-    <div 
-        id="<?php echo $id; ?>" 
-        class="<?php echo $className; ?>" 
-        style="position: absolute; top: <?php echo $y; ?>%; left: <?php echo $x; ?>%; transform: none; z-index: 108;"
-        data-parent-block="<?php echo $parentBlock; ?>"
+    <div
+        id="<?php echo esc_attr( $id ); ?>"
+        class="<?php echo esc_attr( $className ); ?>"
+        style="position: absolute; top: <?php echo esc_attr( $y ); ?>%; left: <?php echo esc_attr( $x ); ?>%; transform: none; z-index: 108;"
+        data-parent-block="<?php echo esc_attr( $parentBlock ); ?>"
     >
-        <div class="vayu-pin-spot-wrapper7 <?php echo 'tooltip-'.$tooltipDisplay; ?>" style="position: relative;"  data-arrow="<?php echo $triangleArrowColor;  ?>">
-            <?php echo $content; // Render the nested blocks (e.g., Tooltip content). ?>
+        <div class="vayu-pin-spot-wrapper7 <?php echo esc_attr( 'tooltip-' . $tooltipDisplay ); ?>" style="position: relative;" data-arrow="<?php echo esc_attr( $triangleArrowColor ); ?>">
+            <?php echo wp_kses_post( $content ); ?>
         </div>
     </div>
     <?php

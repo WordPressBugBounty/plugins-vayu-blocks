@@ -158,7 +158,7 @@ function generate_inline_image_styles($attr) {
     $css .= "}";
 
     $css .= " $wrapper .vb-image-main-container {";
-        $desktopAlignment = !empty($attr['imagealignment']['Desktop']) ? $attr['imagealignment']['Desktop'] : 'center';
+        $desktopAlignment = !empty($attr['imagealignment']['Desktop']) ? sanitize_key($attr['imagealignment']['Desktop']) : 'center';
         $css .= "justify-content: {$desktopAlignment} !important;";
         $css .= "display:flex;";
         $css .= "width:100%;";
@@ -261,11 +261,11 @@ function generate_inline_image_styles($attr) {
     $css .= "}";
 
     if($attr['overlayshow']){
-        $css .= "$wrapper .vb-image-overlay-wrapper:hover:before {";
+        $css .= "$wrapper .vb-image-wrapper:hover .vb-image-overlay-wrapper:before {";
                 if($attr['overlayhvrcolor']){
                     $css .= "background: " . esc_attr($attr['overlayhvrcolor']) . " !important;";
                 }
-                $css .= "opacity: " . esc_attr($attr['overlayhvrcolor']) . " !important;";
+                $css .= "opacity: " . esc_attr($attr['overlayopacity']) . " !important;";
         $css .= "}";
     }
 
@@ -285,9 +285,9 @@ function generate_inline_image_styles($attr) {
         $css .= "position: absolute;";
         $css .= "transition: " . esc_attr($attr['overlaytransitiontime']) . "s ease;";
         $css .= "z-index: 10;";
-        // $css .= "display: flex;";
         $css .= "box-sizing: border-box;";
         $css .= "overflow:hidden;";
+        $css .= "pointer-events: none;";
        
         //  Backdrop Filter styles
         $filter = $attr['filter'] ?? [];
@@ -302,6 +302,15 @@ function generate_inline_image_styles($attr) {
         $css .= "backdrop-filter: {$backdrop};";
         $css .= "-webkit-backdrop-filter: {$backdrop};"; // Safari support
 
+    $css .= "}";
+
+    $css .= "$wrapper .vb-image-overlay-wrapper a,";
+    $css .= "$wrapper .vb-image-overlay-wrapper button,";
+    $css .= "$wrapper .vb-image-overlay-wrapper input,";
+    $css .= "$wrapper .vb-image-overlay-wrapper select,";
+    $css .= "$wrapper .vb-image-overlay-wrapper textarea,";
+    $css .= "$wrapper .vb-image-overlay-wrapper .wp-block-vayu-blocks-advance-button {";
+        $css .= "pointer-events: auto;";
     $css .= "}";
 
     $css .= "$wrapper .vb-image-overlay-wrapper:after {";
@@ -602,7 +611,7 @@ function generate_inline_image_styles($attr) {
     $css .= "}";
 
     $css .= "$wrapper .vb-image-tag {";
-        $css .= "text-align: {$attr['captionalignment']['Desktop']};";
+        $css .= "text-align: " . sanitize_key($attr['captionalignment']['Desktop'] ?? 'center') . ";";
     $css .= "}";
 
     $css .= "$wrapper .vb-image-caption-text {";
@@ -641,7 +650,7 @@ function generate_inline_image_styles($attr) {
         $css .= "}";
 
         $css .= " $wrapper .vb-image-main-container {";
-            $desktopAlignment = isset($attr['imagealignment']['Tablet']) && !empty($attr['imagealignment']['Tablet']) ? $attr['imagealignment']['Tablet'] : '';
+            $desktopAlignment = isset($attr['imagealignment']['Tablet']) && !empty($attr['imagealignment']['Tablet']) ? sanitize_key($attr['imagealignment']['Tablet']) : '';
             $css .= "justify-content: {$desktopAlignment} !important;";
         $css .= "}";
 
@@ -747,7 +756,7 @@ function generate_inline_image_styles($attr) {
         $css .= "}";
 
         $css .= " $wrapper .vb-image-main-container {";
-            $desktopAlignment = isset($attr['imagealignment']['Mobile']) && !empty($attr['imagealignment']['Mobile']) ? $attr['imagealignment']['Mobile'] : '';
+            $desktopAlignment = isset($attr['imagealignment']['Mobile']) && !empty($attr['imagealignment']['Mobile']) ? sanitize_key($attr['imagealignment']['Mobile']) : '';
             $css .= "justify-content: {$desktopAlignment} !important;";
         $css .= "}";
 

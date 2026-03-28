@@ -75,33 +75,49 @@ class Vayu_blocks_image {
         });
 
         $image_html= '';
-        
-        $image_html = $OBJ_STYLE->renderVideo('advBackground');
-        
-        $image_html .= '<div class="vb-image-main-container vb-image-rotating-div">';
 
-            if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
-                $link_url     = esc_url($attributes['link']['url']);
-                $link_id      = esc_attr(!empty($attributes['link']['id']) ? $attributes['link']['id'] : 'default-id');
-                $link_title   = esc_attr(!empty($attributes['link']['title']) ? $attributes['link']['title'] : 'Default Title');
-                $link_target  = !empty($attributes['link']['opensInNewTab']) ? '_blank' : '_self';
-                $link_rel     = !empty($attributes['link']['opensInNewTab']) ? 'noopener noreferrer' : '';
-            
-                $image_html .= '<a href="' . $link_url . '" id="' . $link_id . '" title="' . $link_title . '" target="' . $link_target . '" rel="' . $link_rel . '">';
+        $image_html = $OBJ_STYLE->renderVideo('advBackground');
+
+        $hasLink = !empty($attributes['link']) && !empty($attributes['link']['url']);
+        if ($hasLink) {
+            $rel = [];
+            $link_url    = esc_url($attributes['link']['url']);
+            //$link_id     = esc_attr(!empty($attributes['link']['id']) ? $attributes['link']['id'] : 'default-id');
+             $link_nofollow  = !empty($attributes['link']['marskasnofollow']) ? 'nofollow' : '';
+            $link_target = !empty($attributes['link']['opensInNewTab']) ? '_blank' : '_self';
+                        // new tab → security rel add
+            if ($link_target === '_blank') {
+                $rel[] = 'noopener';
+                $rel[] = 'noreferrer';
             }
 
-            $image_html .= '<div class="vb-image-container ' . $wrapperanimation . ' ' . ( !empty($attributes['contentani']) ? 'vb-start-cont-ani' : '' ) . ' " id='. $uniqueId .'>';
-            
-                $image_html .= '<div class="' . esc_attr(implode(' ', $wrapperclasses)) . '">';
-                
-                    if ($attributes['typeimage'] === 'image') {
+                        // nofollow condition
+            if (!empty($link_nofollow)) {
+                $rel[] = $link_nofollow;
+            }
+            $link_rel = !empty($rel) ? ' rel="' . esc_attr(implode(' ', $rel)) . '"' : '';
+        }
 
-                        $image_html .= '<img 
-                            src="' . $imageSrc . '" 
-                            alt="' . $imageAlt . '" 
-                            class="vb-image-tag ' . $imageHvrEffect . ' ' . $imageHvrFilter . ' '. $imagemaskshape .'" 
-                            ' . $parallax_data . ' 
+        $image_html .= '<div class="vb-image-main-container vb-image-rotating-div">';
+
+            $image_html .= '<div class="vb-image-container ' . esc_attr($wrapperanimation) . ' ' . ( !empty($attributes['contentani']) ? 'vb-start-cont-ani' : '' ) . '" id="' . esc_attr($uniqueId) . '">';
+
+                $image_html .= '<div class="' . esc_attr(implode(' ', $wrapperclasses)) . '">';
+
+                    if ($attributes['typeimage'] === 'image') {
+                        // Link wraps only the image — keeps overlay buttons independent
+                        if ($hasLink) {
+                            $image_html .= '<a href="' . $link_url . '" target="' . $link_target . '"' . $link_rel . '>';
+                        }
+                        $image_html .= '<img
+                            src="' . $imageSrc . '"
+                            alt="' . $imageAlt . '"
+                            class="vb-image-tag ' . esc_attr($imageHvrEffect) . ' ' . esc_attr($imageHvrFilter) . ' ' . esc_attr($imagemaskshape) . '"
+                            ' . $parallax_data . '
                         />';
+                        if ($hasLink) {
+                            $image_html .= '</a>';
+                        }
                     }
 
                     if (!empty($attributes['overlayshow']) || !empty($attributes['frameshow'])) {
@@ -109,10 +125,6 @@ class Vayu_blocks_image {
                     }
 
                 $image_html .= '</div>';
-
-                if (!empty($attributes['link']) && !empty($attributes['link']['url'])) {
-                    $image_html .= '</a>';
-                }
 
             $image_html .= '</div>';
         $image_html .= '</div>';
@@ -130,7 +142,7 @@ class Vayu_blocks_image {
             $classhover = 'vayu-blocks-image-hover';
         }
         
-        $classes = [ 'vayu-blocks-image-main-container' . $uniqueId ];
+        $classes = [ 'vayu-blocks-image-main-container' . esc_attr($uniqueId) ];
 
         if (!empty($classhover)) {
             $classes[] = $classhover;
@@ -180,12 +192,15 @@ class Vayu_blocks_image {
         
         $imagemaskshape = isset($attributes['animationData']['mask']['maskshape']) && $attributes['animationData']['mask']['maskshape'] !== 'none' ? 'maskshapeimage' : '';
 
+        $overlayOnHover = (!empty($attributes['overlayshow']) && isset($attributes['overlayHoverMode']) && $attributes['overlayHoverMode'] === 'hover') ? 'vb-overlay-on-hover' : '';
+
         $classes = array_filter([
             'vb-image-overlay-wrapper',
             $wrapperanimation,
             $overlaywrapper,
             $imageHvrEffect,
-            $imagemaskshape
+            $imagemaskshape,
+            $overlayOnHover
         ], function($class) {
             return !empty($class) && $class !== 'none';
         });

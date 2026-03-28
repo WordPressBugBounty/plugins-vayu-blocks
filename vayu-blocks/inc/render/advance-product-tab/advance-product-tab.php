@@ -570,7 +570,7 @@ public function load_category_products(){
    
     $page = isset($_POST['page']) ? sanitize_text_field($_POST['page']) : '';
 
-    $attr = isset($_POST['attr']) ? json_decode(stripslashes($_POST['attr']), true) : array();  // Decode the JSON string 
+    $attr = isset($_POST['attr']) ? json_decode( wp_unslash( sanitize_text_field( wp_unslash( $_POST['attr'] ) ) ), true ) : array();
    
     $args = array(
         'status' => 'publish',

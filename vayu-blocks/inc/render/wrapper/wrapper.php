@@ -48,7 +48,8 @@ function vayu_block_wrapper_render($attributes, $content, $block){
 		$classnames .= 'is-layout-grid';
 	}
 
-	$deviceType = isset( $_REQUEST['device_type'] ) ? $_REQUEST['device_type'] : 'desktop';
+	$allowed_device_types = [ 'desktop', 'tablet', 'mobile' ];
+	$deviceType = isset( $_REQUEST['device_type'] ) && in_array( $_REQUEST['device_type'], $allowed_device_types, true ) ? $_REQUEST['device_type'] : 'desktop';
 	// Ensure backwards compatibility by flagging the number of columns via classname when using grid layout.
 	if ( isset( $attributes['layoutType'] ) && 'grid' === $attributes['layoutType'] ) {
     // Initialize class name variable

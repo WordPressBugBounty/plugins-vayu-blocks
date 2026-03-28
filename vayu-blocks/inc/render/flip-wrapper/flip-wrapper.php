@@ -27,11 +27,11 @@ class Vayu_blocks_front_image {
         $animated = isset($attributes['className']) ? esc_attr($attributes['className']) : ''; // animation
         $uniqueId = isset($attributes['uniqueId']) ? esc_attr($attributes['uniqueId']) : '';
 
-        $image_html .= '<div class="vayu_blocks_front_image_wrapper-for-front" id='. $uniqueId .'>';          
+        $image_html .= '<div class="vayu_blocks_front_image_wrapper-for-front" id="' . esc_attr( $uniqueId ) . '">';
             $image_html .= $this->content;
         $image_html .= '</div>';
-    
-        return '<div class="vb-flip-innerblock-' . $uniqueId . ' ' . $animated . '">' . $image_html . '</div>';
+
+        return '<div class="vb-flip-innerblock-' . esc_attr( $uniqueId ) . ' ' . esc_attr( $animated ) . '">' . $image_html . '</div>';
     }
     
 }

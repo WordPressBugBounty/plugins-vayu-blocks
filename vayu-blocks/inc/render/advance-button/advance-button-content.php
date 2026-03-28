@@ -107,10 +107,10 @@ $btnRadiusHover_bottom_right = isset($attributes['btnBorderRadiusHover']['Deskto
     if ( ! empty( $url ) ) {
         $target = $opensInNewTab ? ' target="_blank"' : '';
         $rel = $markAsNofollow ? ' rel="nofollow noreferrer noopener"' : '';
-        $buttonElement = "<a href=\"" . esc_url( $url ) . "\" class=\"$buttonClasses\" style=\"$styleInline\"$target$rel>$innerButton</a>";
+        $buttonElement = "<a href=\"" . esc_url( $url ) . "\" class=\"" . esc_attr( $buttonClasses ) . "\" style=\"" . esc_attr( $styleInline ) . "\"$target$rel>" . wp_kses_post( $innerButton ) . "</a>";
     } else {
-        $buttonElement = "<div class=\"$buttonClasses\" style=\"$styleInline\">$innerButton</div>";
+        $buttonElement = "<div class=\"" . esc_attr( $buttonClasses ) . "\" style=\"" . esc_attr( $styleInline ) . "\">" . wp_kses_post( $innerButton ) . "</div>";
     }
 
-    return "<div class=\"th-button-wrapper{$uniqueID}\">{$buttonElement}</div>";
+    return "<div class=\"th-button-wrapper" . esc_attr( $uniqueID ) . "\">{$buttonElement}</div>";
 }

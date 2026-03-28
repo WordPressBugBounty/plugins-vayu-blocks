@@ -4,7 +4,7 @@ Tags: block, blocks editor, addons, page builder, gutenberg templates
 Requires at least: 6.2
 Tested up to: 6.9
 Requires PHP: 7.8
-Stable tag: 1.4.6
+Stable tag: 1.4.7
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
@@ -150,6 +150,12 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+
+= 1.4.7 =
+New: Advance Image block — overlay "Show Overlay" option added with Always / On Hover radio control.
+New: Advance Image block — default button added inside overlay InnerBlocks template.
+Fix: Advance Image block — overlay pointer-events fixed so image URL link remains clickable when overlay is active.
+Security: XSS vulnerabilities fixed across image, pin-child, advance-button, flip-wrapper, wrapper, and advance-product-tab render files.
 
 = 1.4.6 =
 New: Deactivation feedback popup added to collect user feedback when deactivating the plugin.

@@ -23,13 +23,47 @@ if ( ! defined( 'ABSPATH' ) ) {
 // add_action( 'wp_enqueue_scripts', 'vayu_blocks_block_frontend_styles' );
 
 
+function vayu_blocks_resolve_template_content() {
+	$stylesheet = get_stylesheet();
+	$template   = null;
+
+	if ( is_front_page() ) {
+		$template = get_block_template( $stylesheet . '//front-page' );
+	}
+
+	if ( ! $template && ( is_home() || is_front_page() ) ) {
+		$template = get_block_template( $stylesheet . '//home' );
+	}
+
+	if ( ! $template && is_singular( 'page' ) ) {
+		$template = get_block_template( $stylesheet . '//page' );
+	}
+
+	if ( ! $template && is_singular() ) {
+		$template = get_block_template( $stylesheet . '//single' );
+	}
+
+	if ( ! $template ) {
+		$template = get_block_template( $stylesheet . '//index' );
+	}
+
+	return ( $template && isset( $template->content ) ) ? $template->content : '';
+}
+
 function vayu_render_server_side_css() {
 	global $_wp_current_template_content;
 
-	$content         = '';
-	$slugs           = array();
+	$content  = '';
+	$slugs    = array();
 
-	$template_blocks = parse_blocks( $_wp_current_template_content );
+	$template_content = $_wp_current_template_content;
+
+	// Fallback: $_wp_current_template_content is empty on static front page
+	if ( empty( $template_content ) ) {
+		$template_content = vayu_blocks_resolve_template_content();
+	}
+
+	$template_blocks = parse_blocks( $template_content );
 
 	foreach ( $template_blocks as $template_block ) {
 		if ( 'core/template-part' === $template_block['blockName'] ) {
@@ -38,21 +72,24 @@ function vayu_render_server_side_css() {
 	}
 
 	$templates_parts = get_block_templates( array( 'slugs__in' => $slugs ), 'wp_template_part' );
-    
-	
+
 	foreach ( $templates_parts as $templates_part ) {
 		if ( isset( $templates_part->content ) && isset( $templates_part->slug ) && in_array( $templates_part->slug, $slugs ) ) {
 			$content .= $templates_part->content;
 		}
 	}
 
-	$content .= $_wp_current_template_content; 
+	$content .= $template_content;
 
    if ( function_exists( 'has_blocks' ) ) {
 
 		global $post;
 
 				if ( is_front_page() || is_home() ) {
+					// Static front page: include the page's own block content
+					if ( is_front_page() && is_singular( 'page' ) ) {
+						$content .= get_post_field( 'post_content', get_the_ID() );
+					}
 					$blocks = parse_blocks( $content );
 					$css = vayu_cycle_through_blocks( $blocks, ' ' );
 					return $css;

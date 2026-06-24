@@ -52,34 +52,33 @@ add_action( 'enqueue_block_assets', 'vayu_blocks_enqueue_block_assets' );
 
 
 function vayu_blocks_multiblock_enqueue_block_assets() {
-	$dependencies =   require_once VAYU_BLOCKS_DIR_PATH .'public/build/multi-block-editor.asset.php';
+	$dependencies = require_once VAYU_BLOCKS_DIR_PATH . 'public/build/multi-block-editor.asset.php';
 
-	// wp_enqueue_style(
-	// 	'vayu-blocks-frontend',
-	// 	plugin_dir_url( __FILE__ ) . 'build/style-multi-block-editor.css',
-	// );
+	wp_enqueue_style( 'vayu-blocks-frontend' );
 
-	 wp_enqueue_style('vayu-blocks-frontend');
-
-		wp_enqueue_style(
-		'vayu-blocks-editor',
-		plugin_dir_url( __FILE__ ) . 'build/multi-block-editor.css',
-		array(),
-		null
-	);
-
-
-		wp_enqueue_script(
+	wp_enqueue_script(
 		'vayu-blocks-editor',
 		plugin_dir_url( __FILE__ ) . 'build/multi-block-editor.js',
 		$dependencies['dependencies'],
 		$dependencies['version'],
 		false
 	);
-
-
 }
 add_action( 'enqueue_block_editor_assets', 'vayu_blocks_multiblock_enqueue_block_assets' );
+
+// enqueue_block_assets loads inside the iframed editor; enqueue_block_editor_assets does not.
+function vayu_blocks_editor_iframe_styles() {
+	if ( ! is_admin() ) {
+		return;
+	}
+	wp_enqueue_style(
+		'vayu-blocks-editor',
+		plugin_dir_url( __FILE__ ) . 'build/multi-block-editor.css',
+		array(),
+		null
+	);
+}
+add_action( 'enqueue_block_assets', 'vayu_blocks_editor_iframe_styles' );
 
 
 

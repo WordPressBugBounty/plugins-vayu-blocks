@@ -1,14 +1,14 @@
-=== Vayu Blocks – Website Builder for the Block Editor ===
+=== Vayu Blocks – Website Builder for the Gutenberg Block Editor ===
 Contributors: ThemeHunk, satyendra61
-Tags: block, blocks editor, addons, page builder, gutenberg templates
+Tags: block, blocks editor, addons, page builder, gutenberg blocks
 Requires at least: 6.2
-Tested up to: 6.9
-Requires PHP: 7.8
-Stable tag: 1.4.7
+Tested up to: 7.0
+Requires PHP: 7.0
+Stable tag: 1.4.8
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-Vayu Blocks - Page Builder For Gutenberg Editor, Block Addons & FSE Templates
+Vayu Blocks - Page Builder For Gutenberg blocks, Block editor & FSE Templates
 
 == Description ==
 Unlock the full potential of the WordPress Block Editor (Gutenberg) with Vayu Blocks – your all-in-one, lightning-fast website and page builder! Tired of slow, bloated page builders? Vayu Blocks is engineered for peak performance and unparalleled ease of use, letting you craft stunning, high-converting websites without a single line of code. Whether you're a beginner or a seasoned designer, our intuitive drag-and-drop interface, combined with a robust library of 25+ powerful blocks and dozens of readymade templates, makes website creation a breeze.
@@ -150,6 +150,11 @@ If you encounter any difficulties or if you have questions about Vayu Blocks, yo
 create a new thread on the [Support](https://themehunk.com/contact-us/) And also you can connect in [live chat](https://themehunk.com).
 
 == Changelog ==
+
+= 1.4.8 =
+Fix: Reading Mode homepage block styles were not applying correctly. This issue has been fixed.
+Fix: Editor color settings were not displaying properly. This issue has been resolved.
+Update: Updated deprecated functions for improved compatibility and performance.
 
 = 1.4.7 =
 New: Advance Image block — overlay "Show Overlay" option added with Always / On Hover radio control.
